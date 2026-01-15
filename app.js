@@ -1,4 +1,4 @@
-const DB_FOLDER = './lessons_db/';
+const DB_FOLDER = './';
 const ui = {
     selector: document.getElementById('match-selector'),
     title: document.getElementById('lesson-title'),
@@ -102,5 +102,6 @@ function setupPenaltyShootout(engine) {
         ui.quizOptions.appendChild(btn);
     });
 }
+
 
 initLeague();
