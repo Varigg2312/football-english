@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football English - The Locker Room</title>
+    <link rel="stylesheet" href="football.css">
+    <style>
+        /* Estilos rápidos para el menú */
+        .match-selector-container {
+            margin-bottom: 25px; padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px; display: inline-block;
+        }
+        label { color: #00ff88; font-weight: bold; margin-right: 10px; text-transform: uppercase; }
+        select { padding: 8px; border-radius: 4px; background: #333; color: white; border: 1px solid #00ff88; }
+    </style>
+</head>
+<body>
+
+    <header class="match-header">
+        <div class="match-selector-container">
+            <label for="match-selector">⚽ Select Match:</label>
+            <select id="match-selector">
+                <option value="" disabled selected>Loading Season...</option>
+            </select>
+        </div>
+
+        <div class="scoreboard">
+            <h1 id="lesson-title">Waiting for Kick-off...</h1>
+            <span id="lesson-level" class="badge">--</span>
+        </div>
+        <p id="lesson-intro" class="commentary"></p>
+    </header>
+
+    <main class="pitch">
+        
+        <section id="tactics-section" class="card">
+            <h2>📋 Tactical Board</h2>
+            <div id="core-concept"></div>
+        </section>
+
+        <section id="warmup-section" class="card">
+            <h2>📢 Pitch Vocabulary</h2>
+            <ul id="vocabulary-list" class="player-list"></ul>
+        </section>
+
+        <section id="penalty-shootout" class="card interactive">
+            <h2>⚡ Your Turn (Penalty Shootout)</h2>
+            <p id="quiz-question">What's your move?</p>
+            <div id="options-container" class="buttons-grid"></div>
+            <div id="feedback-zone" class="hidden"></div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Built with sweat, tears & Python.</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
