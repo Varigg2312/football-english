@@ -1,27 +1,38 @@
 [
   {
-    "file": "manager.json",
-    "title": "The Manager's Playbook",
-    "elo": 1500
+    "title": "Corner Kick Strategy: Set-Piece Mastery",
+    "file": "corner_kick_strategy.json",
+    "difficulty": "Pro",
+    "id": "gen_1768860742"
   },
   {
-    "file": "the_last_line_of_defense.json",
-    "title": "The Last Line of Defense",
-    "elo": 1500
+    "title": "The Captains Armband",
+    "file": "the_captains_armband.json",
+    "difficulty": "Pro",
+    "id": "gen_1768860721"
   },
   {
-    "file": "the_offside_rule.json",
-    "title": "The Offside Rule",
-    "elo": 1200
+    "title": "Taking a Penalty",
+    "file": "taking_a_penalty.json",
+    "difficulty": "Pro",
+    "id": "gen_1768860697"
   },
   {
-    "file": "the_penalty_kick.json",
-    "title": "The Penalty Kick",
-    "elo": 1200
+    "title": "Yellow Card vs Red Card: The Language of Discipline",
+    "file": "yellow_card_vs_red_card.json",
+    "difficulty": "Pro",
+    "id": "gen_1768860674"
   },
   {
-    "file": "var.json",
-    "title": "The VAR Review",
-    "elo": 1400
+    "title": "The Counter Attack",
+    "file": "the_counter_attack.json",
+    "difficulty": "Pro",
+    "id": "gen_1768860650"
+  },
+  {
+    "title": "The VAR Check: Understanding the Video Assistant Referee",
+    "file": "the_var_check.json",
+    "difficulty": "Pro",
+    "id": "gen_1768860624"
   }
 ]
