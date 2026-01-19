@@ -1,10 +1,22 @@
-const DB_FOLDER = './'; // Ruta raíz
+const DB_FOLDER = './';
 
 // ==========================================
-// 1. ELEMENTOS DE LA INTERFAZ (UI)
+// 🚨 ZONA DE CONFIGURACIÓN DEL CEO 🚨
 // ==========================================
+
+// 1. TU CLAVE DE DEEPSEEK (YA LA HE PUESTO YO)
+const SYSTEM_KEY = "sk-bb4843296d0f4f039379dc6bf65c53c7"; 
+
+// 2. CONTRASEÑA PARA TUS ALUMNOS VIP
+// (Solo quien tenga esto podrá hablar con la IA)
+const VIP_PASSWORD = "FOOTBALL-ENGLISH-PRO"; 
+
+// ==========================================
+// FIN DE LA ZONA DE CONFIGURACIÓN
+// ==========================================
+
 const ui = {
-    // Buscador y Contenido Principal
+    // UI Principal
     search: document.getElementById('magic-search'),
     results: document.getElementById('search-results'),
     matchInfo: document.getElementById('match-info'),
@@ -17,21 +29,21 @@ const ui = {
     quizQuestion: document.getElementById('quiz-question'),
     quizOptions: document.getElementById('options-container'),
     feedback: document.getElementById('feedback-zone'),
-
-    // Chatbot (El Tutor)
+    
+    // UI del Chatbot
     chatTrigger: document.getElementById('coach-trigger'),
     chatModal: document.getElementById('coach-modal'),
     chatClose: document.getElementById('close-chat'),
     chatHistory: document.getElementById('chat-history'),
     chatInput: document.getElementById('user-msg'),
     chatSend: document.getElementById('send-msg'),
-    apiKeyInput: document.getElementById('api-key-input')
+    passwordInput: document.getElementById('api-key-input') 
 };
 
-let allLessons = []; // Aquí guardaremos todas las lecciones
+let allLessons = [];
 
 // ==========================================
-// 2. INICIALIZACIÓN (LIGA)
+// 1. INICIALIZAR LIGA
 // ==========================================
 async function initLeague() {
     try {
@@ -41,24 +53,24 @@ async function initLeague() {
         allLessons = await response.json();
         console.log("Lessons loaded:", allLessons);
 
-        setupSearch(); // Activar el buscador
-        setupChat();   // Activar el Chatbot
+        setupSearch(); // Activar buscador
+        setupChat();   // Activar Chat VIP
 
     } catch (error) {
         console.error(error);
-        if(ui.title) ui.title.innerText = "❌ System Error";
+        if(ui.title) ui.title.innerText = "❌ System Error: Check index.json";
     }
 }
 
 // ==========================================
-// 3. LÓGICA DEL BUSCADOR (TIPO CANVA)
+// 2. LÓGICA DEL BUSCADOR (CANVA STYLE)
 // ==========================================
 function setupSearch() {
-    if(!ui.search) return; // Protección
+    if(!ui.search) return;
 
     ui.search.addEventListener('keyup', (e) => {
         const query = e.target.value.toLowerCase();
-        ui.results.innerHTML = ''; // Limpiar
+        ui.results.innerHTML = ''; // Limpiar anteriores
 
         if (query.length < 1) {
             ui.results.classList.add('hidden');
@@ -85,12 +97,12 @@ function setupSearch() {
                 ui.results.appendChild(div);
             });
         } else {
-            ui.results.innerHTML = '<div class="result-item" style="color: #999">No matches found. Try "VAR"...</div>';
+            ui.results.innerHTML = '<div class="result-item" style="color: #999">No matches found...</div>';
             ui.results.classList.remove('hidden');
         }
     });
 
-    // Ocultar al hacer clic fuera
+    // Cerrar al hacer clic fuera
     document.addEventListener('click', (e) => {
         if (!ui.search.contains(e.target)) {
             ui.results.classList.add('hidden');
@@ -99,7 +111,7 @@ function setupSearch() {
 }
 
 // ==========================================
-// 4. CARGAR LECCIÓN (MATCH)
+// 3. CARGAR LECCIÓN
 // ==========================================
 async function loadMatch(filename) {
     ui.main.classList.add('hidden');
@@ -156,21 +168,35 @@ function renderTactics(lesson) {
 }
 
 // ==========================================
-// 5. CHATBOT IA (THE GAFFER)
+// 4. CHATBOT VIP (PROTEGIDO POR PASSWORD)
 // ==========================================
 function setupChat() {
-    if(!ui.chatTrigger) return; // Protección
+    if(!ui.chatTrigger) return;
 
-    // Abrir y cerrar ventana
+    // Abrir/Cerrar modal
     ui.chatTrigger.onclick = () => ui.chatModal.classList.remove('hidden');
     ui.chatClose.onclick = () => ui.chatModal.classList.add('hidden');
 
-    // Habilitar input solo si hay API Key
-    ui.apiKeyInput.addEventListener('input', (e) => {
-        if(e.target.value.length > 5) {
+    // Configurar campo de contraseña
+    ui.passwordInput.placeholder = "🔒 Enter VIP Password...";
+    ui.passwordInput.type = "password";
+
+    // Validar contraseña en tiempo real
+    ui.passwordInput.addEventListener('input', (e) => {
+        if(e.target.value === VIP_PASSWORD) {
+            // ÉXITO: Desbloquear
+            ui.passwordInput.style.borderColor = "#00ff88"; 
+            ui.passwordInput.style.backgroundColor = "#dcfce7";
             ui.chatInput.disabled = false;
             ui.chatSend.disabled = false;
-            ui.chatInput.placeholder = "Ask me about football grammar...";
+            ui.chatInput.placeholder = "Coach is listening... Ask anything!";
+        } else {
+            // BLOQUEADO
+            ui.passwordInput.style.borderColor = "#e5e7eb";
+            ui.passwordInput.style.backgroundColor = "#f9fafb";
+            ui.chatInput.disabled = true;
+            ui.chatSend.disabled = true;
+            ui.chatInput.placeholder = "Enter correct password to chat...";
         }
     });
 
@@ -183,38 +209,42 @@ function setupChat() {
 
 async function sendMessage() {
     const text = ui.chatInput.value;
-    const key = ui.apiKeyInput.value;
+    const userPass = ui.passwordInput.value;
     
-    if (!text || !key) return;
+    // Doble chequeo de seguridad
+    if (!text || userPass !== VIP_PASSWORD) {
+        alert("Access Denied: Invalid Password.");
+        return;
+    }
 
-    // 1. Pintar mensaje usuario
+    // 1. Mostrar mensaje usuario
     addMessage(text, 'user-msg');
     ui.chatInput.value = '';
     
-    // 2. Pintar "Pensando..."
+    // 2. Mostrar "Pensando..."
     const loadingDiv = addMessage('Tactical analysis...', 'bot-msg');
 
     try {
-        // 3. LLAMADA A LA API DEEPSEEK
+        // 3. Llamada a la IA (Usando tu SYSTEM_KEY oculta)
         const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${key}`
+                "Authorization": `Bearer ${SYSTEM_KEY}`
             },
             body: JSON.stringify({
                 model: "deepseek-chat",
                 messages: [
                     { 
                         role: "system", 
-                        content: "You are 'The Gaffer', an intense, charismatic English football manager teaching English. Use football metaphors (VAR, offside, red card) to explain grammar and vocabulary. Be brief, direct, and motivational." 
+                        content: "You are 'The Gaffer', an intense English football manager teaching English. Be brief, motivational, and use football metaphors." 
                     },
                     { role: "user", content: text }
                 ]
             })
         });
 
-        if (!response.ok) throw new Error("API Error");
+        if (!response.ok) throw new Error("API Limit reached or Key Error");
 
         const data = await response.json();
         
@@ -222,20 +252,20 @@ async function sendMessage() {
         loadingDiv.innerText = data.choices[0].message.content;
 
     } catch (error) {
-        loadingDiv.innerText = "❌ Foul Play: Invalid API Key or Connection Error.";
+        loadingDiv.innerText = "❌ Server overloaded. Try again later.";
         console.error(error);
     }
 }
 
-// Función auxiliar para añadir globos de chat
+// Función auxiliar para añadir mensajes al chat
 function addMessage(text, className) {
     const div = document.createElement('div');
     div.className = `message ${className}`;
     div.innerText = text;
     ui.chatHistory.appendChild(div);
-    ui.chatHistory.scrollTop = ui.chatHistory.scrollHeight; // Auto-scroll al final
+    ui.chatHistory.scrollTop = ui.chatHistory.scrollHeight;
     return div;
 }
 
-// ARRANQUE DEL SISTEMA
+// ARRANQUE
 initLeague();
