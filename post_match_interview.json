@@ -1,0 +1,264 @@
+{
+  "file": "post_match_interview.json",
+  "title": "Post Match Interview",
+  "meta": {
+    "difficulty_elo": 1500,
+    "lesson_id": "gen_1768864692"
+  },
+  "content": {
+    "title": "The Post-Match Interview: Talking Tactics",
+    "intro_hook": "The final whistle blows, but the game isn't over until you've faced the cameras.",
+    "core_concept": {
+      "explanation": "A post-match interview is a conversation where a player or manager answers questions from journalists immediately after a game. It's a chance to explain performance, give credit, and show sportsmanship. The language used is often diplomatic, positive, and focused on the team.",
+      "analogy": "Think of it like the team's post-game debrief, but for the public. You analyse the key moments, praise your teammates' work rate, and set your sights on the next fixture, just as you would in the dressing room."
+    },
+    "vocabulary_rich": [
+      {
+        "term": "Gutted",
+        "meaning": "Extremely disappointed or upset."
+      },
+      {
+        "term": "Over the moon",
+        "meaning": "Extremely happy or delighted."
+      },
+      {
+        "term": "A game of two halves",
+        "meaning": "A match where each team dominated one half."
+      },
+      {
+        "term": "Credit to the lads",
+        "meaning": "Praise for the effort and performance of the players."
+      },
+      {
+        "term": "We go again",
+        "meaning": "We move on and focus on the next match."
+      },
+      {
+        "term": "A tough place to come",
+        "meaning": "Referring to an opponent's stadium that is difficult to play at."
+      },
+      {
+        "term": "The rub of the green",
+        "meaning": "Luck, especially good luck during a match."
+      },
+      {
+        "term": "A proper shift",
+        "meaning": "A hard, honest effort from a player or the team."
+      }
+    ]
+  },
+  "interactive_engine": {
+    "questions": [
+      {
+        "id": 1,
+        "scenario": "Your team has just lost 1-0 to a last-minute penalty. The interviewer asks, 'How do you feel about that result?' What's the most professional response?",
+        "options": [
+          {
+            "text": "\"The referee was a disgrace. He cost us the game.\"",
+            "outcome": "WRONG",
+            "feedback": "Blaming officials is unprofessional and can lead to fines. Focus on your team's performance."
+          },
+          {
+            "text": "\"Absolutely gutted. We gave everything and to lose like that at the death is cruel, but we have to take it on the chin.\"",
+            "outcome": "CORRECT",
+            "feedback": "Perfect. Shows honest emotion, credits the team's effort, and demonstrates resilience."
+          },
+          {
+            "text": "\"I don't want to talk about it. Next question.\"",
+            "outcome": "WRONG",
+            "feedback": "This is rude and uncooperative. Post-match interviews are part of the job."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "scenario": "You've just scored a hat-trick in a 3-2 win. The interviewer says, 'Three goals! You must be delighted?' How do you respond?",
+        "options": [
+          {
+            "text": "\"Yeah, of course. It's all about me today, I was on fire.\"",
+            "outcome": "WRONG",
+            "feedback": "Sounds arrogant. Always try to share credit with the team."
+          },
+          {
+            "text": "\"Over the moon, but the most important thing is the three points. The lads were brilliant in creating the chances.\"",
+            "outcome": "CORRECT",
+            "feedback": "Excellent. Shows happiness but prioritises the team result and praises teammates."
+          },
+          {
+            "text": "\"It was okay. I should have scored four, really.\"",
+            "outcome": "WRONG",
+            "feedback": "This sounds ungrateful and dismissive of a great achievement."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "scenario": "Your team played poorly in the first half but improved massively to win in the second. The interviewer asks for your analysis.",
+        "options": [
+          {
+            "text": "\"The manager gave us a proper rollicking at half-time, and it worked.\"",
+            "outcome": "WRONG",
+            "feedback": "Revealing private dressing room details is generally frowned upon."
+          },
+          {
+            "text": "\"It was a real game of two halves. We weren't at the races early on, but we showed great character to turn it around after the break.\"",
+            "outcome": "CORRECT",
+            "feedback": "Uses the perfect idiom, acknowledges the poor start, and highlights the positive reaction."
+          },
+          {
+            "text": "\"We just decided to start playing football in the second half.\"",
+            "outcome": "WRONG",
+            "feedback": "This implies you weren't trying in the first half, which is an unhelpful admission."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "scenario": "You're the manager. A key player missed a sitter in the 89th minute that would have won the game. A journalist asks about that miss specifically.",
+        "options": [
+          {
+            "text": "\"If he scores that, we win the game. It's that simple. He knows he let us down.\"",
+            "outcome": "WRONG",
+            "feedback": "Publicly criticising an individual player destroys morale and trust."
+          },
+          {
+            "text": "\"These things happen in football. He's been brilliant for us all season, and we create and miss chances as a team. We'll support him.\"",
+            "outcome": "CORRECT",
+            "feedback": "Protects the player, spreads responsibility, and shows strong man-management."
+          },
+          {
+            "text": "\"I didn't see it. I was already thinking about the next game.\"",
+            "outcome": "WRONG",
+            "feedback": "Dismissive and clearly untrue. You need to address the key moment of the match."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "scenario": "Your team has drawn 0-0 away at a top-four rival. The interviewer asks if it's a good point.",
+        "options": [
+          {
+            "text": "\"No, we came to win. A draw is useless.\"",
+            "outcome": "WRONG",
+            "feedback": "Devalues a solid result at a difficult ground. Can demotivate the team."
+          },
+          {
+            "text": "\"It's a solid point. This is a tough place to come, they're a top side, and we defended well. We go again next week.\"",
+            "outcome": "CORRECT",
+            "feedback": "Realistic, respectful to the opponent, highlights a positive (defence), and looks forward."
+          },
+          {
+            "text": "\"We were lucky. They should have beaten us.\"",
+            "outcome": "WRONG",
+            "feedback": "Undermines your team's achievement and makes the performance sound weak."
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "scenario": "The interviewer suggests your winning goal was 'against the run of play' (meaning the other team was dominating). How do you respond?",
+        "options": [
+          {
+            "text": "\"That's rubbish. We controlled the whole game.\"",
+            "outcome": "WRONG",
+            "feedback": "Argumentative and defensive, even if you disagree."
+          },
+          {
+            "text": "\"They had a good spell, but you have to be clinical when your chance comes. We defended resolutely and took our big moment.\"",
+            "outcome": "CORRECT",
+            "feedback": "Acknowledges the opponent's play fairly, but pivots to praise your own team's key strengths."
+          },
+          {
+            "text": "\"Yeah, we got the rub of the green today, but we'll take it!\"",
+            "outcome": "WRONG",
+            "feedback": "While 'rub of the green' is a good phrase, over-relying on 'luck' diminishes your team's skill."
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "scenario": "A young player from your academy made his debut today. The interviewer asks for your thoughts on his performance.",
+        "options": [
+          {
+            "text": "\"He was nervous and made a few mistakes, but he's young.\"",
+            "outcome": "WRONG",
+            "feedback": "Focusing on negatives in public can shatter a young player's confidence."
+          },
+          {
+            "text": "\"I thought he was excellent. To come in and put in a shift like that on his debut is a real credit to him and the academy.\"",
+            "outcome": "CORRECT",
+            "feedback": "Positive, uses encouraging language ('put in a shift', 'credit'), and boosts the player's morale."
+          },
+          {
+            "text": "\"He did a job. We didn't have anyone else fit.\"",
+            "outcome": "WRONG",
+            "feedback": "Makes it sound like he was a last resort, which is demeaning."
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "scenario": "The interviewer asks about a controversial refereeing decision that went in your favour. How do you handle it?",
+        "options": [
+          {
+            "text": "\"I haven't seen it back, so I can't comment.\"",
+            "outcome": "CORRECT",
+            "feedback": "The safest and most professional answer. Avoids inflaming controversy."
+          },
+          {
+            "text": "\"We got lucky with that one! I think it was a foul, to be honest.\"",
+            "outcome": "WRONG",
+            "feedback": "Admitting the referee was wrong, even in your favour, can cause problems and sound insincere."
+          },
+          {
+            "text": "\"The ref got it right. It was never a foul.\"",
+            "outcome": "WRONG",
+            "feedback": "This is taking a strong stance on a controversial issue. It's better to be non-committal."
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "scenario": "Your team has just secured promotion with a last-day victory. The interviewer asks what this means for the club.",
+        "options": [
+          {
+            "text": "\"It's what we deserve. We've been the best team all season.\"",
+            "outcome": "WRONG",
+            "feedback": "Sounds boastful. Share the moment with the fans and the whole club."
+          },
+          {
+            "text": "\"It means everything. For the players, the staff, and most importantly these incredible fans who have stuck with us. This is for them.\"",
+            "outcome": "CORRECT",
+            "feedback": "Emotional, inclusive, and acknowledges the wider club community. Perfect for a big moment."
+          },
+          {
+            "text": "\"Job done. Now we need to focus on staying up next year.\"",
+            "outcome": "WRONG",
+            "feedback": "Too pragmatic and cold. Doesn't savour the huge achievement."
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "scenario": "You're a player who was substituted early after a poor performance. The interviewer asks if you're frustrated.",
+        "options": [
+          {
+            "text": "\"Yes, obviously. The manager's decision cost us the game.\"",
+            "outcome": "WRONG",
+            "feedback": "Directly criticising the manager is a sure way to get dropped or cause a media storm."
+          },
+          {
+            "text": "\"Every player wants to play 90 minutes, but the manager makes decisions for the team. I'll work hard in training to be ready for next week.\"",
+            "outcome": "CORRECT",
+            "feedback": "Shows professional disappointment but respects the manager's authority and focuses on the future."
+          },
+          {
+            "text": "\"I don't know why I was taken off. You'll have to ask him.\"",
+            "outcome": "WRONG",
+            "feedback": "Passive-aggressive and unhelpful. It passes the buck and shows a lack of team spirit."
+          }
+        ]
+      }
+    ]
+  }
+}

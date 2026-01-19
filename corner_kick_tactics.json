@@ -1,0 +1,248 @@
+{
+  "file": "corner_kick_tactics.json",
+  "title": "Corner Kick Tactics",
+  "meta": {
+    "difficulty_elo": 1500,
+    "lesson_id": "gen_1768864622"
+  },
+  "content": {
+    "title": "Corner Kick Tactics: Turning Set-Pieces into Goals",
+    "intro_hook": "Don't just cross it and hope. A well-drilled corner is a golden chance to score.",
+    "core_concept": {
+      "explanation": "Corner kicks are planned attacking plays from the corner flag. Teams use specific routines to create scoring opportunities, involving player movement, blocking defenders, and precise delivery. The aim is to outsmart the organised defence.",
+      "analogy": "Think of it like a rehearsed play in basketball or American football. Everyone has a specific role and timing to create space for the key scorer."
+    },
+    "vocabulary_rich": [
+      {
+        "term": "Near Post",
+        "meaning": "The goalpost closest to where the corner is being taken. A common target for flick-ons."
+      },
+      {
+        "term": "Far Post",
+        "meaning": "The goalpost furthest from the corner taker. Often targeted for deeper crosses."
+      },
+      {
+        "term": "Delivery",
+        "meaning": "The act of kicking the ball from the corner flag. Can be in-swinging (curving towards goal) or out-swinging (curving away)."
+      },
+      {
+        "term": "Block/Run",
+        "meaning": "An attacking player's movement to impede a defender, creating space for a teammate to attack the ball."
+      }
+    ]
+  },
+  "interactive_engine": {
+    "questions": [
+      {
+        "id": 1,
+        "scenario": "Your team wins a corner on the left side. Your tallest, strongest player is marked by two defenders in the centre of the box. What's a good tactical option?",
+        "options": [
+          {
+            "text": "Lump the ball directly onto your tall player's head.",
+            "outcome": "WRONG",
+            "feedback": "With two markers, it's a low-percentage play. The defence expects this."
+          },
+          {
+            "text": "Play a short corner to a teammate to change the angle of attack.",
+            "outcome": "CORRECT",
+            "feedback": "Good choice. A short pass pulls defenders out of position, potentially freeing your key player for a cross from a better angle."
+          },
+          {
+            "text": "Take the corner quickly before your tall player gets into the box.",
+            "outcome": "WRONG",
+            "feedback": "Rushing wastes your main aerial threat. Organisation is key for corners."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "scenario": "The opposition goalkeeper is poor at claiming crosses. What type of delivery is most effective?",
+        "options": [
+          {
+            "text": "A low, driven cross along the six-yard box.",
+            "outcome": "WRONG",
+            "feedback": "This is risky and often cleared by the first defender. It doesn't directly test the keeper."
+          },
+          {
+            "text": "A high, looping cross aimed at the penalty spot.",
+            "outcome": "CORRECT",
+            "feedback": "Perfect. A high ball into a crowded area forces the hesitant keeper to make a decision, causing chaos and chances."
+          },
+          {
+            "text": "A pass back to your centre-back 30 yards from goal.",
+            "outcome": "WRONG",
+            "feedback": "This surrenders the attacking pressure of the corner entirely."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "scenario": "You are taking an in-swinging corner from the right. Where should a teammate make a 'near-post run'?",
+        "options": [
+          {
+            "text": "From the edge of the box to the far post.",
+            "outcome": "WRONG",
+            "feedback": "That's a far-post run. A near-post run attacks the space closest to the taker."
+          },
+          {
+            "text": "From a central position towards the front post (nearest to you).",
+            "outcome": "CORRECT",
+            "feedback": "Yes. They attack the ball's flight path early, aiming to flick it on or score directly."
+          },
+          {
+            "text": "They should stand still on the penalty spot.",
+            "outcome": "WRONG",
+            "feedback": "Static players are easy to mark. Movement is essential to lose defenders."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "scenario": "What is the primary purpose of a 'block' or 'screen' during a corner routine?",
+        "options": [
+          {
+            "text": "To physically foul a key defender.",
+            "outcome": "WRONG",
+            "feedback": "It's a tactical obstruction, not a foul. The blocker must be stationary."
+          },
+          {
+            "text": "To create space for an attacker by impeding their marker.",
+            "outcome": "CORRECT",
+            "feedback": "Exactly. A teammate legally stands in the defender's path, allowing the attacker a free run at the ball."
+          },
+          {
+            "text": "To protect the goalkeeper from opposing players.",
+            "outcome": "WRONG",
+            "feedback": "This is not a common tactic for attacking corners. Blocking is for freeing attackers."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "scenario": "Your team is losing 1-0 in the 89th minute. You win a corner. Your goalkeeper is great in the air. What might you do?",
+        "options": [
+          {
+            "text": "Send the goalkeeper up to join the attack in the opposition box.",
+            "outcome": "CORRECT",
+            "feedback": "In a desperate situation, this adds an extra aerial threat. It's a high-risk, high-reward tactic."
+          },
+          {
+            "text": "Take the corner short to keep possession and build slowly.",
+            "outcome": "WRONG",
+            "feedback": "There's no time for a slow build-up. You need to get the ball into the danger area immediately."
+          },
+          {
+            "text": "Have every player, including the keeper, stay back to defend a counter-attack.",
+            "outcome": "WRONG",
+            "feedback": "While defending the counter is important, you must commit players to score. You're losing."
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "scenario": "What is an 'out-swinging' corner?",
+        "options": [
+          {
+            "text": "A cross that curves away from the goal after being kicked.",
+            "outcome": "CORRECT",
+            "feedback": "Correct. A right-footed player on the right corner kicks it so it swerves away from the goalmouth."
+          },
+          {
+            "text": "A cross that curves towards the goal after being kicked.",
+            "outcome": "WRONG",
+            "feedback": "That describes an 'in-swinging' corner."
+          },
+          {
+            "text": "A corner taken from outside the quadrant.",
+            "outcome": "WRONG",
+            "feedback": "That's just an incorrectly taken corner, not a tactical type."
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "scenario": "A defender is assigned 'man-marking' duty on your best header. How can your team counter this?",
+        "options": [
+          {
+            "text": "Tell your player to just try and out-jump his marker.",
+            "outcome": "WRONG",
+            "feedback": "This is a physical battle you might lose. Use tactics to gain an advantage."
+          },
+          {
+            "text": "Use a 'decoy run' to drag the marker away, creating space for another attacker.",
+            "outcome": "CORRECT",
+            "feedback": "Smart. If the marker follows the decoy, it opens space. If he doesn't, the decoy might get free."
+          },
+          {
+            "text": "Avoid crossing the ball to that area of the box completely.",
+            "outcome": "WRONG",
+            "feedback": "This lets the defender win without even having to make a challenge."
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "scenario": "Where should players be positioned for a 'second ball' opportunity from a corner?",
+        "options": [
+          {
+            "text": "On the halfway line, ready to defend.",
+            "outcome": "WRONG",
+            "feedback": "These players are too far away to react to a knockdown or clearance."
+          },
+          {
+            "text": "On the edge of the penalty area (the 'D').",
+            "outcome": "CORRECT",
+            "feedback": "Yes. Cleared balls often fall to the edge of the box. Players here can shoot or recycle possession."
+          },
+          {
+            "text": "Standing directly behind the goalkeeper.",
+            "outcome": "WRONG",
+            "feedback": "This is an offside position and offers no tactical benefit."
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "scenario": "You see attackers forming a tight group just inside the box before a corner. What is this likely setting up?",
+        "options": [
+          {
+            "text": "A defensive wall to protect their goalkeeper.",
+            "outcome": "WRONG",
+            "feedback": "Defensive walls are for free-kicks, not attacking corners."
+          },
+          {
+            "text": "A 'bunch' or 'train' routine to confuse zonal markers.",
+            "outcome": "CORRECT",
+            "feedback": "Correct. The group breaks in different directions at the last moment, making it hard for zonal defenders to pick up their runners."
+          },
+          {
+            "text": "A protest against the referee's decision.",
+            "outcome": "WRONG",
+            "feedback": "This is not a standard football tactic."
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "scenario": "What is the main advantage of a 'drilled', low corner (hit with pace along the ground)?",
+        "options": [
+          {
+            "text": "It is easier for the goalkeeper to catch.",
+            "outcome": "WRONG",
+            "feedback": "Keepers hate low, hard balls through crowds. They are difficult to handle."
+          },
+          {
+            "text": "It can cause chaos with deflections and is hard to clear decisively.",
+            "outcome": "CORRECT",
+            "feedback": "Exactly. A ball zipped across the six-yard box can be turned in by any touch, from either team."
+          },
+          {
+            "text": "It allows the taker to score directly from the corner.",
+            "outcome": "WRONG",
+            "feedback": "An 'Olympic Goal' is extremely rare. A low drive is not aimed at the net."
+          }
+        ]
+      }
+    ]
+  }
+}

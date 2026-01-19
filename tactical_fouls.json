@@ -1,0 +1,248 @@
+{
+  "file": "tactical_fouls.json",
+  "title": "Tactical Fouls",
+  "meta": {
+    "difficulty_elo": 1500,
+    "lesson_id": "gen_1768864380"
+  },
+  "content": {
+    "title": "The Professional Foul: A Tactical Tool",
+    "intro_hook": "Sometimes, a foul isn't a mistake\u2014it's a calculated decision to stop a dangerous attack.",
+    "core_concept": {
+      "explanation": "A tactical foul is a deliberate infringement committed to stop an opponent's promising attack, usually by a defender who is out of position. While it results in a free-kick and often a yellow card, it is considered a worthwhile trade-off to prevent a more dangerous scoring opportunity.",
+      "analogy": "It's like a defender in basketball intentionally fouling a player on a fast break to prevent an easy layup, accepting the free throws to reset the defence."
+    },
+    "vocabulary_rich": [
+      {
+        "term": "Professional Foul",
+        "meaning": "A deliberate foul, usually a trip or pull, committed to stop a promising attack."
+      },
+      {
+        "term": "Taking One for the Team",
+        "meaning": "A phrase describing a player who commits a tactical foul and accepts the resulting booking."
+      },
+      {
+        "term": "Last Man",
+        "meaning": "The final defender between the attacker and the goalkeeper; a foul by this player often results in a red card."
+      },
+      {
+        "term": "Stopping a Counter-Attack",
+        "meaning": "The primary purpose of a tactical foul\u2014to halt a fast break by the opposition before it develops."
+      }
+    ]
+  },
+  "interactive_engine": {
+    "questions": [
+      {
+        "id": 1,
+        "scenario": "Your team loses the ball in midfield. An opponent turns and starts sprinting towards your goal with only one defender ahead of him. What is the primary tactical consideration for your nearest midfielder?",
+        "options": [
+          {
+            "text": "Sprint back to goal to defend the cross.",
+            "outcome": "WRONG",
+            "feedback": "By the time you get there, the attack may have already resulted in a shot. The immediate danger is the player with the ball."
+          },
+          {
+            "text": "Commit a tactical foul to stop the counter-attack immediately.",
+            "outcome": "CORRECT",
+            "feedback": "Correct. A strategic foul here stops the dangerous break, allows your team to regroup, and concedes only a distant free-kick, likely for a yellow card."
+          },
+          {
+            "text": "Shout at your defender to step up and play offside.",
+            "outcome": "WRONG",
+            "feedback": "This is risky and difficult to coordinate in a fast break. The player with the ball is already ahead and in control."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "scenario": "A winger has beaten your full-back and is racing towards the byline in the final third. You are the covering centre-back. What is the key decision?",
+        "options": [
+          {
+            "text": "Stand your ground and prepare to block a cross.",
+            "outcome": "CORRECT",
+            "feedback": "Good. You are not the last man, and the attacker is moving wide. The angle for a shot is poor. Positioning to block the cross is the safer, non-punishable option."
+          },
+          {
+            "text": "Slide in to try and win the ball cleanly.",
+            "outcome": "WRONG",
+            "feedback": "A slide tackle here is high risk. If you miss, you're out of the play completely and may give away a penalty."
+          },
+          {
+            "text": "Pull the winger's shirt to stop his run.",
+            "outcome": "WRONG",
+            "feedback": "This is an unnecessary tactical foul. The attacker is not in a central, direct scoring position. A foul here gives away a dangerous free-kick and a certain booking."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "scenario": "You are the last defender. A striker plays the ball past you and is about to run through on goal. You stick out a leg and trip him. What is the most likely outcome?",
+        "options": [
+          {
+            "text": "Yellow card and a free-kick.",
+            "outcome": "WRONG",
+            "feedback": "Denying an obvious goal-scoring opportunity (DOGSO) when you are the last defender is usually a red card offence, not yellow."
+          },
+          {
+            "text": "Red card and a penalty (if inside the box).",
+            "outcome": "CORRECT",
+            "feedback": "Correct. As the last defender, you have illegally denied a clear goal-scoring opportunity. This is a straight red card and a penalty if the foul occurred inside the area."
+          },
+          {
+            "text": "A warning from the referee.",
+            "outcome": "WRONG",
+            "feedback": "This is a serious foul in a critical area of the pitch. A simple warning is highly unlikely."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "scenario": "Your team is winning 1-0 in the 89th minute. An opponent receives the ball near the halfway line with space to run. You have a yellow card already. What should you do?",
+        "options": [
+          {
+            "text": "Make a tactical foul immediately to kill the attack.",
+            "outcome": "WRONG",
+            "feedback": "With a yellow card already, a second yellow means a red card and suspension. This is a huge risk so late in the game."
+          },
+          {
+            "text": "Jockey and shepherd the player away from goal, delaying until help arrives.",
+            "outcome": "CORRECT",
+            "feedback": "Correct. The priority is to stay on the pitch. Use your body to slow the attacker down and force them wide or backwards without committing a foul."
+          },
+          {
+            "text": "Shout for a teammate who doesn't have a yellow card to make the foul.",
+            "outcome": "WRONG",
+            "feedback": "While this happens, it's not a reliable plan. You are responsible for your positioning and decisions."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "scenario": "Where on the pitch is committing a tactical foul generally considered MOST effective and least risky?",
+        "options": [
+          {
+            "text": "Inside your own penalty area.",
+            "outcome": "WRONG",
+            "feedback": "A foul here gives away a penalty\u2014the highest-value chance for the opponent. This is the worst place to foul."
+          },
+          {
+            "text": "In the central area just inside the opponent's half.",
+            "outcome": "CORRECT",
+            "feedback": "Correct. A foul here stops a dangerous break, but the resulting free-kick is from a long distance with many defenders between the ball and your goal. Good risk/reward."
+          },
+          {
+            "text": "On the wing, level with the opponent's penalty area.",
+            "outcome": "WRONG",
+            "feedback": "This area is dangerous for crossing free-kicks. It's better to defend the cross from open play than give a skilled player a chance to deliver a set piece."
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "scenario": "What is a key non-verbal signal a player might use to indicate to a teammate that they should commit a tactical foul?",
+        "options": [
+          {
+            "text": "Pointing to the sky.",
+            "outcome": "WRONG",
+            "feedback": "This has no commonly understood tactical meaning in this context."
+          },
+          {
+            "text": "A loud, sharp shout of 'MAN ON!'.",
+            "outcome": "WRONG",
+            "feedback": "This is a warning to a teammate in possession, not an instruction to foul."
+          },
+          {
+            "text": "A clear hand gesture, like a chopping motion across the neck or a pointing finger drawn across the throat.",
+            "outcome": "CORRECT",
+            "feedback": "Correct. While not official, such gestures are widely understood in football as an instruction to 'take him down' or 'stop the play' by any means necessary."
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "scenario": "You commit a tactical foul by tripping a player. How should you behave towards the referee to minimise the chance of a harsher punishment?",
+        "options": [
+          {
+            "text": "Immediately protest that it wasn't a foul.",
+            "outcome": "WRONG",
+            "feedback": "This will annoy the referee and may lead to a quicker or more certain booking for dissent."
+          },
+          {
+            "text": "Walk away quickly, avoiding eye contact.",
+            "outcome": "WRONG",
+            "feedback": "This can look guilty and disrespectful. The referee will call you back."
+          },
+          {
+            "text": "Accept the decision, put your hands up in a slight apology, and walk back to your position without argument.",
+            "outcome": "CORRECT",
+            "feedback": "Correct. This shows respect for the official's decision. While you will likely still be booked, it reduces the risk of a red card for dissent or the foul being judged as more cynical."
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "scenario": "Which of these is NOT a common type of tactical foul?",
+        "options": [
+          {
+            "text": "A subtle shirt-pull from behind.",
+            "outcome": "WRONG",
+            "feedback": "This is a classic tactical foul\u2014it's discreet but effective at stopping a runner."
+          },
+          {
+            "text": "A late, clipping challenge on the ankle.",
+            "outcome": "WRONG",
+            "feedback": "This is another common method to trip a player without excessive force."
+          },
+          {
+            "text": "A fair, shoulder-to-shoulder charge to win the ball.",
+            "outcome": "CORRECT",
+            "feedback": "Correct. This is a legal challenge. A tactical foul, by definition, is an illegal infringement."
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "scenario": "Why might a manager be frustrated if a player does NOT commit a tactical foul in a specific situation?",
+        "options": [
+          {
+            "text": "Because the player missed a chance to score.",
+            "outcome": "WRONG",
+            "feedback": "A tactical foul is a defensive action, not related to scoring."
+          },
+          {
+            "text": "Because the player showed a lack of tactical awareness, allowing a dangerous attack that led to a goal.",
+            "outcome": "CORRECT",
+            "feedback": "Correct. The manager's frustration stems from the player failing to make a smart, if cynical, professional decision that could have prevented a goal."
+          },
+          {
+            "text": "Because the player wasted time unnecessarily.",
+            "outcome": "WRONG",
+            "feedback": "While tactical fouls can waste time, that's a secondary benefit. The primary reason is to stop an attack."
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "scenario": "A player commits a tactical foul and receives a yellow card. Later, they commit an identical foul in a similar situation. What is the consequence?",
+        "options": [
+          {
+            "text": "A second yellow card, followed by a red card and sending off.",
+            "outcome": "CORRECT",
+            "feedback": "Correct. Two yellow cards for any offences result in a red card. The player must now leave the pitch and their team plays with 10 players."
+          },
+          {
+            "text": "A final warning from the referee.",
+            "outcome": "WRONG",
+            "feedback": "The referee may speak to the player, but the Laws of the Game mandate a second yellow card for a second bookable offence."
+          },
+          {
+            "text": "A direct red card, as the foul is now 'persistent infringement'.",
+            "outcome": "WRONG",
+            "feedback": "Persistent infringement is a separate category. For two identical tactical fouls, the standard procedure is two separate yellow cards."
+          }
+        ]
+      }
+    ]
+  }
+}

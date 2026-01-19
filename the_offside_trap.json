@@ -1,0 +1,253 @@
+{
+  "file": "the_offside_trap.json",
+  "title": "The Offside Trap",
+  "meta": {
+    "difficulty_elo": 1500,
+    "lesson_id": "gen_1768864458"
+  },
+  "content": {
+    "title": "The Offside Trap",
+    "intro_hook": "Master the art of timing and teamwork to catch attackers offside and turn defence into attack.",
+    "core_concept": {
+      "explanation": "The offside trap is a coordinated defensive strategy where defenders step forward in unison just before an opponent's pass is played, aiming to leave an attacking player in an offside position. It requires perfect timing, communication, and a high defensive line. When executed correctly, it stops an attack and awards your team a free-kick.",
+      "analogy": "It's like a perfectly timed jump in a game of jump rope. The defenders are the rope-turners, deciding the exact moment to 'swing' the rope (the defensive line) up, catching the attacker (the jumper) who mistimed their entry."
+    },
+    "vocabulary_rich": [
+      {
+        "term": "Offside Line",
+        "meaning": "The imaginary line across the pitch, level with the second-last defender (usually the last outfield player)."
+      },
+      {
+        "term": "High Line",
+        "meaning": "A defensive strategy where the back line positions themselves far up the pitch, close to the halfway line, to compress space."
+      },
+      {
+        "term": "Stepping Up",
+        "meaning": "The synchronized movement of the defensive line forward to catch an opponent offside."
+      },
+      {
+        "term": "Playing the Trap",
+        "meaning": "The act of deliberately luring an opponent into an offside position by holding a high line and timing the step forward."
+      }
+    ]
+  },
+  "interactive_engine": {
+    "questions": [
+      {
+        "id": 1,
+        "scenario": "Your team is defending. The opposition's midfielder is about to play a through ball to their striker. As the last defender, what is your primary visual cue to initiate the offside trap?",
+        "options": [
+          {
+            "text": "When the striker starts his run.",
+            "outcome": "WRONG",
+            "feedback": "Too early. The key moment is when the ball is *played*, not when the run starts."
+          },
+          {
+            "text": "The moment the passer's foot makes contact with the ball.",
+            "outcome": "CORRECT",
+            "feedback": "Perfect. The offside position is judged at the exact moment the ball is played. You must step forward at that instant."
+          },
+          {
+            "text": "When you hear your goalkeeper shout 'NOW!'.",
+            "outcome": "WRONG",
+            "feedback": "While communication is key, the visual cue of the pass is the definitive signal. The shout should coincide with it."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "scenario": "You are the left-back in a back four. The right-back is slightly deeper than you and the two centre-backs. The opposition plays a through ball. Has the offside trap been set correctly?",
+        "options": [
+          {
+            "text": "Yes, as long as the striker is ahead of the ball.",
+            "outcome": "WRONG",
+            "feedback": "The offside position is judged against the second-last defender. A staggered line makes this impossible to judge consistently."
+          },
+          {
+            "text": "No, the defensive line is not straight. The right-back is playing the attacker onside.",
+            "outcome": "CORRECT",
+            "feedback": "Correct. For an offside trap to work, the back line must move as one flat unit. The deepest defender sets the line for everyone."
+          },
+          {
+            "text": "Yes, because three defenders are still ahead of the striker.",
+            "outcome": "WRONG",
+            "feedback": "It only takes one defender (the right-back) being deeper to play the attacker onside. The line is broken."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "scenario": "An attacker is in an offside position when the ball is played, but a defender deliberately kicks the ball towards his own goal and it deflects to that attacker. Is it offside?",
+        "options": [
+          {
+            "text": "Yes, the attacker was in an offside position when the initial pass was made.",
+            "outcome": "WRONG",
+            "feedback": "The initial phase is over. A 'deliberate play' by a defender resets the offside phase."
+          },
+          {
+            "text": "No, because the defender made a deliberate play on the ball.",
+            "outcome": "CORRECT",
+            "feedback": "Correct. Law 11 states that a player is not offside if they receive the ball from an opponent who deliberately plays it. The trap was sprung but then nullified by the defender's action."
+          },
+          {
+            "text": "Yes, because the attacker gained an advantage from being in that position.",
+            "outcome": "WRONG",
+            "feedback": "While true, the key exception here is the defender's deliberate intervention, which overrides that."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "scenario": "Why is communication, often led by the goalkeeper, absolutely vital for a successful offside trap?",
+        "options": [
+          {
+            "text": "To distract the opposition striker.",
+            "outcome": "WRONG",
+            "feedback": "While it might, that's not its primary purpose."
+          },
+          {
+            "text": "To ensure every defender steps forward at the exact same moment.",
+            "outcome": "CORRECT",
+            "feedback": "Exactly. A split-second difference can leave an attacker onside. A loud, clear command (like 'STEP!') synchronises the movement."
+          },
+          {
+            "text": "To tell the midfielders to drop back and cover.",
+            "outcome": "WRONG",
+            "feedback": "This is a related but separate tactical instruction. The trap is about the defenders' coordinated movement."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "scenario": "What is the major risk of employing the offside trap, especially if the timing is wrong?",
+        "options": [
+          {
+            "text": "Conceding a corner kick.",
+            "outcome": "WRONG",
+            "feedback": "Not the primary risk. A failed trap usually leads to a much more dangerous situation."
+          },
+          {
+            "text": "Giving away a penalty.",
+            "outcome": "WRONG",
+            "feedback": "Unlikely directly from a mistimed step forward."
+          },
+          {
+            "text": "Leaving the attacker one-on-one with the goalkeeper.",
+            "outcome": "CORRECT",
+            "feedback": "Correct. If the trap is mistimed, the defensive line has moved up, leaving a huge gap behind them for the attacker to run into with only the keeper to beat."
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "scenario": "A winger is level with the last defender when the through ball is played. He then uses his pace to run past the defender and collect the ball. Is he offside?",
+        "options": [
+          {
+            "text": "Yes, he ended up in front of the defender.",
+            "outcome": "WRONG",
+            "feedback": "Offside is judged at the moment the ball is played, not where players end up."
+          },
+          {
+            "text": "No, he was level at the moment the pass was made.",
+            "outcome": "CORRECT",
+            "feedback": "Correct. Being level with the second-last defender is not an offside position. The trap failed because the line didn't step up in time to get ahead of him."
+          },
+          {
+            "text": "Yes, because he gained an advantage from his position.",
+            "outcome": "WRONG",
+            "feedback": "He didn't gain an advantage from an offside position, as he was not in an offside position when the ball was played."
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "scenario": "Your team has just won the ball high up the pitch after a successful offside trap. What is the immediate tactical benefit?",
+        "options": [
+          {
+            "text": "You get a goal kick.",
+            "outcome": "WRONG",
+            "feedback": "A successful trap results in an indirect free-kick to your team, not a goal kick."
+          },
+          {
+            "text": "Your team is now in a great position to launch a counter-attack.",
+            "outcome": "CORRECT",
+            "feedback": "Exactly! The defence is already in a high position, and the opposition is often caught out of shape. This is the perfect moment for a fast, vertical counter."
+          },
+          {
+            "text": "The game stops for a substitution.",
+            "outcome": "WRONG",
+            "feedback": "No, play continues with the free-kick."
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "scenario": "Which of these player attributes is LEAST critical for a defender in a team that uses the offside trap frequently?",
+        "options": [
+          {
+            "text": "Blistering recovery pace.",
+            "outcome": "WRONG",
+            "feedback": "This is VERY critical. If the trap fails, pace is needed to recover and catch the attacker."
+          },
+          {
+            "text": "Excellent concentration for 90 minutes.",
+            "outcome": "WRONG",
+            "feedback": "Vital. One lapse in focus, one player holds the line, and the trap is broken."
+          },
+          {
+            "text": "Extreme physical strength in shoulder-to-shoulder duels.",
+            "outcome": "CORRECT",
+            "feedback": "While useful, it's the least specific to the trap. The trap is about positioning, timing, and pace. Strength is more important in box defending."
+          },
+          {
+            "text": "Strong tactical understanding and discipline.",
+            "outcome": "WRONG",
+            "feedback": "Perhaps the most critical attribute. They must understand the system and hold their position."
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "scenario": "An attacker receives the ball directly from a throw-in. Can he be offside from this situation?",
+        "options": [
+          {
+            "text": "Yes, the offside law applies to all restarts.",
+            "outcome": "WRONG",
+            "feedback": "There are specific exceptions. This is one of them."
+          },
+          {
+            "text": "No, a player cannot be offside directly from a throw-in.",
+            "outcome": "CORRECT",
+            "feedback": "Correct. Law 11 explicitly states there is no offside offence from a throw-in. An offside trap should not be attempted in this specific scenario."
+          },
+          {
+            "text": "Only if he is in the opponent's penalty area.",
+            "outcome": "WRONG",
+            "feedback": "The location on the pitch does not change this specific rule."
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "scenario": "The assistant referee raises their flag for offside. What should the defending team do immediately?",
+        "options": [
+          {
+            "text": "Stop playing and appeal to the referee.",
+            "outcome": "WRONG",
+            "feedback": "Dangerous. The whistle has not been blown. Only the referee's whistle stops play."
+          },
+          {
+            "text": "Continue playing until they hear the referee's whistle.",
+            "outcome": "CORRECT",
+            "feedback": "Absolutely correct. The flag is a signal, but the referee may overrule it. Play to the whistle. Stopping could allow the opposition to score."
+          },
+          {
+            "text": "Immediately take the free-kick from where the flag was raised.",
+            "outcome": "WRONG",
+            "feedback": "You cannot take a free-kick until the referee has stopped play and awarded it."
+          }
+        ]
+      }
+    ]
+  }
+}
