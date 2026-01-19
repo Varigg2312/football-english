@@ -3,15 +3,14 @@ const DB_FOLDER = './';
 // ==========================================
 // 🚨 ZONA DE CONFIGURACIÓN 🚨
 // ==========================================
-// TU CLAVE DE DEEPSEEK (Ya incluida)
+// Pega aquí TU CLAVE
 const SYSTEM_KEY = "sk-bb4843296d0f4f039379dc6bf65c53c7"; 
 
-// LA CONTRASEÑA PARA TUS ALUMNOS VIP
+// TU CONTRASEÑA
 const VIP_PASSWORD = "PRO-LEAGUE"; 
 // ==========================================
 
 const ui = {
-    // UI Principal
     search: document.getElementById('magic-search'),
     results: document.getElementById('search-results'),
     matchInfo: document.getElementById('match-info'),
@@ -28,17 +27,16 @@ const ui = {
     // UI del Chatbot
     chatTrigger: document.getElementById('coach-trigger'),
     chatModal: document.getElementById('coach-modal'),
-    chatMaximize: document.getElementById('maximize-chat'), // Botón nuevo
     chatClose: document.getElementById('close-chat'),
     chatHistory: document.getElementById('chat-history'),
     chatInput: document.getElementById('user-msg'),
     chatSend: document.getElementById('send-msg'),
     passwordInput: document.getElementById('api-key-input') 
+    // NOTA: He quitado 'maximize-chat' de aquí para evitar el error.
 };
 
 let allLessons = [];
 
-// 1. INICIALIZAR LIGA
 async function initLeague() {
     try {
         const response = await fetch(DB_FOLDER + 'index.json');
@@ -50,28 +48,25 @@ async function initLeague() {
     } catch (error) { console.error(error); if(ui.title) ui.title.innerText = "❌ System Error"; }
 }
 
-// 2. BUSCADOR
+// ... (Buscador y Lecciones igual que antes) ...
+
 function setupSearch() {
     if(!ui.search) return;
     ui.search.addEventListener('keyup', (e) => {
         const query = e.target.value.toLowerCase();
         ui.results.innerHTML = ''; 
         if (query.length < 1) { ui.results.classList.add('hidden'); return; }
-
         const matches = allLessons.filter(lesson => 
             lesson.title.toLowerCase().includes(query) || 
             lesson.file.toLowerCase().includes(query)
         );
-
         if (matches.length > 0) {
             ui.results.classList.remove('hidden');
             matches.forEach(lesson => {
                 const div = document.createElement('div');
                 div.className = 'result-item';
                 div.innerHTML = `<span>${lesson.title}</span> <strong>GO <i class="fa-solid fa-arrow-right"></i></strong>`;
-                div.onclick = () => {
-                    loadMatch(lesson.file); ui.search.value = lesson.title; ui.results.classList.add('hidden');
-                };
+                div.onclick = () => { loadMatch(lesson.file); ui.search.value = lesson.title; ui.results.classList.add('hidden'); };
                 ui.results.appendChild(div);
             });
         } else { ui.results.innerHTML = '<div class="result-item" style="color: #999">No matches found...</div>'; ui.results.classList.remove('hidden'); }
@@ -79,7 +74,6 @@ function setupSearch() {
     document.addEventListener('click', (e) => { if (!ui.search.contains(e.target)) ui.results.classList.add('hidden'); });
 }
 
-// 3. CARGAR LECCIÓN
 async function loadMatch(filename) {
     ui.main.classList.add('hidden'); ui.matchInfo.classList.add('hidden');
     try {
@@ -118,26 +112,37 @@ function renderTactics(lesson) {
     });
 }
 
-// 4. CHATBOT VIP (FULL SCREEN)
+// ==========================================
+// 4. CHATBOT VIP (CORREGIDO)
+// ==========================================
 function setupChat() {
     if(!ui.chatTrigger) return;
+    
+    // Abrir/Cerrar
     ui.chatTrigger.onclick = () => ui.chatModal.classList.remove('hidden');
     ui.chatClose.onclick = () => ui.chatModal.classList.add('hidden');
 
-    // LOGICA PANTALLA COMPLETA
-    if(ui.chatMaximize) {
-        ui.chatMaximize.onclick = () => {
+    // 🚨 AQUÍ ESTÁ EL ARREGLO 🚨
+    // Buscamos el botón AHORA MISMO, no al principio.
+    const maximizeBtn = document.getElementById('maximize-chat');
+
+    if (maximizeBtn) {
+        maximizeBtn.onclick = () => {
             ui.chatModal.classList.toggle('fullscreen');
-            const icon = ui.chatMaximize.querySelector('i');
-            if(ui.chatModal.classList.contains('fullscreen')) {
-                icon.className = "fa-solid fa-compress"; // Icono reducir
+            
+            // Cambiar icono
+            const icon = maximizeBtn.querySelector('i');
+            if (ui.chatModal.classList.contains('fullscreen')) {
+                icon.className = "fa-solid fa-compress";
             } else {
-                icon.className = "fa-solid fa-expand"; // Icono expandir
+                icon.className = "fa-solid fa-expand";
             }
         };
+    } else {
+        console.error("Botón Maximize no encontrado (Revisa tu HTML)");
     }
 
-    // PASSWORD VIP
+    // Lógica Password
     ui.passwordInput.addEventListener('input', (e) => {
         if(e.target.value === VIP_PASSWORD) {
             ui.passwordInput.style.borderColor = "#00ff88"; 
