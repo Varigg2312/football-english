@@ -46,8 +46,7 @@ async function initLeague() {
 
     } catch (error) {
         console.error(error);
-        ui.title.innerText = "❌ System Error";
-        ui.intro.innerText = "Check connection or JSON files.";
+        if(ui.title) ui.title.innerText = "❌ System Error";
     }
 }
 
@@ -55,6 +54,8 @@ async function initLeague() {
 // 3. LÓGICA DEL BUSCADOR (TIPO CANVA)
 // ==========================================
 function setupSearch() {
+    if(!ui.search) return; // Protección
+
     ui.search.addEventListener('keyup', (e) => {
         const query = e.target.value.toLowerCase();
         ui.results.innerHTML = ''; // Limpiar
@@ -158,6 +159,8 @@ function renderTactics(lesson) {
 // 5. CHATBOT IA (THE GAFFER)
 // ==========================================
 function setupChat() {
+    if(!ui.chatTrigger) return; // Protección
+
     // Abrir y cerrar ventana
     ui.chatTrigger.onclick = () => ui.chatModal.classList.remove('hidden');
     ui.chatClose.onclick = () => ui.chatModal.classList.add('hidden');
