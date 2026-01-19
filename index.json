@@ -1,38 +1,32 @@
 [
   {
-    "title": "Corner Kick Strategy: Set-Piece Mastery",
-    "file": "corner_kick_strategy.json",
+    "title": "The Post-Match Interview: Talking Tactics",
+    "file": "post_match_interview.json",
     "difficulty": "Pro",
-    "id": "gen_1768860742"
+    "id": "gen_1768864692"
   },
   {
-    "title": "The Captains Armband",
-    "file": "the_captains_armband.json",
+    "title": "Corner Kick Tactics: Turning Set-Pieces into Goals",
+    "file": "corner_kick_tactics.json",
     "difficulty": "Pro",
-    "id": "gen_1768860721"
+    "id": "gen_1768864622"
   },
   {
-    "title": "Taking a Penalty",
-    "file": "taking_a_penalty.json",
+    "title": "Zonal Marking: Defending Space, Not Players",
+    "file": "zonal_marking.json",
     "difficulty": "Pro",
-    "id": "gen_1768860697"
+    "id": "gen_1768864535"
   },
   {
-    "title": "Yellow Card vs Red Card: The Language of Discipline",
-    "file": "yellow_card_vs_red_card.json",
+    "title": "The Offside Trap",
+    "file": "the_offside_trap.json",
     "difficulty": "Pro",
-    "id": "gen_1768860674"
+    "id": "gen_1768864458"
   },
   {
-    "title": "The Counter Attack",
-    "file": "the_counter_attack.json",
+    "title": "The Professional Foul: A Tactical Tool",
+    "file": "tactical_fouls.json",
     "difficulty": "Pro",
-    "id": "gen_1768860650"
-  },
-  {
-    "title": "The VAR Check: Understanding the Video Assistant Referee",
-    "file": "the_var_check.json",
-    "difficulty": "Pro",
-    "id": "gen_1768860624"
+    "id": "gen_1768864380"
   }
 ]
