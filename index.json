@@ -2,6 +2,21 @@
   {
     "file": "manager.json",
     "title": "The Manager's Playbook",
+    "elo": 1500
+  },
+  {
+    "file": "the_last_line_of_defense.json",
+    "title": "The Last Line of Defense",
+    "elo": 1500
+  },
+  {
+    "file": "the_offside_rule.json",
+    "title": "The Offside Rule",
+    "elo": 1200
+  },
+  {
+    "file": "the_penalty_kick.json",
+    "title": "The Penalty Kick",
     "elo": 1200
   },
   {
