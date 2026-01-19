@@ -1,11 +1,11 @@
 [
   {
-    "file": "the_manager's_playbook.json",
+    "file": "manager.json",
     "title": "The Manager's Playbook",
-    "elo": 1500
+    "elo": 1200
   },
   {
-    "file": "the_var_review.json",
+    "file": "var.json",
     "title": "The VAR Review",
     "elo": 1400
   }
