@@ -1,0 +1,58 @@
+{
+  "file": "the_captains_armband.json",
+  "title": "The Captains Armband",
+  "meta": {
+    "difficulty_elo": 1500,
+    "lesson_id": "gen_1768860721"
+  },
+  "content": {
+    "title": "The Captains Armband",
+    "intro_hook": "More than just a piece of fabric, it's a symbol of leadership, responsibility, and the voice of the team.",
+    "core_concept": {
+      "explanation": "In English, we use specific nouns and verbs to talk about leadership roles. 'Captain' is a noun for the leader. 'To lead', 'to motivate', and 'to represent' are key verbs for their actions. The 'armband' itself is a concrete noun, a symbol of the abstract concepts of 'authority' and 'responsibility'.",
+      "analogy": "Think of the captain as the conductor of an orchestra. The armband is their baton. They don't play every instrument, but they set the tempo, guide the sections, and ensure everyone performs in harmony to create a winning performance."
+    },
+    "vocabulary_rich": [
+      {
+        "term": "Captain",
+        "meaning": "The appointed leader of a football team on the pitch."
+      },
+      {
+        "term": "Armband",
+        "meaning": "A band worn around the upper arm, signifying the captain."
+      },
+      {
+        "term": "Vice-captain",
+        "meaning": "The deputy who assumes the captain's role if they are absent."
+      },
+      {
+        "term": "To lead by example",
+        "meaning": "To inspire others through one's own actions and effort, not just words."
+      },
+      {
+        "term": "Skipper",
+        "meaning": "An informal, common synonym for 'captain'."
+      }
+    ]
+  },
+  "interactive_engine": {
+    "scenario_text": "It's a tense cup final. Your team's captain, John, receives a red card and is sent off in the 60th minute. As he walks off, he takes off the captain's armband. What is the most important thing for him to do next?",
+    "options": [
+      {
+        "text": "Throw the armband on the ground in frustration.",
+        "outcome": "WRONG",
+        "feedback": "No, this shows poor leadership. A true captain maintains composure and respect for the symbol, even in disappointment."
+      },
+      {
+        "text": "Clearly hand the armband to the designated vice-captain on the pitch.",
+        "outcome": "CORRECT",
+        "feedback": "Correct! This ensures a smooth transition of leadership. The team needs a clear leader to organise and motivate them for the remaining 30 minutes with ten men."
+      },
+      {
+        "text": "Keep the armband and take it with him to the dressing room.",
+        "outcome": "WRONG",
+        "feedback": "Incorrect. The armband must stay on the pitch. The team cannot be without a designated captain and spokesperson for the referee."
+      }
+    ]
+  }
+}
