@@ -3,65 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Football English PRO</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Football English Academy</title>
     <link rel="stylesheet" href="football.css">
 </head>
 <body>
 
-    <div class="background-glow"></div>
-
     <div class="container">
         
         <header>
-            <div class="header-top">
-                <span id="lesson-level" class="badge">ROOKIE LEAGUE</span>
-                <div class="live-indicator">● LIVE SESSION</div>
-            </div>
-            
-            <h1 id="lesson-title">Loading Match...</h1>
-            <p id="lesson-intro">Select a scenario to start your tactical training.</p>
+            <span class="brand">Football English Academy</span>
+            <h1 id="lesson-title">Dashboard Loading...</h1>
+            <p id="lesson-intro">Master the language of the game with professional tactical scenarios.</p>
             
             <div class="selector-wrapper">
                 <select id="match-selector">
-                    <option value="" disabled selected>Select Match Scenario...</option>
+                    <option value="" disabled selected>Select Lesson Module...</option>
                 </select>
             </div>
         </header>
 
         <div id="premium-banner" class="card premium-card">
-            <div class="premium-content">
-                <h2>🚀 UNLOCK PRO CAREER</h2>
-                <p>Get access to advanced audio drills, real match analysis, and certifications.</p>
+            <div class="premium-text">
+                <h2>Unlock Full Access</h2>
+                <p>Get certified with advanced analysis & audio packs.</p>
             </div>
             <a href="https://buy.stripe.com/00w5kEccv9ur6r3eMl9R600" target="_blank" class="cta-button">
-                BECOME A PRO (5€)
+                Get PRO Access (5€)
             </a>
         </div>
 
         <main>
-            <section class="card fade-in">
-                <div class="card-header">
-                    <span class="icon">📋</span>
-                    <h2>Tactical Board</h2>
-                </div>
-                <div id="core-concept" class="content-text"></div>
+            <section class="card">
+                <h2>Module 01: Core Concept</h2>
+                <div id="core-concept"></div>
             </section>
 
-            <section class="card fade-in delay-1">
-                <div class="card-header">
-                    <span class="icon">📢</span>
-                    <h2>Pitch Vocabulary</h2>
-                </div>
+            <section class="card">
+                <h2>Key Terminology</h2>
                 <ul id="vocabulary-list" class="vocab-grid"></ul>
             </section>
 
-            <section class="card interactive-card fade-in delay-2">
-                <div class="card-header">
-                    <span class="icon">⚡</span>
-                    <h2>Make the Call</h2>
-                </div>
-                <p id="quiz-question">Waiting for kick-off...</p>
+            <section class="card">
+                <h2>Decision Making Scenario</h2>
+                <p id="quiz-question" style="font-size: 1.2rem; margin-bottom: 10px;">Waiting for selection...</p>
                 
                 <div id="options-container" class="buttons-grid"></div>
                 <div id="feedback-zone" class="hidden"></div>
@@ -69,7 +53,7 @@
         </main>
 
         <footer>
-            <p>Football English © 2026 • Built for Winners</p>
+            <p>© 2026 Football English Academy. All rights reserved.</p>
         </footer>
 
     </div>
