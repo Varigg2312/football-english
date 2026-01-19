@@ -10,6 +10,7 @@
     <meta name="theme-color" content="#0f172a">
     <link rel="apple-touch-icon" href="https://img.icons8.com/color/480/football2--v1.png">
     <link rel="icon" type="image/png" href="https://img.icons8.com/color/96/football2--v1.png">
+    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="football.css">
@@ -61,22 +62,18 @@
                     <span class="hud-label">RANK</span>
                     <span id="player-rank" class="hud-value">ROOKIE</span>
                 </div>
-
                 <div class="hud-item">
                     <span class="hud-label">STREAK</span>
                     <span id="player-streak" class="hud-value fire-text">0 🔥</span>
                 </div>
-
                 <div class="hud-progress">
                     <div id="xp-bar" class="xp-fill" style="width: 0%"></div>
                 </div>
-                
                 <div class="hud-item">
                     <span class="hud-label">XP</span>
                     <span id="player-xp" class="hud-value">0 pts</span>
                 </div>
             </div>
-
             <button id="auth-btn" class="auth-btn"><i class="fa-solid fa-user"></i> Login</button>
         </div>
 
@@ -156,7 +153,7 @@
                 </div>
             </div>
             <div id="chat-history" class="chat-body">
-                <div class="message bot-msg">Alright lad? I'm here 24/7. Unlock PRO access to chat properly.</div>
+                <div class="message bot-msg">Alright lad? Unlock PRO access to chat properly.</div>
             </div>
             <div class="chat-input-area">
                 <input type="password" id="api-key-input" placeholder="🔒 Enter VIP Password..." class="key-input">
@@ -164,11 +161,13 @@
                     <input type="text" id="user-msg" placeholder="Ask a question..." disabled>
                     <button id="send-msg" disabled><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
-                <p style="font-size: 0.7rem; color: #999; margin-top: 5px; text-align: center;">*Solo PRO. <a href="https://buy.stripe.com/00w5kEccv9ur6r3eMl9R600" target="_blank">Consigue clave aquí</a>.</p>
+                <p style="font-size: 0.7rem; color: #999; margin-top: 5px; text-align: center;">*Solo PRO. <a href="https://buy.stripe.com/00w5kEccv9ur6r3eMl9R600" target="_blank">Clave aquí</a>.</p>
             </div>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
     <script src="app.js"></script>
 </body>
 </html>
