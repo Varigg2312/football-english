@@ -10,138 +10,148 @@
 </head>
 <body>
 
-    <div id="player-hud" class="player-hud hidden">
-        <div class="hud-group">
-            <div class="hud-item">
-                <span class="hud-label">RANK</span>
-                <span id="player-rank" class="hud-value">ROOKIE</span>
-            </div>
-            <div class="hud-progress">
-                <div id="xp-bar" class="xp-fill" style="width: 0%"></div>
-            </div>
-            <div class="hud-item">
-                <span class="hud-label">XP</span>
-                <span id="player-xp" class="hud-value">0 pts</span>
-            </div>
-        </div>
-
-        <button id="auth-btn" class="auth-btn">
-            <i class="fa-solid fa-user"></i> Login
-        </button>
-    </div>
-
-    <div id="auth-modal" class="coach-window auth-window hidden">
-        <div class="coach-header">
-            <span><i class="fa-solid fa-locker"></i> Locker Room</span>
-            <button id="close-auth"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        
-        <div class="auth-body">
-            <h3 id="auth-title">Sign In</h3>
-            <p class="auth-subtitle">Access your career stats and save progress.</p>
-            
-            <input type="text" id="auth-user" placeholder="Username (e.g. CR7)" class="auth-input">
-            <input type="password" id="auth-pass" placeholder="Password" class="auth-input">
-            
-            <button id="submit-auth" class="cta-button full-width">Sign In</button>
-            
-            <p class="auth-footer">
-                <span id="toggle-auth-mode">Need an account? <strong>Register</strong></span>
+    <section id="landing-page" class="landing-page">
+        <div class="landing-content">
+            <span class="landing-badge">OFFICIAL ACADEMY 2026</span>
+            <h1 class="hero-title">Don't just watch football.<br>Speak it.</h1>
+            <p class="hero-subtitle">
+                Dominar el inglés táctico no es un juego, es tu carrera.<br>
+                Entrena con <strong>IA</strong>, sube de <strong>Rango</strong> y ficha por la élite.
             </p>
-            <p id="auth-msg" class="error-msg"></p>
-        </div>
-    </div>
 
-    <div class="container">
-        
-        <header class="hero-section">
-            <div class="brand-badge">FOOTBALL ENGLISH ACADEMY</div>
-            
-            <h1 class="gradient-title">¿Qué aprendemos hoy?</h1>
-            
-            <div class="search-wrapper">
-                <div class="search-bar">
-                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" id="magic-search" placeholder="Busca 'VAR', 'Tactics', 'Pressing'..." autocomplete="off">
-                    <button class="search-btn"><i class="fa-solid fa-arrow-right"></i></button>
+            <div class="features-grid">
+                <div class="feature-box">
+                    <i class="fa-solid fa-brain"></i>
+                    <h3>Tactical AI</h3>
+                    <p>Análisis en tiempo real con "The Gaffer".</p>
                 </div>
-                <div id="search-results" class="results-dropdown hidden"></div>
-            </div>
-
-            <div id="match-info" class="fade-in hidden">
-                <div class="match-meta">
-                    <h2 id="lesson-title">Select a match...</h2>
-                    <span id="lesson-level" class="level-badge">LEVEL 0</span>
+                <div class="feature-box">
+                    <i class="fa-solid fa-trophy"></i>
+                    <h3>Career Mode</h3>
+                    <p>Progresión XP: De Rookie a Legend.</p>
                 </div>
-                <p id="lesson-intro">Use the search bar above to start your training session.</p>
+                <div class="feature-box">
+                    <i class="fa-solid fa-volume-high"></i>
+                    <h3>Native Audio</h3>
+                    <p>Pronunciación británica técnica.</p>
+                </div>
             </div>
-        </header>
 
-        <div id="premium-banner" class="card premium-card">
-            <div class="premium-text">
-                <h2>🚀 Go Pro Career</h2>
-                <p>Unlock AI Tutor & Advanced Certifications.</p>
-            </div>
-            <a href="https://buy.stripe.com/00w5kEccv9ur6r3eMl9R600" target="_blank" class="cta-button">
-                Get PRO (5€)
-            </a>
-        </div>
-
-        <main id="main-content" class="hidden">
-            <section class="card">
-                <div class="card-header"><i class="fa-solid fa-chalkboard-user"></i> Core Concept</div>
-                <div id="core-concept"></div>
-            </section>
-
-            <section class="card">
-                <div class="card-header"><i class="fa-solid fa-book"></i> Vocabulary</div>
-                <ul id="vocabulary-list" class="vocab-grid"></ul>
-            </section>
-
-            <section class="card highlight-card">
-                <div class="card-header"><i class="fa-solid fa-whistle"></i> The Decision</div>
-                <p id="quiz-question" class="quiz-q">...</p>
-                <div id="options-container" class="buttons-grid"></div>
-                <div id="feedback-zone" class="hidden"></div>
-            </section>
-        </main>
-
-        <footer>
-            <p>© 2026 Football English Academy • Built for Winners</p>
-        </footer>
-
-    </div>
-
-    <div id="coach-trigger" class="coach-btn">
-        <i class="fa-solid fa-headset"></i> Talk to Coach
-    </div>
-
-    <div id="coach-modal" class="coach-window hidden">
-        <div class="coach-header">
-            <span><i class="fa-solid fa-user-tie"></i> The Gaffer (AI Tutor)</span>
-            <div class="window-controls">
-                <button id="maximize-chat" title="Full Screen"><i class="fa-solid fa-expand"></i></button>
-                <button id="close-chat" title="Close"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-        </div>
-        
-        <div id="chat-history" class="chat-body">
-            <div class="message bot-msg">
-                Alright lad? I'm here 24/7. 
-                <br><br><strong>Unlock PRO access to start the tactical meeting.</strong>
-            </div>
-        </div>
-
-        <div class="chat-input-area">
-            <input type="password" id="api-key-input" placeholder="🔒 Introduce tu CONTRASEÑA VIP..." class="key-input">
+            <button id="start-btn" class="enter-btn">
+                ENTER STADIUM <i class="fa-solid fa-arrow-right"></i>
+            </button>
             
-            <div class="input-row">
-                <input type="text" id="user-msg" placeholder="Ask a question..." disabled>
-                <button id="send-msg" disabled><i class="fa-solid fa-paper-plane"></i></button>
-            </div>
-            <p style="font-size: 0.7rem; color: #999; margin-top: 5px; text-align: center;">
-                *Solo para miembros PRO. <a href="https://buy.stripe.com/00w5kEccv9ur6r3eMl9R600" target="_blank" style="color:var(--primary)">Consigue tu clave aquí</a>.
+            <p style="margin-top: 20px; font-size: 0.8rem; color: #64748b;">
+                *Progreso guardado automáticamente en tu navegador.
             </p>
+        </div>
+    </section>
+
+    <div id="app-interface" class="hidden" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+        
+        <div id="player-hud" class="player-hud">
+            <div class="hud-group">
+                <div class="hud-item">
+                    <span class="hud-label">RANK</span>
+                    <span id="player-rank" class="hud-value">ROOKIE</span>
+                </div>
+                <div class="hud-progress">
+                    <div id="xp-bar" class="xp-fill" style="width: 0%"></div>
+                </div>
+                <div class="hud-item">
+                    <span class="hud-label">XP</span>
+                    <span id="player-xp" class="hud-value">0 pts</span>
+                </div>
+            </div>
+            <button id="auth-btn" class="auth-btn"><i class="fa-solid fa-user"></i> Login</button>
+        </div>
+
+        <div id="auth-modal" class="coach-window auth-window hidden">
+            <div class="coach-header">
+                <span><i class="fa-solid fa-locker"></i> Locker Room</span>
+                <button id="close-auth"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="auth-body">
+                <h3 id="auth-title">Sign In</h3>
+                <p class="auth-subtitle">Accede a tus estadísticas de carrera.</p>
+                <input type="text" id="auth-user" placeholder="Username" class="auth-input">
+                <input type="password" id="auth-pass" placeholder="Password" class="auth-input">
+                <button id="submit-auth" class="cta-button full-width">Sign In</button>
+                <p class="auth-footer"><span id="toggle-auth-mode">Need an account? <strong>Register</strong></span></p>
+                <p id="auth-msg" class="error-msg"></p>
+            </div>
+        </div>
+
+        <div class="container">
+            <header class="hero-section">
+                <div class="brand-badge">TRAINING GROUND</div>
+                <h1 class="gradient-title">¿Qué aprendemos hoy?</h1>
+                <div class="search-wrapper">
+                    <div class="search-bar">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="magic-search" placeholder="Busca 'VAR', 'Penalty', 'Pressing'..." autocomplete="off">
+                        <button class="search-btn"><i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                    <div id="search-results" class="results-dropdown hidden"></div>
+                </div>
+                <div id="match-info" class="fade-in hidden">
+                    <div class="match-meta">
+                        <h2 id="lesson-title">Select a match...</h2>
+                        <span id="lesson-level" class="level-badge">LEVEL 0</span>
+                    </div>
+                    <p id="lesson-intro">Usa el buscador para iniciar sesión de entrenamiento.</p>
+                </div>
+            </header>
+
+            <div id="premium-banner" class="card premium-card">
+                <div class="premium-text">
+                    <h2>🚀 Go Pro Career</h2>
+                    <p>Desbloquea el Tutor IA y Certificaciones Avanzadas.</p>
+                </div>
+                <a href="https://buy.stripe.com/00w5kEccv9ur6r3eMl9R600" target="_blank" class="cta-button">Get PRO (5€)</a>
+            </div>
+
+            <main id="main-content" class="hidden">
+                <section class="card">
+                    <div class="card-header"><i class="fa-solid fa-chalkboard-user"></i> Core Concept</div>
+                    <div id="core-concept"></div>
+                </section>
+                <section class="card">
+                    <div class="card-header"><i class="fa-solid fa-book"></i> Vocabulary</div>
+                    <ul id="vocabulary-list" class="vocab-grid"></ul>
+                </section>
+                <section class="card highlight-card">
+                    <div class="card-header"><i class="fa-solid fa-whistle"></i> The Decision</div>
+                    <p id="quiz-question" class="quiz-q">...</p>
+                    <div id="options-container" class="buttons-grid"></div>
+                    <div id="feedback-zone" class="hidden"></div>
+                </section>
+            </main>
+            
+            <footer><p>© 2026 Football English Academy • Built for Winners</p></footer>
+        </div>
+
+        <div id="coach-trigger" class="coach-btn"><i class="fa-solid fa-headset"></i> Talk to Coach</div>
+        
+        <div id="coach-modal" class="coach-window hidden">
+            <div class="coach-header">
+                <span><i class="fa-solid fa-user-tie"></i> The Gaffer (AI Tutor)</span>
+                <div class="window-controls">
+                    <button id="maximize-chat"><i class="fa-solid fa-expand"></i></button>
+                    <button id="close-chat"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+            <div id="chat-history" class="chat-body">
+                <div class="message bot-msg">Alright lad? I'm here 24/7. Unlock PRO access to chat properly.</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="password" id="api-key-input" placeholder="🔒 Enter VIP Password..." class="key-input">
+                <div class="input-row">
+                    <input type="text" id="user-msg" placeholder="Ask a question..." disabled>
+                    <button id="send-msg" disabled><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+                <p style="font-size: 0.7rem; color: #999; margin-top: 5px; text-align: center;">*Solo PRO. <a href="https://buy.stripe.com/00w5kEccv9ur6r3eMl9R600" target="_blank">Consigue clave aquí</a>.</p>
+            </div>
         </div>
     </div>
 
