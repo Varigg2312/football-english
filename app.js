@@ -20,13 +20,12 @@ let currentUser = null;
 let usersDB = JSON.parse(localStorage.getItem('football_users_db') || '{}');
 let usedMessages = 0;
 let playerXP = 0;
+let playerStreak = 0; // 🔥 NUEVA VARIABLE
 
-// VARIABLES DEL QUIZ
 let currentQuizQuestions = [];
 let currentQuestionIndex = 0;
 
 const ui = {
-    // UI General
     search: document.getElementById('magic-search'),
     results: document.getElementById('search-results'),
     matchInfo: document.getElementById('match-info'),
@@ -47,6 +46,7 @@ const ui = {
     hud: document.getElementById('player-hud'),
     rankDisplay: document.getElementById('player-rank'),
     xpDisplay: document.getElementById('player-xp'),
+    streakDisplay: document.getElementById('player-streak'), // 🔥 UI STREAK
     xpBar: document.getElementById('xp-bar'),
     
     // CHATBOT
@@ -57,8 +57,6 @@ const ui = {
     chatInput: document.getElementById('user-msg'),
     chatSend: document.getElementById('send-msg'),
     passwordInput: document.getElementById('api-key-input'),
-
-    // AUTH (LOGIN)
     authBtn: document.getElementById('auth-btn'),
     authModal: document.getElementById('auth-modal'),
     closeAuth: document.getElementById('close-auth'),
@@ -80,7 +78,6 @@ async function initLeague() {
     const landingPage = document.getElementById('landing-page');
     const appInterface = document.getElementById('app-interface');
 
-    // Botón Portada -> App
     if (startBtn) {
         startBtn.onclick = () => {
             if(landingPage) landingPage.classList.add('hidden');
@@ -91,7 +88,6 @@ async function initLeague() {
         };
     }
 
-    // Auto-Login
     const savedUser = localStorage.getItem('current_session_user');
     if (savedUser && usersDB[savedUser]) {
         loginUser(savedUser);
@@ -110,9 +106,8 @@ async function initLeague() {
         const response = await fetch(DB_FOLDER + 'index.json');
         if (!response.ok) throw new Error("Index not found");
         allLessons = await response.json();
-        
         setupSearch();
-        setupChat(); // <--- AQUÍ SE ACTIVA EL CHAT
+        setupChat(); 
         setupAuth();
     } catch (error) { console.error(error); }
 }
@@ -143,7 +138,8 @@ function setupAuth() {
         if (isRegisterMode) {
             if (usersDB[user]) { ui.authMsg.innerText = "Username exists!"; } 
             else {
-                usersDB[user] = { pass: pass, xp: 0, msgs: 0 };
+                // Nuevo usuario: Racha 1
+                usersDB[user] = { pass: pass, xp: 0, msgs: 0, streak: 1, lastVisit: new Date().toDateString() };
                 saveUsersDB();
                 loginUser(user);
                 ui.authModal.classList.add('hidden');
@@ -162,6 +158,11 @@ function loginUser(username) {
     localStorage.setItem('current_session_user', username);
     playerXP = usersDB[username].xp;
     usedMessages = usersDB[username].msgs || 0;
+    
+    // 🔥 CALCULAR RACHA
+    calculateStreak(usersDB[username]);
+    saveUsersDB();
+
     ui.authBtn.innerHTML = `<i class="fa-solid fa-user-check"></i> ${username} (Exit)`;
     ui.authBtn.classList.add('logged-in');
     updateHUD();
@@ -179,8 +180,36 @@ function logoutUser() {
 function loadGuestData() {
     playerXP = parseInt(localStorage.getItem('guest_xp') || '0');
     usedMessages = parseInt(localStorage.getItem('guest_msgs') || '0');
+    
+    // 🔥 CALCULAR RACHA INVITADO
+    const guestData = {
+        streak: parseInt(localStorage.getItem('guest_streak') || '0'),
+        lastVisit: localStorage.getItem('guest_last_visit')
+    };
+    calculateStreak(guestData);
+    localStorage.setItem('guest_streak', guestData.streak);
+    localStorage.setItem('guest_last_visit', guestData.lastVisit);
+    
     updateHUD();
     updateChatStatus();
+}
+
+// 🔥 MOTOR DE RACHAS
+function calculateStreak(userData) {
+    const today = new Date().toDateString();
+    const lastVisit = userData.lastVisit;
+    let streak = userData.streak || 0;
+
+    if (lastVisit !== today) {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        if (lastVisit === yesterday.toDateString()) streak++; 
+        else streak = 1; 
+        
+        userData.lastVisit = today;
+        userData.streak = streak;
+    }
+    playerStreak = streak;
 }
 
 function saveUserData() {
@@ -220,12 +249,20 @@ function updateHUD() {
     }
     ui.rankDisplay.innerText = currentRank.name;
     ui.xpDisplay.innerText = `${playerXP} pts`;
+    
+    // 🔥 ACTUALIZAR UI RACHA
+    if(ui.streakDisplay) {
+        ui.streakDisplay.innerText = `${playerStreak} 🔥`;
+        if (playerStreak > 1) ui.streakDisplay.classList.add('streak-active');
+        else ui.streakDisplay.classList.remove('streak-active');
+    }
+
     const progress = Math.min(100, (playerXP / nextRankXP) * 100);
     ui.xpBar.style.width = `${progress}%`;
 }
 
 // ==========================================
-// 4. FUNCIONALIDAD PRINCIPAL (BUSCADOR Y LECCIONES)
+// 4. FUNCIONALIDAD PRINCIPAL
 // ==========================================
 function setupSearch() {
     if(!ui.search) return;
@@ -267,7 +304,6 @@ function renderTactics(lesson) {
     ui.intro.innerText = lesson.content.intro_hook;
     ui.concept.innerHTML = `<p>${lesson.content.core_concept.explanation}</p>`;
     
-    // VOCABULARIO
     ui.vocabList.innerHTML = '';
     lesson.content.vocabulary_rich.forEach(word => {
         const li = document.createElement('li');
@@ -351,13 +387,12 @@ function handleAnswer(option, btnClicked) {
 }
 
 // ==========================================
-// 5. CHATBOT IA (RECUPERADO)
+// 5. CHATBOT Y AUDIO
 // ==========================================
 function setupChat() {
     if(!ui.chatTrigger) return;
     ui.chatTrigger.onclick = () => ui.chatModal.classList.remove('hidden');
     ui.chatClose.onclick = () => ui.chatModal.classList.add('hidden');
-    
     const maximizeBtn = document.getElementById('maximize-chat');
     if (maximizeBtn) {
         maximizeBtn.onclick = () => {
@@ -366,7 +401,6 @@ function setupChat() {
             icon.className = ui.chatModal.classList.contains('fullscreen') ? "fa-solid fa-compress" : "fa-solid fa-expand";
         };
     }
-    
     updateChatStatus();
     ui.passwordInput.addEventListener('input', updateChatStatus);
     ui.chatSend.onclick = sendMessage;
@@ -428,7 +462,6 @@ function addMessage(text, className) {
     return div;
 }
 
-// 🔊 AUDIO
 function speak(text) {
     if (!window.speechSynthesis) return;
     const synth = window.speechSynthesis;
