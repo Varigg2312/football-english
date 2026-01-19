@@ -1,12 +1,16 @@
 const DB_FOLDER = './';
 
 // ==========================================
-// 🚨 CONFIGURACIÓN 🚨
+// 🚨 CONFIGURACIÓN TÁCTICA 🚨
 // ==========================================
+// TU CLAVE DE DEEPSEEK REAL:
 const SYSTEM_KEY = "sk-bb4843296d0f4f039379dc6bf65c53c7"; 
+// CONTRASEÑA VIP:
 const VIP_PASSWORD = "PRO-LEAGUE"; 
+// LÍMITE DE MENSAJES GRATIS:
 const FREE_LIMIT = 10; 
 
+// NIVELES DE CARRERA (Gamificación)
 const RANKS = [
     { name: "ROOKIE", limit: 0 },
     { name: "ACADEMY", limit: 500 },
@@ -17,6 +21,7 @@ const RANKS = [
 // ==========================================
 
 const ui = {
+    // UI General
     search: document.getElementById('magic-search'),
     results: document.getElementById('search-results'),
     matchInfo: document.getElementById('match-info'),
@@ -29,10 +34,14 @@ const ui = {
     quizQuestion: document.getElementById('quiz-question'),
     quizOptions: document.getElementById('options-container'),
     feedback: document.getElementById('feedback-zone'),
+    
+    // HUD (Barra de Progreso)
     hud: document.getElementById('player-hud'),
     rankDisplay: document.getElementById('player-rank'),
     xpDisplay: document.getElementById('player-xp'),
     xpBar: document.getElementById('xp-bar'),
+    
+    // Chatbot
     chatTrigger: document.getElementById('coach-trigger'),
     chatModal: document.getElementById('coach-modal'),
     chatClose: document.getElementById('close-chat'),
@@ -43,25 +52,39 @@ const ui = {
 };
 
 let allLessons = [];
+// Persistencia (Guardar progreso en el navegador)
 let usedMessages = parseInt(localStorage.getItem('msgs_used') || '0');
 let playerXP = parseInt(localStorage.getItem('player_xp') || '0');
 
+// ==========================================
+// 1. INICIALIZACIÓN
+// ==========================================
 async function initLeague() {
-    updateHUD();
+    updateHUD(); // Cargar XP y Rango
     if(ui.hud) ui.hud.classList.remove('hidden');
+
     try {
         const response = await fetch(DB_FOLDER + 'index.json');
         if (!response.ok) throw new Error("Index not found");
         allLessons = await response.json();
+        
         setupSearch();
         setupChat();
-    } catch (error) { console.error(error); if(ui.title) ui.title.innerText = "❌ System Error"; }
+    } catch (error) { 
+        console.error(error); 
+        if(ui.title) ui.title.innerText = "❌ System Error: Check JSON files."; 
+    }
 }
 
+// ==========================================
+// 2. SISTEMA DE XP Y RANKING
+// ==========================================
 function addXP(amount) {
     playerXP += amount;
-    localStorage.setItem('player_xp', playerXP);
+    localStorage.setItem('player_xp', playerXP); // Guardar
     updateHUD();
+    
+    // Efecto visual
     if(ui.xpDisplay) {
         ui.xpDisplay.classList.add('xp-gained');
         setTimeout(() => ui.xpDisplay.classList.remove('xp-gained'), 300);
@@ -70,79 +93,102 @@ function addXP(amount) {
 
 function updateHUD() {
     if(!ui.rankDisplay) return;
+    
     let currentRank = RANKS[0];
     let nextRankXP = RANKS[1].limit;
+
     for (let i = 0; i < RANKS.length; i++) {
         if (playerXP >= RANKS[i].limit) {
             currentRank = RANKS[i];
             nextRankXP = RANKS[i+1] ? RANKS[i+1].limit : playerXP * 1.5;
         }
     }
+
     ui.rankDisplay.innerText = currentRank.name;
     ui.xpDisplay.innerText = `${playerXP} pts`;
+    
     const progress = Math.min(100, (playerXP / nextRankXP) * 100);
     ui.xpBar.style.width = `${progress}%`;
 }
 
+// ==========================================
+// 3. BUSCADOR
+// ==========================================
 function setupSearch() {
     if(!ui.search) return;
     ui.search.addEventListener('keyup', (e) => {
         const query = e.target.value.toLowerCase();
         ui.results.innerHTML = ''; 
         if (query.length < 1) { ui.results.classList.add('hidden'); return; }
+
         const matches = allLessons.filter(lesson => 
-            lesson.title.toLowerCase().includes(query) || lesson.file.toLowerCase().includes(query)
+            lesson.title.toLowerCase().includes(query) || 
+            lesson.file.toLowerCase().includes(query)
         );
+
         if (matches.length > 0) {
             ui.results.classList.remove('hidden');
             matches.forEach(lesson => {
                 const div = document.createElement('div');
                 div.className = 'result-item';
                 div.innerHTML = `<span>${lesson.title}</span> <strong>GO <i class="fa-solid fa-arrow-right"></i></strong>`;
-                div.onclick = () => { loadMatch(lesson.file); ui.search.value = lesson.title; ui.results.classList.add('hidden'); };
+                div.onclick = () => {
+                    loadMatch(lesson.file); 
+                    ui.search.value = lesson.title; 
+                    ui.results.classList.add('hidden');
+                };
                 ui.results.appendChild(div);
             });
-        } else { ui.results.innerHTML = '<div class="result-item" style="color: #999">No matches found...</div>'; ui.results.classList.remove('hidden'); }
+        } else { 
+            ui.results.innerHTML = '<div class="result-item" style="color: #999">No matches found...</div>'; 
+            ui.results.classList.remove('hidden'); 
+        }
     });
     document.addEventListener('click', (e) => { if (!ui.search.contains(e.target)) ui.results.classList.add('hidden'); });
 }
 
+// ==========================================
+// 4. MOTOR DE LECCIONES (+ AUDIO)
+// ==========================================
 async function loadMatch(filename) {
-    ui.main.classList.add('hidden'); ui.matchInfo.classList.add('hidden');
+    ui.main.classList.add('hidden'); 
+    ui.matchInfo.classList.add('hidden');
     try {
         const response = await fetch(DB_FOLDER + filename);
         if (!response.ok) throw new Error("File not found");
         const data = await response.json();
         renderTactics(data);
-        ui.matchInfo.classList.remove('hidden'); ui.main.classList.remove('hidden');
-    } catch (error) { alert("Error loading match"); }
+        ui.matchInfo.classList.remove('hidden'); 
+        ui.main.classList.remove('hidden');
+    } catch (error) { alert("Error loading match: " + filename); }
 }
 
-// 🔊 AQUÍ ESTÁ LA NUEVA FUNCIÓN CON AUDIO INTEGRADO
 function renderTactics(lesson) {
     ui.title.innerText = lesson.content.title;
     if(ui.level) ui.level.innerText = `${lesson.meta.difficulty_elo || '1500'} ELO`;
     ui.intro.innerText = lesson.content.intro_hook;
     ui.concept.innerHTML = `<p>${lesson.content.core_concept.explanation}</p>`;
     
-    // VOCABULARIO CON AUDIO
+    // VOCABULARIO (Con botones de Audio)
     ui.vocabList.innerHTML = '';
     lesson.content.vocabulary_rich.forEach(word => {
         const li = document.createElement('li');
         
-        // Creamos botón de altavoz
+        // Botón Altavoz
         const audioBtn = document.createElement('button');
         audioBtn.className = 'audio-btn';
         audioBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
-        audioBtn.onclick = () => speak(word.term); // Al hacer clic, habla
+        audioBtn.onclick = () => speak(word.term); // Llama a la función de voz
         
         li.appendChild(audioBtn);
         li.innerHTML += ` <strong>${word.term}</strong>: ${word.meaning}`;
         ui.vocabList.appendChild(li);
     });
 
+    // Quiz
     ui.quizQuestion.innerText = lesson.interactive_engine.scenario_text;
-    ui.quizOptions.innerHTML = ''; ui.feedback.className = 'hidden';
+    ui.quizOptions.innerHTML = ''; 
+    ui.feedback.className = 'hidden';
     
     lesson.interactive_engine.options.forEach(option => {
         const btn = document.createElement('button');
@@ -150,14 +196,18 @@ function renderTactics(lesson) {
         btn.innerText = option.text;
         btn.onclick = () => {
             const isCorrect = /CORRECT|RIGHT/.test(option.outcome.toUpperCase());
+            
             ui.feedback.innerText = option.feedback;
             ui.feedback.className = isCorrect ? 'feedback-box feedback-success' : 'feedback-box feedback-error';
             ui.feedback.style.display = 'block';
+
             if (isCorrect) {
+                // Premio: XP
                 addXP(100); 
                 ui.feedback.innerText += " (+100 XP 🎯)";
                 btn.style.borderColor = "#4ade80"; 
                 btn.style.backgroundColor = "#f0fdf4";
+                // Desactivar botones
                 const allBtns = ui.quizOptions.querySelectorAll('button');
                 allBtns.forEach(b => b.disabled = true);
             }
@@ -166,8 +216,12 @@ function renderTactics(lesson) {
     });
 }
 
+// ==========================================
+// 5. CHATBOT IA
+// ==========================================
 function setupChat() {
     if(!ui.chatTrigger) return;
+    
     ui.chatTrigger.onclick = () => ui.chatModal.classList.remove('hidden');
     ui.chatClose.onclick = () => ui.chatModal.classList.add('hidden');
 
@@ -212,27 +266,47 @@ function updateChatStatus() {
 async function sendMessage() {
     const text = ui.chatInput.value;
     const isVip = (ui.passwordInput.value === VIP_PASSWORD);
+
     if (!text) return;
     if (!isVip && usedMessages >= FREE_LIMIT) {
         alert("🚨 Trial ended! Enter VIP password."); return;
     }
+
     addMessage(text, 'user-msg');
     ui.chatInput.value = '';
-    if (!isVip) { usedMessages++; localStorage.setItem('msgs_used', usedMessages); updateChatStatus(); }
-    const loadingDiv = addMessage('Analyzing tactics...', 'bot-msg');
+    
+    if (!isVip) {
+        usedMessages++;
+        localStorage.setItem('msgs_used', usedMessages);
+        updateChatStatus();
+    }
+
+    const loadingDiv = addMessage('Tactical analysis...', 'bot-msg');
+
     try {
         const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
             method: "POST",
-            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${SYSTEM_KEY}` },
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${SYSTEM_KEY}`
+            },
             body: JSON.stringify({
                 model: "deepseek-chat",
-                messages: [ { role: "system", content: "You are 'The Gaffer'. Brief, motivational, football metaphors." }, { role: "user", content: text } ]
+                messages: [
+                    { role: "system", content: "You are 'The Gaffer', an intense English football manager teaching English. Be brief, motivational, and use football metaphors." },
+                    { role: "user", content: text }
+                ]
             })
         });
-        if (!response.ok) throw new Error("API Limit");
+
+        if (!response.ok) throw new Error("API Limit reached");
         const data = await response.json();
         loadingDiv.innerText = data.choices[0].message.content;
-    } catch (error) { loadingDiv.innerText = "❌ Server error."; console.error(error); }
+
+    } catch (error) { 
+        loadingDiv.innerText = "❌ Server error (Check API limits)."; 
+        console.error(error); 
+    }
 }
 
 function addMessage(text, className) {
@@ -244,18 +318,33 @@ function addMessage(text, className) {
     return div;
 }
 
-// 🔊 FUNCIÓN DE AUDIO (The Gaffer's Voice)
+// ==========================================
+// 6. MOTOR DE AUDIO (CORREGIDO)
+// ==========================================
 function speak(text) {
-    if (!window.speechSynthesis) return;
-    // Cancelamos si ya estaba hablando para no solaparse
-    window.speechSynthesis.cancel();
-    
+    // Verificar soporte
+    if (!window.speechSynthesis) {
+        console.error("Audio not supported");
+        return;
+    }
+
+    const synth = window.speechSynthesis;
+
+    // 🛑 RESET DE SEGURIDAD: Si está hablando, lo callamos para que no se atasque
+    if (synth.speaking) {
+        synth.cancel();
+    }
+
+    // Configurar voz
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-GB'; // Inglés Británico
-    utterance.rate = 0.9;     // Velocidad didáctica
-    utterance.pitch = 1.0;
-    
-    window.speechSynthesis.speak(utterance);
+    utterance.lang = 'en-GB'; // Acento Británico 🇬🇧
+    utterance.rate = 0.8;     // Velocidad didáctica
+    utterance.pitch = 1;
+
+    // Ejecutar
+    synth.speak(utterance);
+    console.log("🔊 Speaking:", text);
 }
 
+// ARRANQUE DEL SISTEMA
 initLeague();
