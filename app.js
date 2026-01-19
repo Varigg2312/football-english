@@ -21,7 +21,7 @@ let usersDB = JSON.parse(localStorage.getItem('football_users_db') || '{}');
 let usedMessages = 0;
 let playerXP = 0;
 
-// VARIABLES DEL QUIZ (NUEVO)
+// VARIABLES DEL QUIZ
 let currentQuizQuestions = [];
 let currentQuestionIndex = 0;
 
@@ -37,8 +37,8 @@ const ui = {
     concept: document.getElementById('core-concept'),
     vocabList: document.getElementById('vocabulary-list'),
     
-    // QUIZ ELEMENTS
-    quizHeader: document.querySelector('.highlight-card .card-header'), // Para cambiar el titulo "Question 1/10"
+    // QUIZ
+    quizHeader: document.querySelector('.highlight-card .card-header'),
     quizQuestion: document.getElementById('quiz-question'),
     quizOptions: document.getElementById('options-container'),
     feedback: document.getElementById('feedback-zone'),
@@ -49,7 +49,7 @@ const ui = {
     xpDisplay: document.getElementById('player-xp'),
     xpBar: document.getElementById('xp-bar'),
     
-    // Chat & Auth (Sin cambios)
+    // CHATBOT
     chatTrigger: document.getElementById('coach-trigger'),
     chatModal: document.getElementById('coach-modal'),
     chatClose: document.getElementById('close-chat'),
@@ -57,6 +57,8 @@ const ui = {
     chatInput: document.getElementById('user-msg'),
     chatSend: document.getElementById('send-msg'),
     passwordInput: document.getElementById('api-key-input'),
+
+    // AUTH (LOGIN)
     authBtn: document.getElementById('auth-btn'),
     authModal: document.getElementById('auth-modal'),
     closeAuth: document.getElementById('close-auth'),
@@ -70,19 +72,26 @@ const ui = {
 
 let allLessons = [];
 
+// ==========================================
+// 1. INICIALIZACIÓN
+// ==========================================
 async function initLeague() {
     const startBtn = document.getElementById('start-btn');
     const landingPage = document.getElementById('landing-page');
     const appInterface = document.getElementById('app-interface');
 
+    // Botón Portada -> App
     if (startBtn) {
         startBtn.onclick = () => {
-            landingPage.classList.add('hidden');
-            appInterface.classList.remove('hidden');
-            appInterface.style.display = 'flex';
+            if(landingPage) landingPage.classList.add('hidden');
+            if(appInterface) {
+                appInterface.classList.remove('hidden');
+                appInterface.style.display = 'flex';
+            }
         };
     }
 
+    // Auto-Login
     const savedUser = localStorage.getItem('current_session_user');
     if (savedUser && usersDB[savedUser]) {
         loginUser(savedUser);
@@ -99,143 +108,96 @@ async function initLeague() {
 
     try {
         const response = await fetch(DB_FOLDER + 'index.json');
+        if (!response.ok) throw new Error("Index not found");
         allLessons = await response.json();
+        
         setupSearch();
-        setupChat();
+        setupChat(); // <--- AQUÍ SE ACTIVA EL CHAT
         setupAuth();
     } catch (error) { console.error(error); }
 }
 
-// ... (FUNCIONES DE AUTH, SEARCH Y XP IGUAL QUE ANTES, OMITIDAS POR ESPACIO PERO NECESARIAS) ...
-// PEGA AQUÍ LAS FUNCIONES DE AUTH (setupAuth, loginUser...), XP (addXP) Y SEARCH (setupSearch) DEL APP.JS ANTERIOR
-// VOY A INCLUIR LAS IMPORTANTES PARA EL QUIZ ABAJO
+// ==========================================
+// 2. SISTEMA DE LOGIN / REGISTRO
+// ==========================================
+let isRegisterMode = false;
+
+function setupAuth() {
+    if(!ui.authBtn) return;
+    ui.authBtn.onclick = () => { if (currentUser) logoutUser(); else ui.authModal.classList.remove('hidden'); };
+    ui.closeAuth.onclick = () => ui.authModal.classList.add('hidden');
+    
+    ui.toggleAuth.onclick = () => {
+        isRegisterMode = !isRegisterMode;
+        ui.authTitle.innerText = isRegisterMode ? "Create Account" : "Sign In";
+        ui.submitAuth.innerText = isRegisterMode ? "Register" : "Sign In";
+        ui.toggleAuth.innerHTML = isRegisterMode ? "Have an account? <strong>Sign In</strong>" : "Need an account? <strong>Register</strong>";
+        ui.authMsg.innerText = "";
+    };
+
+    ui.submitAuth.onclick = () => {
+        const user = ui.authUser.value.trim();
+        const pass = ui.authPass.value.trim();
+        if (!user || !pass) { ui.authMsg.innerText = "Please fill all fields."; return; }
+
+        if (isRegisterMode) {
+            if (usersDB[user]) { ui.authMsg.innerText = "Username exists!"; } 
+            else {
+                usersDB[user] = { pass: pass, xp: 0, msgs: 0 };
+                saveUsersDB();
+                loginUser(user);
+                ui.authModal.classList.add('hidden');
+            }
+        } else {
+            if (usersDB[user] && usersDB[user].pass === pass) {
+                loginUser(user);
+                ui.authModal.classList.add('hidden');
+            } else { ui.authMsg.innerText = "Invalid credentials."; }
+        }
+    };
+}
+
+function loginUser(username) {
+    currentUser = username;
+    localStorage.setItem('current_session_user', username);
+    playerXP = usersDB[username].xp;
+    usedMessages = usersDB[username].msgs || 0;
+    ui.authBtn.innerHTML = `<i class="fa-solid fa-user-check"></i> ${username} (Exit)`;
+    ui.authBtn.classList.add('logged-in');
+    updateHUD();
+    updateChatStatus();
+}
+
+function logoutUser() {
+    currentUser = null;
+    localStorage.removeItem('current_session_user');
+    loadGuestData();
+    ui.authBtn.innerHTML = `<i class="fa-solid fa-user"></i> Login`;
+    ui.authBtn.classList.remove('logged-in');
+}
+
+function loadGuestData() {
+    playerXP = parseInt(localStorage.getItem('guest_xp') || '0');
+    usedMessages = parseInt(localStorage.getItem('guest_msgs') || '0');
+    updateHUD();
+    updateChatStatus();
+}
+
+function saveUserData() {
+    if (currentUser) {
+        usersDB[currentUser].xp = playerXP;
+        usersDB[currentUser].msgs = usedMessages;
+        saveUsersDB();
+    } else {
+        localStorage.setItem('guest_xp', playerXP);
+        localStorage.setItem('guest_msgs', usedMessages);
+    }
+}
+function saveUsersDB() { localStorage.setItem('football_users_db', JSON.stringify(usersDB)); }
 
 // ==========================================
-// 🚀 MOTOR DE LECCIONES Y QUIZ (ACTUALIZADO)
+// 3. GAMIFICACIÓN (XP)
 // ==========================================
-async function loadMatch(filename) {
-    ui.main.classList.add('hidden'); ui.matchInfo.classList.add('hidden');
-    try {
-        const response = await fetch(DB_FOLDER + filename);
-        const data = await response.json();
-        renderTactics(data);
-        ui.matchInfo.classList.remove('hidden'); ui.main.classList.remove('hidden');
-    } catch (error) { alert("Error loading match"); }
-}
-
-function renderTactics(lesson) {
-    ui.title.innerText = lesson.content.title;
-    if(ui.level) ui.level.innerText = `${lesson.meta.difficulty_elo || '1500'} ELO`;
-    ui.intro.innerText = lesson.content.intro_hook;
-    ui.concept.innerHTML = `<p>${lesson.content.core_concept.explanation}</p>`;
-    
-    // Vocabulario
-    ui.vocabList.innerHTML = '';
-    lesson.content.vocabulary_rich.forEach(word => {
-        const li = document.createElement('li');
-        const audioBtn = document.createElement('button');
-        audioBtn.className = 'audio-btn';
-        audioBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
-        audioBtn.onclick = () => speak(word.term);
-        li.appendChild(audioBtn);
-        li.innerHTML += ` <strong>${word.term}</strong>: ${word.meaning}`;
-        ui.vocabList.appendChild(li);
-    });
-
-    // 🚨 INICIALIZAR QUIZ DE 10 PREGUNTAS
-    if (lesson.interactive_engine.questions) {
-        // Formato Nuevo (Array)
-        currentQuizQuestions = lesson.interactive_engine.questions;
-    } else {
-        // Formato Viejo (Fallback para no romper lecciones antiguas)
-        currentQuizQuestions = [{
-            scenario: lesson.interactive_engine.scenario_text,
-            options: lesson.interactive_engine.options
-        }];
-    }
-    
-    currentQuestionIndex = 0;
-    showQuestion(); // Muestra la primera pregunta
-}
-
-function showQuestion() {
-    const qData = currentQuizQuestions[currentQuestionIndex];
-    
-    // Actualizar cabecera (Ej: "Question 1/10")
-    ui.quizHeader.innerHTML = `<i class="fa-solid fa-whistle"></i> Match Scenario ${currentQuestionIndex + 1}/${currentQuizQuestions.length}`;
-    
-    ui.quizQuestion.innerText = qData.scenario || qData.scenario_text; // Soporte para ambos formatos
-    ui.quizOptions.innerHTML = ''; 
-    ui.feedback.className = 'hidden';
-
-    // Generar botones
-    qData.options.forEach(option => {
-        const btn = document.createElement('button');
-        btn.className = 'option-btn';
-        btn.innerText = option.text;
-        
-        btn.onclick = () => {
-            handleAnswer(option, btn);
-        };
-        
-        ui.quizOptions.appendChild(btn);
-    });
-}
-
-function handleAnswer(option, btnClicked) {
-    const isCorrect = /CORRECT|RIGHT/.test(option.outcome.toUpperCase());
-    
-    // Mostrar Feedback
-    ui.feedback.innerHTML = `<p>${option.feedback}</p>`;
-    ui.feedback.className = isCorrect ? 'feedback-box feedback-success' : 'feedback-box feedback-error';
-    ui.feedback.style.display = 'block';
-
-    // Desactivar botones
-    const allBtns = ui.quizOptions.querySelectorAll('button');
-    allBtns.forEach(b => b.disabled = true);
-
-    if (isCorrect) {
-        addXP(20); // 20 XP por pregunta (200 XP total si aciertas las 10)
-        btnClicked.style.borderColor = "#4ade80"; 
-        btnClicked.style.backgroundColor = "#f0fdf4";
-        ui.feedback.innerHTML += " <strong>(+20 XP 🎯)</strong>";
-    } else {
-        btnClicked.style.borderColor = "#fee2e2";
-    }
-
-    // BOTÓN SIGUIENTE PREGUNTA
-    const nextBtn = document.createElement('button');
-    nextBtn.className = 'cta-button';
-    nextBtn.style.marginTop = '15px';
-    nextBtn.style.width = '100%';
-    
-    // Si quedan preguntas -> "Next Play", si no -> "Finish Match"
-    if (currentQuestionIndex < currentQuizQuestions.length - 1) {
-        nextBtn.innerHTML = `Next Play <i class="fa-solid fa-forward"></i>`;
-        nextBtn.onclick = () => {
-            currentQuestionIndex++;
-            showQuestion();
-        };
-    } else {
-        nextBtn.innerHTML = `🏁 FINISH MATCH`;
-        nextBtn.onclick = () => {
-            ui.quizHeader.innerHTML = `<i class="fa-solid fa-trophy"></i> Match Results`;
-            ui.quizQuestion.innerText = "Training Session Completed! Great job, lad.";
-            ui.quizOptions.innerHTML = "";
-            ui.feedback.classList.add('hidden');
-        };
-    }
-
-    ui.feedback.appendChild(nextBtn);
-}
-
-// ... (RESTO DE FUNCIONES IGUALES: AUTH, CHAT, AUDIO, XP) ...
-// Asegúrate de copiar las funciones auxiliares (addXP, loginUser, etc.) del código anterior
-// o pide el archivo completo si prefieres.
-
-// -----------------------------------------------------------
-// BLOQUE DE FUNCIONES AUXILIARES NECESARIAS (Copia esto si falta)
-// -----------------------------------------------------------
 function addXP(amount) {
     playerXP += amount;
     saveUserData();
@@ -245,6 +207,7 @@ function addXP(amount) {
         setTimeout(() => ui.xpDisplay.classList.remove('xp-gained'), 300);
     }
 }
+
 function updateHUD() {
     if(!ui.rankDisplay) return;
     let currentRank = RANKS[0];
@@ -260,6 +223,212 @@ function updateHUD() {
     const progress = Math.min(100, (playerXP / nextRankXP) * 100);
     ui.xpBar.style.width = `${progress}%`;
 }
+
+// ==========================================
+// 4. FUNCIONALIDAD PRINCIPAL (BUSCADOR Y LECCIONES)
+// ==========================================
+function setupSearch() {
+    if(!ui.search) return;
+    ui.search.addEventListener('keyup', (e) => {
+        const query = e.target.value.toLowerCase();
+        ui.results.innerHTML = ''; 
+        if (query.length < 1) { ui.results.classList.add('hidden'); return; }
+        const matches = allLessons.filter(lesson => 
+            lesson.title.toLowerCase().includes(query) || lesson.file.toLowerCase().includes(query)
+        );
+        if (matches.length > 0) {
+            ui.results.classList.remove('hidden');
+            matches.forEach(lesson => {
+                const div = document.createElement('div');
+                div.className = 'result-item';
+                div.innerHTML = `<span>${lesson.title}</span> <strong>GO <i class="fa-solid fa-arrow-right"></i></strong>`;
+                div.onclick = () => { loadMatch(lesson.file); ui.search.value = lesson.title; ui.results.classList.add('hidden'); };
+                ui.results.appendChild(div);
+            });
+        } else { ui.results.innerHTML = '<div class="result-item" style="color: #999">No matches found...</div>'; ui.results.classList.remove('hidden'); }
+    });
+    document.addEventListener('click', (e) => { if (!ui.search.contains(e.target)) ui.results.classList.add('hidden'); });
+}
+
+async function loadMatch(filename) {
+    ui.main.classList.add('hidden'); ui.matchInfo.classList.add('hidden');
+    try {
+        const response = await fetch(DB_FOLDER + filename);
+        if (!response.ok) throw new Error("File not found");
+        const data = await response.json();
+        renderTactics(data);
+        ui.matchInfo.classList.remove('hidden'); ui.main.classList.remove('hidden');
+    } catch (error) { alert("Error loading match"); }
+}
+
+function renderTactics(lesson) {
+    ui.title.innerText = lesson.content.title;
+    if(ui.level) ui.level.innerText = `${lesson.meta.difficulty_elo || '1500'} ELO`;
+    ui.intro.innerText = lesson.content.intro_hook;
+    ui.concept.innerHTML = `<p>${lesson.content.core_concept.explanation}</p>`;
+    
+    // VOCABULARIO
+    ui.vocabList.innerHTML = '';
+    lesson.content.vocabulary_rich.forEach(word => {
+        const li = document.createElement('li');
+        const audioBtn = document.createElement('button');
+        audioBtn.className = 'audio-btn';
+        audioBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+        audioBtn.onclick = () => speak(word.term);
+        li.appendChild(audioBtn);
+        li.innerHTML += ` <strong>${word.term}</strong>: ${word.meaning}`;
+        ui.vocabList.appendChild(li);
+    });
+
+    // 🚀 LÓGICA DE 10 PREGUNTAS
+    if (lesson.interactive_engine.questions) {
+        currentQuizQuestions = lesson.interactive_engine.questions;
+    } else {
+        currentQuizQuestions = [{
+            scenario: lesson.interactive_engine.scenario_text,
+            options: lesson.interactive_engine.options
+        }];
+    }
+    
+    currentQuestionIndex = 0;
+    showQuestion();
+}
+
+function showQuestion() {
+    const qData = currentQuizQuestions[currentQuestionIndex];
+    if(ui.quizHeader) ui.quizHeader.innerHTML = `<i class="fa-solid fa-whistle"></i> Match Scenario ${currentQuestionIndex + 1}/${currentQuizQuestions.length}`;
+    
+    ui.quizQuestion.innerText = qData.scenario || qData.scenario_text;
+    ui.quizOptions.innerHTML = ''; 
+    ui.feedback.className = 'hidden';
+
+    qData.options.forEach(option => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerText = option.text;
+        btn.onclick = () => handleAnswer(option, btn);
+        ui.quizOptions.appendChild(btn);
+    });
+}
+
+function handleAnswer(option, btnClicked) {
+    const isCorrect = /CORRECT|RIGHT/.test(option.outcome.toUpperCase());
+    
+    ui.feedback.innerHTML = `<p>${option.feedback}</p>`;
+    ui.feedback.className = isCorrect ? 'feedback-box feedback-success' : 'feedback-box feedback-error';
+    ui.feedback.style.display = 'block';
+
+    const allBtns = ui.quizOptions.querySelectorAll('button');
+    allBtns.forEach(b => b.disabled = true);
+
+    if (isCorrect) {
+        addXP(20); 
+        btnClicked.style.borderColor = "#4ade80"; 
+        btnClicked.style.backgroundColor = "#f0fdf4";
+        ui.feedback.innerHTML += " <strong>(+20 XP 🎯)</strong>";
+    } else {
+        btnClicked.style.borderColor = "#fee2e2";
+    }
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'cta-button';
+    nextBtn.style.marginTop = '15px';
+    nextBtn.style.width = '100%';
+    
+    if (currentQuestionIndex < currentQuizQuestions.length - 1) {
+        nextBtn.innerHTML = `Next Play <i class="fa-solid fa-forward"></i>`;
+        nextBtn.onclick = () => { currentQuestionIndex++; showQuestion(); };
+    } else {
+        nextBtn.innerHTML = `🏁 FINISH MATCH`;
+        nextBtn.onclick = () => {
+            if(ui.quizHeader) ui.quizHeader.innerHTML = `<i class="fa-solid fa-trophy"></i> Match Results`;
+            ui.quizQuestion.innerText = "Training Session Completed! Great job, lad.";
+            ui.quizOptions.innerHTML = "";
+            ui.feedback.classList.add('hidden');
+        };
+    }
+    ui.feedback.appendChild(nextBtn);
+}
+
+// ==========================================
+// 5. CHATBOT IA (RECUPERADO)
+// ==========================================
+function setupChat() {
+    if(!ui.chatTrigger) return;
+    ui.chatTrigger.onclick = () => ui.chatModal.classList.remove('hidden');
+    ui.chatClose.onclick = () => ui.chatModal.classList.add('hidden');
+    
+    const maximizeBtn = document.getElementById('maximize-chat');
+    if (maximizeBtn) {
+        maximizeBtn.onclick = () => {
+            ui.chatModal.classList.toggle('fullscreen');
+            const icon = maximizeBtn.querySelector('i');
+            icon.className = ui.chatModal.classList.contains('fullscreen') ? "fa-solid fa-compress" : "fa-solid fa-expand";
+        };
+    }
+    
+    updateChatStatus();
+    ui.passwordInput.addEventListener('input', updateChatStatus);
+    ui.chatSend.onclick = sendMessage;
+    ui.chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
+}
+
+function updateChatStatus() {
+    const isVip = (ui.passwordInput.value === VIP_PASSWORD);
+    const msgsLeft = FREE_LIMIT - usedMessages;
+    if (isVip) {
+        ui.passwordInput.style.borderColor = "#00ff88"; 
+        ui.passwordInput.style.backgroundColor = "#dcfce7";
+        ui.chatInput.disabled = false; ui.chatSend.disabled = false;
+        ui.chatInput.placeholder = "VIP ACCESS: The Gaffer is listening...";
+        return;
+    }
+    if (msgsLeft > 0) {
+        ui.passwordInput.style.borderColor = "#e5e7eb";
+        ui.passwordInput.style.backgroundColor = "#fff";
+        ui.chatInput.disabled = false; ui.chatSend.disabled = false;
+        ui.chatInput.placeholder = `BETA TRIAL: ${msgsLeft} messages remaining...`;
+    } else {
+        ui.passwordInput.style.borderColor = "#fee2e2";
+        ui.chatInput.disabled = true; ui.chatSend.disabled = true;
+        ui.chatInput.placeholder = "⛔ Trial ended. Buy PRO to continue.";
+    }
+}
+
+async function sendMessage() {
+    const text = ui.chatInput.value;
+    const isVip = (ui.passwordInput.value === VIP_PASSWORD);
+    if (!text) return;
+    if (!isVip && usedMessages >= FREE_LIMIT) { alert("🚨 Trial ended! Enter VIP password."); return; }
+    addMessage(text, 'user-msg');
+    ui.chatInput.value = '';
+    if (!isVip) { usedMessages++; saveUserData(); updateChatStatus(); }
+    const loadingDiv = addMessage('Thinking...', 'bot-msg');
+    try {
+        const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${SYSTEM_KEY}` },
+            body: JSON.stringify({
+                model: "deepseek-chat",
+                messages: [ { role: "system", content: "You are 'The Gaffer'. Brief, motivational, football metaphors." }, { role: "user", content: text } ]
+            })
+        });
+        if (!response.ok) throw new Error("API Limit");
+        const data = await response.json();
+        loadingDiv.innerText = data.choices[0].message.content;
+    } catch (error) { loadingDiv.innerText = "❌ Server error."; console.error(error); }
+}
+
+function addMessage(text, className) {
+    const div = document.createElement('div');
+    div.className = `message ${className}`;
+    div.innerText = text;
+    ui.chatHistory.appendChild(div);
+    ui.chatHistory.scrollTop = ui.chatHistory.scrollHeight;
+    return div;
+}
+
+// 🔊 AUDIO
 function speak(text) {
     if (!window.speechSynthesis) return;
     const synth = window.speechSynthesis;
@@ -267,10 +436,7 @@ function speak(text) {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'en-GB'; utterance.rate = 0.8; 
     synth.speak(utterance);
+    console.log("🔊 Speaking:", text);
 }
-// -----------------------------------------------------------
 
-// ARRANQUE (Asegúrate que setupAuth y loginUser están definidas arriba o en tu archivo previo)
-// Si has copiado el bloque anterior, necesitarás setupAuth y loginUser definidas.
-// Si no quieres líos, pídeme el app.js COMPLETO DE NUEVO.
 initLeague();
