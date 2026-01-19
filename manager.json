@@ -4,57 +4,44 @@
     "lesson_id": "gen_1768493598"
   },
   "content": {
-    "title": "The Manager's Playbook",
+    "title": "The Manager Playbook",
     "intro_hook": "Master the language of leadership on and off the pitch!",
     "core_concept": {
-      "explanation": "In English, the term 'manager' refers to a person responsible for controlling or administering an organization or group. In football, the manager oversees team strategy, player selection, and match tactics. Grammatically, 'manager' is a countable noun (e.g., 'a manager', 'the managers') and can be used with verbs like 'appoint', 'sack', or 'support'.",
-      "analogy": "Just as a football manager devises formations and substitutions to win games, a language learner uses grammar rules and vocabulary to construct winning sentences."
+      "explanation": "In English, the term 'manager' refers to a person responsible for controlling or administering an organization or group. In football, the manager oversees team strategy.",
+      "analogy": "Just as a football manager devises formations, a learner uses grammar rules."
     },
     "vocabulary_rich": [
       {
         "term": "Manager",
-        "meaning": "The person in charge of a football team, responsible for tactics, training, and player management."
+        "meaning": "The person in charge of a football team."
       },
       {
         "term": "Tactics",
-        "meaning": "The specific plans or strategies used by a manager to achieve success in a match."
+        "meaning": "The specific plans used to achieve success."
       },
       {
         "term": "Formation",
-        "meaning": "The arrangement of players on the field, chosen by the manager to optimize team performance."
-      },
-      {
-        "term": "Substitution",
-        "meaning": "The act of replacing one player with another during a match, often a strategic decision by the manager."
-      },
-      {
-        "term": "Touchline",
-        "meaning": "The boundary line along the side of the pitch where the manager often stands to give instructions."
+        "meaning": "The arrangement of players on the field."
       }
     ]
   },
   "interactive_engine": {
-    "scenario_text": "Your team is losing 1-0 in the 70th minute. As the manager, you need to make a crucial decision to turn the game around. Which instruction uses the correct English grammar and vocabulary?",
+    "scenario_text": "Your team is losing 1-0. You need to make a decision. Which is correct?",
     "options": [
       {
-        "text": "We needs to change our formation to 4-4-2 for more attack.",
+        "text": "We needs to change our formation.",
         "outcome": "WRONG",
-        "feedback": "Incorrect: 'We needs' should be 'We need' because 'we' requires the base form 'need'. Also, 'for more attack' is awkward; use 'for more attacking play'."
+        "feedback": "Incorrect: 'We needs' should be 'We need'."
       },
       {
-        "text": "I am making a substitution to bring on a striker for a defender.",
+        "text": "I am making a substitution.",
         "outcome": "CORRECT",
-        "feedback": "Correct: This uses proper subject-verb agreement ('I am making'), clear vocabulary ('substitution', 'striker', 'defender'), and a logical football strategy."
+        "feedback": "Correct: Proper subject-verb agreement and vocabulary."
       },
       {
-        "text": "Manager say we should press high up the pitch.",
+        "text": "Manager say press high.",
         "outcome": "WRONG",
-        "feedback": "Incorrect: 'Manager say' should be 'The manager says' or 'I say' for proper article use and verb conjugation. Also, it lacks clarity in who is speaking."
-      },
-      {
-        "text": "Let's switch to a defensive mindset and hold the lead.",
-        "outcome": "WRONG",
-        "feedback": "Incorrect: While grammatically sound, this is contextually wrong because the team is losing, not leading. It misapplies the football scenario."
+        "feedback": "Incorrect: Should be 'The manager says'."
       }
     ]
   }
