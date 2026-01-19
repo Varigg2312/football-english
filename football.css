@@ -1,213 +1,197 @@
-/* DISEÑO PROFESSIONAL ACADEMY - CLEAN LIGHT THEME */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+/* DISEÑO CANVA STYLE + AI TUTOR */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
 
 :root {
-    --bg-body: #f3f4f6;       /* Gris muy suave de fondo */
-    --text-main: #111827;     /* Negro no puro (más elegante) */
-    --text-muted: #6b7280;    /* Gris para textos secundarios */
-    --primary: #2563eb;       /* Azul Royal (Confianza) */
-    --primary-dark: #1e40af;  /* Azul oscuro para hover */
-    --success: #10b981;       /* Verde éxito profesional */
-    --card-bg: #ffffff;       /* Blanco puro */
-    --border: #e5e7eb;        /* Bordes sutiles */
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --radius: 12px;
+    --bg: #f8f9fc;
+    --text: #1f2937;
+    --primary: #4f46e5;
+    --accent-gradient: linear-gradient(90deg, #4f46e5, #9333ea, #ec4899);
+    --card-bg: #ffffff;
+    --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+    --radius: 16px;
+    --chat-bg: #111827; /* Fondo oscuro para encabezado del chat */
+    --chat-accent: #00ff88; /* Verde neón para el botón */
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    background-color: var(--bg-body);
-    color: var(--text-main);
+    background-color: var(--bg);
+    color: var(--text);
     font-family: 'Inter', sans-serif;
-    line-height: 1.6;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
-    padding: 40px 20px;
-    min-height: 100vh;
+    padding: 20px;
 }
 
-.container {
-    width: 100%;
-    max-width: 800px; /* Un poco más ancho para respirar */
-    margin: 0 auto;
+.container { width: 100%; max-width: 750px; margin: 0 auto; padding-bottom: 80px; }
+
+/* --- HERO SECTION --- */
+.hero-section { text-align: center; margin-bottom: 40px; padding-top: 20px; }
+
+.brand-badge {
+    background: #e0e7ff; color: #4338ca;
+    padding: 6px 16px; border-radius: 50px;
+    font-size: 0.7rem; font-weight: 800; letter-spacing: 1px;
+    display: inline-block; margin-bottom: 20px;
 }
 
-/* HEADER LIMPIO */
-header {
-    text-align: center;
-    margin-bottom: 50px;
-}
-
-.brand {
+.gradient-title {
+    font-size: 2.8rem;
     font-weight: 800;
-    letter-spacing: -1px;
-    color: var(--primary);
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    margin-bottom: 10px;
-    display: block;
-}
-
-h1 {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--text-main);
-    letter-spacing: -0.025em;
-    margin-bottom: 15px;
     line-height: 1.2;
+    margin-bottom: 30px;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-#lesson-intro {
-    color: var(--text-muted);
-    font-size: 1.1rem;
-    max-width: 600px;
-    margin: 0 auto 30px auto;
+/* --- BUSCADOR --- */
+.search-wrapper { position: relative; max-width: 500px; margin: 0 auto 40px auto; }
+
+.search-bar {
+    background: white; padding: 10px; border-radius: 50px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    display: flex; align-items: center;
+    border: 1px solid transparent; transition: all 0.3s ease;
 }
 
-/* SELECTOR CORPORATIVO */
-.selector-wrapper {
-    max-width: 400px;
-    margin: 0 auto;
-}
-
-select {
-    width: 100%;
-    padding: 12px 16px;
-    background-color: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 1rem;
-    color: var(--text-main);
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    cursor: pointer;
-    outline: none;
-    transition: all 0.2s;
-}
-
-select:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-/* CARDS ESTILO DASHBOARD */
-.card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 32px;
-    margin-bottom: 24px;
-    box-shadow: var(--shadow);
-    transition: transform 0.2s ease;
-}
-
-.card:hover {
+.search-bar:focus-within {
+    border-color: #c7d2fe; box-shadow: 0 4px 30px rgba(79, 70, 229, 0.15);
     transform: translateY(-2px);
 }
 
-.card h2 {
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-muted);
-    font-weight: 700;
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 12px;
+.search-icon { color: #9ca3af; margin-left: 15px; font-size: 1.1rem; }
+#magic-search { flex: 1; border: none; outline: none; padding: 12px 15px; font-size: 1rem; color: #374151; }
+
+.search-btn {
+    background: var(--primary); color: white;
+    width: 40px; height: 40px; border-radius: 50%;
+    border: none; cursor: pointer; transition: transform 0.2s;
+}
+.search-btn:hover { transform: scale(1.1); }
+
+/* --- RESULTADOS DROPDOWN --- */
+.results-dropdown {
+    position: absolute; top: 110%; left: 0; width: 100%;
+    background: white; border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden; z-index: 100; text-align: left;
 }
 
-/* PREMIUM BANNER (El dinero) */
+.result-item {
+    padding: 15px 20px; cursor: pointer;
+    border-bottom: 1px solid #f3f4f6; transition: background 0.2s;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.result-item:hover { background: #f9fafb; }
+
+.level-badge {
+    background: #e0f2fe; color: #0284c7;
+    padding: 4px 10px; border-radius: 12px;
+    font-size: 0.7rem; font-weight: 700; margin-left: 10px;
+}
+
+/* --- CARDS --- */
+.card {
+    background: var(--card-bg); border-radius: var(--radius);
+    padding: 25px; margin-bottom: 25px;
+    box-shadow: var(--shadow-soft); border: 1px solid #f3f4f6;
+}
+.card-header {
+    font-size: 0.85rem; color: #6b7280; font-weight: 700;
+    text-transform: uppercase; margin-bottom: 15px;
+}
+.card-header i { margin-right: 8px; color: var(--primary); }
+
 .premium-card {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); /* Fondo oscuro elegante */
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: none;
+    background: #111827; color: white;
+    display: flex; justify-content: space-between; align-items: center;
 }
-
-.premium-card h2 { color: #94a3b8; border-color: rgba(255,255,255,0.1); }
-.premium-card p { color: #cbd5e1; font-size: 0.95rem; }
 
 .cta-button {
-    background-color: var(--primary);
-    color: white;
-    padding: 12px 24px;
-    border-radius: 6px;
-    font-weight: 600;
-    text-decoration: none;
-    font-size: 0.95rem;
-    transition: background-color 0.2s;
-    white-space: nowrap;
+    background: var(--accent-gradient); color: white;
+    padding: 10px 20px; border-radius: 8px;
+    text-decoration: none; font-weight: 600; font-size: 0.9rem;
 }
 
-.cta-button:hover {
-    background-color: var(--primary-dark);
+/* --- QUIZ --- */
+.buttons-grid { display: grid; gap: 10px; margin-top: 15px; }
+button.option-btn {
+    background: white; border: 1px solid #e5e7eb;
+    padding: 15px; border-radius: 10px; cursor: pointer;
+    text-align: left; transition: all 0.2s; width: 100%;
+    font-size: 1rem; color: var(--text);
+}
+button.option-btn:hover { border-color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+
+.feedback-box { padding: 15px; margin-top: 15px; border-radius: 8px; font-weight: 600; }
+.feedback-success { background: #dcfce7; color: #166534; }
+.feedback-error { background: #fee2e2; color: #991b1b; }
+
+/* --- UTILIDADES --- */
+.hidden { display: none !important; }
+.fade-in { animation: fadeIn 0.5s ease; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+/* =========================================
+   ESTILOS DEL TUTOR IA (CHATBOT)
+   ========================================= */
+.coach-btn {
+    position: fixed; bottom: 30px; right: 30px;
+    background: var(--chat-bg); color: var(--chat-accent);
+    padding: 15px 25px; border-radius: 50px;
+    font-weight: 800; cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: 2px solid var(--chat-accent); z-index: 9999;
+    transition: transform 0.2s; display: flex; align-items: center; gap: 10px;
+}
+.coach-btn:hover { transform: scale(1.05); }
+
+.coach-window {
+    position: fixed; bottom: 100px; right: 30px;
+    width: 350px; height: 500px;
+    background: white; border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    display: flex; flex-direction: column;
+    z-index: 9999; overflow: hidden; border: 1px solid #e5e7eb;
+    animation: fadeIn 0.3s ease;
 }
 
-/* CONTENIDOS */
-#core-concept p {
-    font-size: 1.05rem;
-    color: #374151;
+.coach-header {
+    background: var(--chat-bg); color: white;
+    padding: 15px; font-weight: 700; font-size: 0.9rem;
+    display: flex; justify-content: space-between; align-items: center;
+}
+#close-chat { background: none; border: none; color: white; cursor: pointer; font-size: 1.2rem; }
+
+.chat-body {
+    flex: 1; padding: 15px; overflow-y: auto;
+    background: #f9fafb; display: flex; flex-direction: column; gap: 10px;
 }
 
-.vocab-grid li {
-    padding: 14px 0;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-}
-.vocab-grid li:last-child { border-bottom: none; }
+.message { padding: 10px 15px; border-radius: 12px; max-width: 85%; font-size: 0.9rem; line-height: 1.4; }
+.bot-msg { background: #e5e7eb; color: #1f2937; align-self: flex-start; border-bottom-left-radius: 2px; }
+.user-msg { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
 
-.term {
-    color: var(--primary);
-    font-weight: 700;
-}
+.chat-input-area { padding: 15px; background: white; border-top: 1px solid #e5e7eb; }
 
-/* BOTONES DE QUIZ */
-.buttons-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 24px;
+.key-input {
+    width: 100%; padding: 8px; margin-bottom: 10px;
+    border: 1px solid #e5e7eb; border-radius: 6px; font-size: 0.75rem;
+    background: #f9fafb; color: #666;
 }
+.key-input:focus { border-color: var(--primary); outline: none; }
 
-button {
-    background-color: #f9fafb;
-    border: 1px solid var(--border);
-    padding: 20px;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    color: var(--text-main);
-    transition: all 0.2s;
-    text-align: center;
+.input-row { display: flex; gap: 8px; }
+#user-msg { flex: 1; padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px; outline: none; }
+#user-msg:focus { border-color: var(--primary); }
+
+#send-msg {
+    background: var(--primary); color: white; border: none;
+    padding: 0 15px; border-radius: 6px; cursor: pointer;
+    transition: background 0.2s;
 }
-
-button:hover {
-    background-color: white;
-    border-color: var(--primary);
-    color: var(--primary);
-    box-shadow: var(--shadow);
-}
-
-/* FEEDBACK */
-.feedback-box {
-    margin-top: 20px;
-    padding: 16px;
-    border-radius: 8px;
-    font-weight: 500;
-    text-align: center;
-}
-.feedback-success { background-color: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
-.feedback-error { background-color: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
-
-.hidden { display: none; }
-
-footer {
-    text-align: center;
-    margin-top: 60px;
-    color: var(--text-muted);
-    font-size: 0.85rem;
-}
+#send-msg:hover { background: #4338ca; }
+#send-msg:disabled { background: #ccc; cursor: not-allowed; }
