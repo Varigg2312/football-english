@@ -1,18 +1,13 @@
 const DB_FOLDER = './';
 
 // ==========================================
-// 🚨 ZONA DE CONFIGURACIÓN DEL CEO 🚨
+// 🚨 ZONA DE CONFIGURACIÓN 🚨
 // ==========================================
-
-// 1. TU CLAVE DE DEEPSEEK (YA LA HE PUESTO YO)
+// TU CLAVE DE DEEPSEEK (Ya incluida)
 const SYSTEM_KEY = "sk-bb4843296d0f4f039379dc6bf65c53c7"; 
 
-// 2. CONTRASEÑA PARA TUS ALUMNOS VIP
-// (Solo quien tenga esto podrá hablar con la IA)
-const VIP_PASSWORD = "FOOTBALL-ENGLISH-PRO"; 
-
-// ==========================================
-// FIN DE LA ZONA DE CONFIGURACIÓN
+// LA CONTRASEÑA PARA TUS ALUMNOS VIP
+const VIP_PASSWORD = "PRO-LEAGUE"; 
 // ==========================================
 
 const ui = {
@@ -33,6 +28,7 @@ const ui = {
     // UI del Chatbot
     chatTrigger: document.getElementById('coach-trigger'),
     chatModal: document.getElementById('coach-modal'),
+    chatMaximize: document.getElementById('maximize-chat'), // Botón nuevo
     chatClose: document.getElementById('close-chat'),
     chatHistory: document.getElementById('chat-history'),
     chatInput: document.getElementById('user-msg'),
@@ -42,42 +38,26 @@ const ui = {
 
 let allLessons = [];
 
-// ==========================================
 // 1. INICIALIZAR LIGA
-// ==========================================
 async function initLeague() {
     try {
         const response = await fetch(DB_FOLDER + 'index.json');
         if (!response.ok) throw new Error("Index not found");
-        
         allLessons = await response.json();
-        console.log("Lessons loaded:", allLessons);
-
-        setupSearch(); // Activar buscador
-        setupChat();   // Activar Chat VIP
-
-    } catch (error) {
-        console.error(error);
-        if(ui.title) ui.title.innerText = "❌ System Error: Check index.json";
-    }
+        
+        setupSearch();
+        setupChat();
+    } catch (error) { console.error(error); if(ui.title) ui.title.innerText = "❌ System Error"; }
 }
 
-// ==========================================
-// 2. LÓGICA DEL BUSCADOR (CANVA STYLE)
-// ==========================================
+// 2. BUSCADOR
 function setupSearch() {
     if(!ui.search) return;
-
     ui.search.addEventListener('keyup', (e) => {
         const query = e.target.value.toLowerCase();
-        ui.results.innerHTML = ''; // Limpiar anteriores
+        ui.results.innerHTML = ''; 
+        if (query.length < 1) { ui.results.classList.add('hidden'); return; }
 
-        if (query.length < 1) {
-            ui.results.classList.add('hidden');
-            return;
-        }
-
-        // Filtrar lecciones
         const matches = allLessons.filter(lesson => 
             lesson.title.toLowerCase().includes(query) || 
             lesson.file.toLowerCase().includes(query)
@@ -90,69 +70,40 @@ function setupSearch() {
                 div.className = 'result-item';
                 div.innerHTML = `<span>${lesson.title}</span> <strong>GO <i class="fa-solid fa-arrow-right"></i></strong>`;
                 div.onclick = () => {
-                    loadMatch(lesson.file);
-                    ui.search.value = lesson.title;
-                    ui.results.classList.add('hidden');
+                    loadMatch(lesson.file); ui.search.value = lesson.title; ui.results.classList.add('hidden');
                 };
                 ui.results.appendChild(div);
             });
-        } else {
-            ui.results.innerHTML = '<div class="result-item" style="color: #999">No matches found...</div>';
-            ui.results.classList.remove('hidden');
-        }
+        } else { ui.results.innerHTML = '<div class="result-item" style="color: #999">No matches found...</div>'; ui.results.classList.remove('hidden'); }
     });
-
-    // Cerrar al hacer clic fuera
-    document.addEventListener('click', (e) => {
-        if (!ui.search.contains(e.target)) {
-            ui.results.classList.add('hidden');
-        }
-    });
+    document.addEventListener('click', (e) => { if (!ui.search.contains(e.target)) ui.results.classList.add('hidden'); });
 }
 
-// ==========================================
 // 3. CARGAR LECCIÓN
-// ==========================================
 async function loadMatch(filename) {
-    ui.main.classList.add('hidden');
-    ui.matchInfo.classList.add('hidden');
-
+    ui.main.classList.add('hidden'); ui.matchInfo.classList.add('hidden');
     try {
         const response = await fetch(DB_FOLDER + filename);
-        if (!response.ok) throw new Error("Lesson file not found");
-        
+        if (!response.ok) throw new Error("File not found");
         const data = await response.json();
         renderTactics(data);
-        
-        ui.matchInfo.classList.remove('hidden');
-        ui.main.classList.remove('hidden');
-        
-    } catch (error) {
-        console.error(error);
-        alert("Error loading match: " + filename);
-    }
+        ui.matchInfo.classList.remove('hidden'); ui.main.classList.remove('hidden');
+    } catch (error) { alert("Error loading match"); }
 }
 
 function renderTactics(lesson) {
     ui.title.innerText = lesson.content.title;
     if(ui.level) ui.level.innerText = `${lesson.meta.difficulty_elo || '1500'} ELO`;
-    
     ui.intro.innerText = lesson.content.intro_hook;
     ui.concept.innerHTML = `<p>${lesson.content.core_concept.explanation}</p>`;
-
-    // Vocabulario
     ui.vocabList.innerHTML = '';
     lesson.content.vocabulary_rich.forEach(word => {
         const li = document.createElement('li');
         li.innerHTML = `<strong>${word.term}</strong>: ${word.meaning}`;
         ui.vocabList.appendChild(li);
     });
-
-    // Quiz
     ui.quizQuestion.innerText = lesson.interactive_engine.scenario_text;
-    ui.quizOptions.innerHTML = '';
-    ui.feedback.className = 'hidden';
-
+    ui.quizOptions.innerHTML = ''; ui.feedback.className = 'hidden';
     lesson.interactive_engine.options.forEach(option => {
         const btn = document.createElement('button');
         btn.className = 'option-btn';
@@ -167,65 +118,54 @@ function renderTactics(lesson) {
     });
 }
 
-// ==========================================
-// 4. CHATBOT VIP (PROTEGIDO POR PASSWORD)
-// ==========================================
+// 4. CHATBOT VIP (FULL SCREEN)
 function setupChat() {
     if(!ui.chatTrigger) return;
-
-    // Abrir/Cerrar modal
     ui.chatTrigger.onclick = () => ui.chatModal.classList.remove('hidden');
     ui.chatClose.onclick = () => ui.chatModal.classList.add('hidden');
 
-    // Configurar campo de contraseña
-    ui.passwordInput.placeholder = "🔒 Enter VIP Password...";
-    ui.passwordInput.type = "password";
+    // LOGICA PANTALLA COMPLETA
+    if(ui.chatMaximize) {
+        ui.chatMaximize.onclick = () => {
+            ui.chatModal.classList.toggle('fullscreen');
+            const icon = ui.chatMaximize.querySelector('i');
+            if(ui.chatModal.classList.contains('fullscreen')) {
+                icon.className = "fa-solid fa-compress"; // Icono reducir
+            } else {
+                icon.className = "fa-solid fa-expand"; // Icono expandir
+            }
+        };
+    }
 
-    // Validar contraseña en tiempo real
+    // PASSWORD VIP
     ui.passwordInput.addEventListener('input', (e) => {
         if(e.target.value === VIP_PASSWORD) {
-            // ÉXITO: Desbloquear
             ui.passwordInput.style.borderColor = "#00ff88"; 
             ui.passwordInput.style.backgroundColor = "#dcfce7";
-            ui.chatInput.disabled = false;
-            ui.chatSend.disabled = false;
+            ui.chatInput.disabled = false; ui.chatSend.disabled = false;
             ui.chatInput.placeholder = "Coach is listening... Ask anything!";
         } else {
-            // BLOQUEADO
             ui.passwordInput.style.borderColor = "#e5e7eb";
             ui.passwordInput.style.backgroundColor = "#f9fafb";
-            ui.chatInput.disabled = true;
-            ui.chatSend.disabled = true;
-            ui.chatInput.placeholder = "Enter correct password to chat...";
+            ui.chatInput.disabled = true; ui.chatSend.disabled = true;
         }
     });
 
-    // Enviar mensaje
     ui.chatSend.onclick = sendMessage;
-    ui.chatInput.addEventListener('keypress', (e) => { 
-        if(e.key === 'Enter') sendMessage(); 
-    });
+    ui.chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
 }
 
 async function sendMessage() {
     const text = ui.chatInput.value;
     const userPass = ui.passwordInput.value;
     
-    // Doble chequeo de seguridad
-    if (!text || userPass !== VIP_PASSWORD) {
-        alert("Access Denied: Invalid Password.");
-        return;
-    }
+    if (!text || userPass !== VIP_PASSWORD) { alert("Access Denied"); return; }
 
-    // 1. Mostrar mensaje usuario
     addMessage(text, 'user-msg');
     ui.chatInput.value = '';
-    
-    // 2. Mostrar "Pensando..."
-    const loadingDiv = addMessage('Tactical analysis...', 'bot-msg');
+    const loadingDiv = addMessage('Analyzing tactics...', 'bot-msg');
 
     try {
-        // 3. Llamada a la IA (Usando tu SYSTEM_KEY oculta)
         const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
             method: "POST",
             headers: {
@@ -235,29 +175,17 @@ async function sendMessage() {
             body: JSON.stringify({
                 model: "deepseek-chat",
                 messages: [
-                    { 
-                        role: "system", 
-                        content: "You are 'The Gaffer', an intense English football manager teaching English. Be brief, motivational, and use football metaphors." 
-                    },
+                    { role: "system", content: "You are 'The Gaffer', an intense English football manager. Brief, motivational, football metaphors." },
                     { role: "user", content: text }
                 ]
             })
         });
-
-        if (!response.ok) throw new Error("API Limit reached or Key Error");
-
+        if (!response.ok) throw new Error("API Limit");
         const data = await response.json();
-        
-        // 4. Mostrar respuesta
         loadingDiv.innerText = data.choices[0].message.content;
-
-    } catch (error) {
-        loadingDiv.innerText = "❌ Server overloaded. Try again later.";
-        console.error(error);
-    }
+    } catch (error) { loadingDiv.innerText = "❌ Server error. Check API limits."; console.error(error); }
 }
 
-// Función auxiliar para añadir mensajes al chat
 function addMessage(text, className) {
     const div = document.createElement('div');
     div.className = `message ${className}`;
@@ -267,5 +195,4 @@ function addMessage(text, className) {
     return div;
 }
 
-// ARRANQUE
 initLeague();
