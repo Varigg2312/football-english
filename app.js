@@ -3,11 +3,11 @@ const DB_FOLDER = './';
 // ==========================================
 // 🚨 ZONA DE CONFIGURACIÓN 🚨
 // ==========================================
-// Pega aquí TU CLAVE
-const SYSTEM_KEY = "sk-bb4843296d0f4f039379dc6bf65c53c7"; 
+const SYSTEM_KEY = "sk-bb4843296d0f4f039379dc6bf65c53c7"; // TU CLAVE
+const VIP_PASSWORD = "PRO-LEAGUE"; // CONTRASEÑA DE PAGO
 
-// TU CONTRASEÑA
-const VIP_PASSWORD = "PRO-LEAGUE"; 
+// ¡¡AQUÍ ESTÁ EL CAMBIO!! 👇
+const FREE_LIMIT = 10; // Ahora tienen 10 mensajes para enamorarse de la IA
 // ==========================================
 
 const ui = {
@@ -24,19 +24,22 @@ const ui = {
     quizOptions: document.getElementById('options-container'),
     feedback: document.getElementById('feedback-zone'),
     
-    // UI del Chatbot
+    // UI Chatbot
     chatTrigger: document.getElementById('coach-trigger'),
     chatModal: document.getElementById('coach-modal'),
+    chatMaximize: document.getElementById('maximize-chat'),
     chatClose: document.getElementById('close-chat'),
     chatHistory: document.getElementById('chat-history'),
     chatInput: document.getElementById('user-msg'),
     chatSend: document.getElementById('send-msg'),
     passwordInput: document.getElementById('api-key-input') 
-    // NOTA: He quitado 'maximize-chat' de aquí para evitar el error.
 };
 
 let allLessons = [];
+// Recuperamos cuántos mensajes lleva gastados
+let usedMessages = parseInt(localStorage.getItem('msgs_used') || '0');
 
+// 1. INICIALIZAR LIGA
 async function initLeague() {
     try {
         const response = await fetch(DB_FOLDER + 'index.json');
@@ -48,8 +51,7 @@ async function initLeague() {
     } catch (error) { console.error(error); if(ui.title) ui.title.innerText = "❌ System Error"; }
 }
 
-// ... (Buscador y Lecciones igual que antes) ...
-
+// 2. BUSCADOR
 function setupSearch() {
     if(!ui.search) return;
     ui.search.addEventListener('keyup', (e) => {
@@ -57,8 +59,7 @@ function setupSearch() {
         ui.results.innerHTML = ''; 
         if (query.length < 1) { ui.results.classList.add('hidden'); return; }
         const matches = allLessons.filter(lesson => 
-            lesson.title.toLowerCase().includes(query) || 
-            lesson.file.toLowerCase().includes(query)
+            lesson.title.toLowerCase().includes(query) || lesson.file.toLowerCase().includes(query)
         );
         if (matches.length > 0) {
             ui.results.classList.remove('hidden');
@@ -74,6 +75,7 @@ function setupSearch() {
     document.addEventListener('click', (e) => { if (!ui.search.contains(e.target)) ui.results.classList.add('hidden'); });
 }
 
+// 3. CARGAR LECCIÓN
 async function loadMatch(filename) {
     ui.main.classList.add('hidden'); ui.matchInfo.classList.add('hidden');
     try {
@@ -112,25 +114,18 @@ function renderTactics(lesson) {
     });
 }
 
-// ==========================================
-// 4. CHATBOT VIP (CORREGIDO)
-// ==========================================
+// 4. CHATBOT FREEMIUM (10 MENSAJES)
 function setupChat() {
     if(!ui.chatTrigger) return;
     
-    // Abrir/Cerrar
     ui.chatTrigger.onclick = () => ui.chatModal.classList.remove('hidden');
     ui.chatClose.onclick = () => ui.chatModal.classList.add('hidden');
 
-    // 🚨 AQUÍ ESTÁ EL ARREGLO 🚨
-    // Buscamos el botón AHORA MISMO, no al principio.
+    // Botón Maximizar (Protegido contra carga rápida)
     const maximizeBtn = document.getElementById('maximize-chat');
-
     if (maximizeBtn) {
         maximizeBtn.onclick = () => {
             ui.chatModal.classList.toggle('fullscreen');
-            
-            // Cambiar icono
             const icon = maximizeBtn.querySelector('i');
             if (ui.chatModal.classList.contains('fullscreen')) {
                 icon.className = "fa-solid fa-compress";
@@ -138,37 +133,67 @@ function setupChat() {
                 icon.className = "fa-solid fa-expand";
             }
         };
-    } else {
-        console.error("Botón Maximize no encontrado (Revisa tu HTML)");
     }
 
-    // Lógica Password
-    ui.passwordInput.addEventListener('input', (e) => {
-        if(e.target.value === VIP_PASSWORD) {
-            ui.passwordInput.style.borderColor = "#00ff88"; 
-            ui.passwordInput.style.backgroundColor = "#dcfce7";
-            ui.chatInput.disabled = false; ui.chatSend.disabled = false;
-            ui.chatInput.placeholder = "Coach is listening... Ask anything!";
-        } else {
-            ui.passwordInput.style.borderColor = "#e5e7eb";
-            ui.passwordInput.style.backgroundColor = "#f9fafb";
-            ui.chatInput.disabled = true; ui.chatSend.disabled = true;
-        }
-    });
-
+    updateChatStatus();
+    ui.passwordInput.addEventListener('input', updateChatStatus);
     ui.chatSend.onclick = sendMessage;
     ui.chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
 }
 
+function updateChatStatus() {
+    const isVip = (ui.passwordInput.value === VIP_PASSWORD);
+    const messagesLeft = FREE_LIMIT - usedMessages;
+
+    // SI ES VIP
+    if (isVip) {
+        ui.passwordInput.style.borderColor = "#00ff88"; 
+        ui.passwordInput.style.backgroundColor = "#dcfce7";
+        ui.chatInput.disabled = false;
+        ui.chatSend.disabled = false;
+        ui.chatInput.placeholder = "VIP ACCESS: The Gaffer is listening...";
+        return;
+    }
+
+    // SI TIENE MENSAJES GRATIS
+    if (messagesLeft > 0) {
+        ui.passwordInput.style.borderColor = "#e5e7eb";
+        ui.passwordInput.style.backgroundColor = "#fff";
+        ui.chatInput.disabled = false;
+        ui.chatSend.disabled = false;
+        ui.chatInput.placeholder = `BETA TRIAL: ${messagesLeft} messages remaining...`;
+    } 
+    // SI SE LE ACABARON
+    else {
+        ui.passwordInput.style.borderColor = "#fee2e2";
+        ui.chatInput.disabled = true;
+        ui.chatSend.disabled = true;
+        ui.chatInput.placeholder = "⛔ Trial ended. Buy PRO to continue.";
+        ui.chatInput.value = "";
+    }
+}
+
 async function sendMessage() {
     const text = ui.chatInput.value;
-    const userPass = ui.passwordInput.value;
-    
-    if (!text || userPass !== VIP_PASSWORD) { alert("Access Denied"); return; }
+    const isVip = (ui.passwordInput.value === VIP_PASSWORD);
+
+    if (!text) return;
+    if (!isVip && usedMessages >= FREE_LIMIT) {
+        alert("🚨 Final Whistle! Your free trial match is over. Enter VIP password to play Extra Time.");
+        return;
+    }
 
     addMessage(text, 'user-msg');
     ui.chatInput.value = '';
-    const loadingDiv = addMessage('Analyzing tactics...', 'bot-msg');
+    
+    // Descontar mensaje si no paga
+    if (!isVip) {
+        usedMessages++;
+        localStorage.setItem('msgs_used', usedMessages);
+        updateChatStatus();
+    }
+
+    const loadingDiv = addMessage('Tactical analysis...', 'bot-msg');
 
     try {
         const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
@@ -180,7 +205,7 @@ async function sendMessage() {
             body: JSON.stringify({
                 model: "deepseek-chat",
                 messages: [
-                    { role: "system", content: "You are 'The Gaffer', an intense English football manager. Brief, motivational, football metaphors." },
+                    { role: "system", content: "You are 'The Gaffer', intense English football manager. Brief, motivational, football metaphors." },
                     { role: "user", content: text }
                 ]
             })
@@ -188,7 +213,7 @@ async function sendMessage() {
         if (!response.ok) throw new Error("API Limit");
         const data = await response.json();
         loadingDiv.innerText = data.choices[0].message.content;
-    } catch (error) { loadingDiv.innerText = "❌ Server error. Check API limits."; console.error(error); }
+    } catch (error) { loadingDiv.innerText = "❌ Server error."; console.error(error); }
 }
 
 function addMessage(text, className) {
