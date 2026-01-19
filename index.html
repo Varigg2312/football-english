@@ -11,16 +11,44 @@
 <body>
 
     <div id="player-hud" class="player-hud hidden">
-        <div class="hud-item">
-            <span class="hud-label">RANK</span>
-            <span id="player-rank" class="hud-value">ROOKIE</span>
+        <div class="hud-group">
+            <div class="hud-item">
+                <span class="hud-label">RANK</span>
+                <span id="player-rank" class="hud-value">ROOKIE</span>
+            </div>
+            <div class="hud-progress">
+                <div id="xp-bar" class="xp-fill" style="width: 0%"></div>
+            </div>
+            <div class="hud-item">
+                <span class="hud-label">XP</span>
+                <span id="player-xp" class="hud-value">0 pts</span>
+            </div>
         </div>
-        <div class="hud-progress">
-            <div id="xp-bar" class="xp-fill" style="width: 0%"></div>
+
+        <button id="auth-btn" class="auth-btn">
+            <i class="fa-solid fa-user"></i> Login
+        </button>
+    </div>
+
+    <div id="auth-modal" class="coach-window auth-window hidden">
+        <div class="coach-header">
+            <span><i class="fa-solid fa-locker"></i> Locker Room</span>
+            <button id="close-auth"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div class="hud-item">
-            <span class="hud-label">XP</span>
-            <span id="player-xp" class="hud-value">0 pts</span>
+        
+        <div class="auth-body">
+            <h3 id="auth-title">Sign In</h3>
+            <p class="auth-subtitle">Access your career stats and save progress.</p>
+            
+            <input type="text" id="auth-user" placeholder="Username (e.g. CR7)" class="auth-input">
+            <input type="password" id="auth-pass" placeholder="Password" class="auth-input">
+            
+            <button id="submit-auth" class="cta-button full-width">Sign In</button>
+            
+            <p class="auth-footer">
+                <span id="toggle-auth-mode">Need an account? <strong>Register</strong></span>
+            </p>
+            <p id="auth-msg" class="error-msg"></p>
         </div>
     </div>
 
