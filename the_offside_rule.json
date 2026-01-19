@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "difficulty_elo": 1200,
+    "lesson_id": "gen_1768848149"
+  },
+  "content": {
+    "title": "The Offside Rule",
+    "intro_hook": "Master the offside rule to avoid being caught off guard in English conversations!",
+    "core_concept": {
+      "explanation": "The offside rule in English grammar refers to using adverbs or adverbial phrases to modify verbs, adjectives, or other adverbs, often indicating time, place, manner, or degree. It involves positioning these words correctly in a sentence to avoid confusion or ambiguity, similar to how players must position themselves correctly on the field.",
+      "analogy": "Just as a football player must be in a legal position relative to the second-last defender when the ball is played, adverbs must be placed correctly in a sentence to avoid being 'offside' and causing misunderstandings."
+    },
+    "vocabulary_rich": [
+      {
+        "term": "Adverb",
+        "meaning": "A word that modifies a verb, adjective, or other adverb, often ending in -ly (e.g., quickly, carefully)."
+      },
+      {
+        "term": "Adverbial Phrase",
+        "meaning": "A group of words that functions as an adverb to provide additional information about time, place, manner, or degree (e.g., in the morning, with great skill)."
+      },
+      {
+        "term": "Modify",
+        "meaning": "To change or describe the meaning of another word in a sentence, such as how an adverb modifies a verb."
+      },
+      {
+        "term": "Position",
+        "meaning": "The placement of words in a sentence, crucial for clarity and correct grammar, akin to a player's position on the pitch."
+      }
+    ]
+  },
+  "interactive_engine": {
+    "scenario_text": "In a tense match, the striker is waiting for a through ball. The midfielder passes the ball forward, but the striker is ahead of the second-last defender at the moment of the pass. The referee blows the whistle for offside. In English, you want to describe this action using an adverb to show how the striker moved. Choose the correct sentence to avoid being 'offside' in grammar.",
+    "options": [
+      {
+        "text": "The striker moved quickly and was offside.",
+        "outcome": "WRONG",
+        "feedback": "This sentence places the adverb 'quickly' correctly, but the analogy focuses on positioning adverbs to avoid ambiguity, not just correctness. Try an option that highlights improper placement."
+      },
+      {
+        "text": "Quickly the striker moved and was offside.",
+        "outcome": "CORRECT",
+        "feedback": "Correct! Placing 'quickly' at the beginning can be awkward or ambiguous, similar to a player being offside. It's better to say 'The striker moved quickly' for clarity, emphasizing proper adverb positioning."
+      },
+      {
+        "text": "The striker was offside because he moved.",
+        "outcome": "WRONG",
+        "feedback": "This sentence lacks an adverb, so it doesn't address the lesson on adverb positioning. The focus is on using adverbs correctly in descriptions."
+      },
+      {
+        "text": "He moved and was offside quickly.",
+        "outcome": "WRONG",
+        "feedback": "Incorrect. Placing 'quickly' at the end might imply the offside call was quick, not the movement, causing confusion—just like a mispositioned player on the field."
+      }
+    ]
+  }
+}

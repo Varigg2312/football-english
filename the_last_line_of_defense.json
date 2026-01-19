@@ -1,0 +1,47 @@
+{
+  "meta": {
+    "difficulty_elo": 1500,
+    "lesson_id": "gen_1768848343"
+  },
+  "content": {
+    "title": "The Last Line of Defense",
+    "intro_hook": "Master the grammar of goalkeeping to save your English skills from defeat!",
+    "core_concept": {
+      "explanation": "In English, the present perfect tense (have/has + past participle) is used to describe actions that happened at an unspecified time in the past or have relevance to the present. It emphasizes the result or experience rather than when it occurred.",
+      "analogy": "Just as a goalkeeper's save prevents a goal and affects the current score, the present perfect connects past actions to the present situation, showing their ongoing impact."
+    },
+    "vocabulary_rich": [
+      {
+        "term": "Clean sheet",
+        "meaning": "A match where a goalkeeper prevents the opposing team from scoring any goals"
+      },
+      {
+        "term": "One-on-one",
+        "meaning": "A situation where the goalkeeper faces a single attacking player with the ball"
+      },
+      {
+        "term": "Distribution",
+        "meaning": "How a goalkeeper passes or throws the ball to teammates after making a save"
+      },
+      {
+        "term": "Command the area",
+        "meaning": "When a goalkeeper confidently controls the penalty box during set pieces or crosses"
+      }
+    ]
+  },
+  "interactive_engine": {
+    "scenario_text": "You are the goalkeeper in a crucial match. Your team is leading 1-0 in the 85th minute. The opposing striker breaks through your defense and shoots from close range, but you make a spectacular diving save to parry the ball away. Your coach shouts from the sideline, 'Great save! How many times have you saved us this season?'",
+    "options": [
+      {
+        "text": "I saved us 10 times this season.",
+        "outcome": "WRONG",
+        "feedback": "This uses the simple past tense, which specifies when the actions happened. The coach's question focuses on the total experience up to now, requiring the present perfect to connect past saves to the current season."
+      },
+      {
+        "text": "I have saved us 10 times this season.",
+        "outcome": "CORRECT",
+        "feedback": "This correctly uses the present perfect tense ('have saved') to describe an unspecified number of saves that occurred during the season, emphasizing their cumulative impact on the team's current success."
+      }
+    ]
+  }
+}
