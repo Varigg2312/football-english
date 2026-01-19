@@ -15,12 +15,33 @@ const RANKS = [
     { name: "LEGEND", limit: 5000 }
 ];
 
-// VARIABLES DE ESTADO
+// ==========================================
+// 🎵 SISTEMA DE SONIDO (SFX ONLINE)
+// ==========================================
+// Usamos enlaces directos para que funcione sin descargar archivos
+const sfx = {
+    whistle: new Audio('https://cdn.pixabay.com/audio/2021/08/04/audio_0625c1539c.mp3'), // Silbato
+    correct: new Audio('https://cdn.pixabay.com/audio/2021/08/09/audio_9ec164287d.mp3'), // Acierto
+    wrong: new Audio('https://cdn.pixabay.com/audio/2022/03/10/audio_c8c8a73467.mp3'),   // Fallo
+    win: new Audio('https://cdn.pixabay.com/audio/2021/08/04/audio_12b0c7443c.mp3')      // Ovación
+};
+
+function playSound(name) {
+    try {
+        sfx[name].volume = 0.3; 
+        sfx[name].currentTime = 0; 
+        sfx[name].play().catch(e => console.log("Audio blocked (user interaction needed)"));
+    } catch(e) { console.log("No audio"); }
+}
+
+// ==========================================
+// 🧠 ESTADO DEL JUEGO
+// ==========================================
 let currentUser = null; 
 let usersDB = JSON.parse(localStorage.getItem('football_users_db') || '{}');
 let usedMessages = 0;
 let playerXP = 0;
-let playerStreak = 0; // 🔥 NUEVA VARIABLE
+let playerStreak = 0; 
 
 let currentQuizQuestions = [];
 let currentQuestionIndex = 0;
@@ -46,10 +67,10 @@ const ui = {
     hud: document.getElementById('player-hud'),
     rankDisplay: document.getElementById('player-rank'),
     xpDisplay: document.getElementById('player-xp'),
-    streakDisplay: document.getElementById('player-streak'), // 🔥 UI STREAK
+    streakDisplay: document.getElementById('player-streak'),
     xpBar: document.getElementById('xp-bar'),
     
-    // CHATBOT
+    // CHATBOT & AUTH
     chatTrigger: document.getElementById('coach-trigger'),
     chatModal: document.getElementById('coach-modal'),
     chatClose: document.getElementById('close-chat'),
@@ -138,7 +159,6 @@ function setupAuth() {
         if (isRegisterMode) {
             if (usersDB[user]) { ui.authMsg.innerText = "Username exists!"; } 
             else {
-                // Nuevo usuario: Racha 1
                 usersDB[user] = { pass: pass, xp: 0, msgs: 0, streak: 1, lastVisit: new Date().toDateString() };
                 saveUsersDB();
                 loginUser(user);
@@ -158,8 +178,6 @@ function loginUser(username) {
     localStorage.setItem('current_session_user', username);
     playerXP = usersDB[username].xp;
     usedMessages = usersDB[username].msgs || 0;
-    
-    // 🔥 CALCULAR RACHA
     calculateStreak(usersDB[username]);
     saveUsersDB();
 
@@ -180,8 +198,6 @@ function logoutUser() {
 function loadGuestData() {
     playerXP = parseInt(localStorage.getItem('guest_xp') || '0');
     usedMessages = parseInt(localStorage.getItem('guest_msgs') || '0');
-    
-    // 🔥 CALCULAR RACHA INVITADO
     const guestData = {
         streak: parseInt(localStorage.getItem('guest_streak') || '0'),
         lastVisit: localStorage.getItem('guest_last_visit')
@@ -189,23 +205,19 @@ function loadGuestData() {
     calculateStreak(guestData);
     localStorage.setItem('guest_streak', guestData.streak);
     localStorage.setItem('guest_last_visit', guestData.lastVisit);
-    
     updateHUD();
     updateChatStatus();
 }
 
-// 🔥 MOTOR DE RACHAS
 function calculateStreak(userData) {
     const today = new Date().toDateString();
     const lastVisit = userData.lastVisit;
     let streak = userData.streak || 0;
-
     if (lastVisit !== today) {
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
         if (lastVisit === yesterday.toDateString()) streak++; 
         else streak = 1; 
-        
         userData.lastVisit = today;
         userData.streak = streak;
     }
@@ -250,13 +262,11 @@ function updateHUD() {
     ui.rankDisplay.innerText = currentRank.name;
     ui.xpDisplay.innerText = `${playerXP} pts`;
     
-    // 🔥 ACTUALIZAR UI RACHA
     if(ui.streakDisplay) {
         ui.streakDisplay.innerText = `${playerStreak} 🔥`;
         if (playerStreak > 1) ui.streakDisplay.classList.add('streak-active');
         else ui.streakDisplay.classList.remove('streak-active');
     }
-
     const progress = Math.min(100, (playerXP / nextRankXP) * 100);
     ui.xpBar.style.width = `${progress}%`;
 }
@@ -299,6 +309,8 @@ async function loadMatch(filename) {
 }
 
 function renderTactics(lesson) {
+    playSound('whistle'); // 📢 Pitido inicial
+    
     ui.title.innerText = lesson.content.title;
     if(ui.level) ui.level.innerText = `${lesson.meta.difficulty_elo || '1500'} ELO`;
     ui.intro.innerText = lesson.content.intro_hook;
@@ -316,7 +328,6 @@ function renderTactics(lesson) {
         ui.vocabList.appendChild(li);
     });
 
-    // 🚀 LÓGICA DE 10 PREGUNTAS
     if (lesson.interactive_engine.questions) {
         currentQuizQuestions = lesson.interactive_engine.questions;
     } else {
@@ -358,11 +369,13 @@ function handleAnswer(option, btnClicked) {
     allBtns.forEach(b => b.disabled = true);
 
     if (isCorrect) {
+        playSound('correct'); // ✅ Gol
         addXP(20); 
         btnClicked.style.borderColor = "#4ade80"; 
         btnClicked.style.backgroundColor = "#f0fdf4";
         ui.feedback.innerHTML += " <strong>(+20 XP 🎯)</strong>";
     } else {
+        playSound('wrong'); // ❌ Fallo
         btnClicked.style.borderColor = "#fee2e2";
     }
 
@@ -377,6 +390,13 @@ function handleAnswer(option, btnClicked) {
     } else {
         nextBtn.innerHTML = `🏁 FINISH MATCH`;
         nextBtn.onclick = () => {
+            playSound('win'); // 👏 Ovación
+            
+            // 🎉 CONFETI MAGIC 🎉
+            if (typeof confetti === "function") {
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            }
+
             if(ui.quizHeader) ui.quizHeader.innerHTML = `<i class="fa-solid fa-trophy"></i> Match Results`;
             ui.quizQuestion.innerText = "Training Session Completed! Great job, lad.";
             ui.quizOptions.innerHTML = "";
@@ -469,7 +489,6 @@ function speak(text) {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'en-GB'; utterance.rate = 0.8; 
     synth.speak(utterance);
-    console.log("🔊 Speaking:", text);
 }
 
 initLeague();
