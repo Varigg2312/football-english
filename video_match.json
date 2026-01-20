@@ -1,28 +1,29 @@
 {
   "file": "video_match.json",
-  "title": "Video Demo: The Bicycle Kick",
+  "title": "Video Demo: The Knuckleball",
   "video_id": "qV8g2CqJ9T0",
   "meta": { "difficulty_elo": 2000, "lesson_id": "vid_001" },
   "content": {
-    "title": "The Bicycle Kick",
-    "intro_hook": "Watch greatness in motion.",
+    "title": "The Knuckleball",
+    "intro_hook": "Master the technique of Ronaldo & Bale.",
     "core_concept": { 
-        "explanation": "A bicycle kick is an acrobatic strike where a player kicks an airborne ball rearward in midair.", 
-        "analogy": "Like a ninja backflip but with a ball." 
+        "explanation": "A knuckleball is a shot with zero spin, causing the ball to move erratically in the air due to the airflow.", 
+        "analogy": "Like a baseball pitcher throwing a knuckleball." 
     },
     "vocabulary_rich": [
-      { "term": "Overhead Kick", "meaning": "Another name for bicycle kick." },
-      { "term": "Acrobatic", "meaning": "Performing difficult gymnastic feats." }
+      { "term": "No Spin", "meaning": "The ball does not rotate in the air." },
+      { "term": "Valve", "meaning": "The hardest part of the ball, often the target for impact." },
+      { "term": "Wobble", "meaning": "To move unsteadily from side to side." }
     ]
   },
   "interactive_engine": {
     "questions": [
       {
         "id": 1,
-        "scenario": "Did you see the goal? What part of the foot did he use?",
+        "scenario": "Watch the impact. Where does he strike the ball to stop the spin?",
         "options": [
-          { "text": "The laces (instep)", "outcome": "CORRECT", "feedback": "Bang on! Maximum power." },
-          { "text": "The heel", "outcome": "WRONG", "feedback": "No, that would be a scorpion kick." }
+          { "text": "The Valve (Sweet Spot)", "outcome": "CORRECT", "feedback": "Spot on! Hitting the valve gives maximum power and zero spin." },
+          { "text": "The side of the ball", "outcome": "WRONG", "feedback": "No, that would create a curve (curl), not a knuckle." }
         ]
       }
     ]
