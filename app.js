@@ -93,13 +93,11 @@ let allLessons = [];
 async function initLeague() {
     console.log("🚀 Starting System...");
 
-    // --- 🛡️ ZONA DE SEGURIDAD ---
-    // Activamos esto PRIMERO. Si la base de datos falla luego, 
-    // al menos el Chat, el Login y la Voz funcionan.
+    // 🛡️ REGLA DE ORO: Activamos los sistemas ANTES de cargar datos.
+    // Esto asegura que el botón de Voz y Chat funcionen aunque falle el JSON.
     setupChat(); 
     setupAuth(); 
     setupVoiceControl();
-    // ---------------------------
 
     const startBtn = document.getElementById('start-btn');
     const landingPage = document.getElementById('landing-page');
@@ -131,7 +129,7 @@ async function initLeague() {
 
     if(ui.hud) ui.hud.classList.remove('hidden');
 
-    // Cargar Datos (Lo hacemos al final y con protección)
+    // Cargar Datos (Protegido)
     try {
         console.log("📂 Loading Index...");
         const response = await fetch(DB_FOLDER + 'index.json');
@@ -139,11 +137,10 @@ async function initLeague() {
         allLessons = await response.json();
         
         console.log("✅ Lessons loaded:", allLessons.length);
-        setupSearch(); // Solo activamos el buscador si hay lecciones
+        setupSearch(); // Solo activamos buscador si hay lecciones
         
     } catch (error) { 
-        console.error("❌ ERROR CRÍTICO CARGANDO DATOS:", error);
-        // Aquí no pasa nada grave, el chat sigue vivo gracias al cambio de orden.
+        console.error("❌ Error loading data:", error);
     }
 }
 
@@ -295,9 +292,10 @@ function setupAuth() {
 }
 
 // ==========================================
-// 4. VOZ Y PARTIDO
+// 4. VOZ Y PARTIDO (ARREGLADO)
 // ==========================================
 function setupVoiceControl() {
+    // 1. Verificar soporte del navegador
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
         if(ui.voiceBtn) ui.voiceBtn.style.display = 'none'; 
         return;
@@ -309,23 +307,50 @@ function setupVoiceControl() {
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
+    // VARIABLE DE SEGURIDAD (Para que no explote si le das 2 veces)
+    let isListening = false;
+
     if(ui.voiceBtn) {
         ui.voiceBtn.onclick = () => {
+            // Si ya está escuchando, lo paramos y salimos
+            if (isListening) {
+                recognition.stop();
+                return;
+            }
+
+            // Si no, arrancamos
             playSound('whistle'); 
-            recognition.start();
-            ui.voiceBtn.classList.add('mic-listening');
+            try {
+                recognition.start();
+                isListening = true;
+                ui.voiceBtn.classList.add('mic-listening');
+            } catch(e) {
+                console.log("Mic busy:", e);
+                isListening = false;
+                ui.voiceBtn.classList.remove('mic-listening');
+            }
         };
     }
 
     recognition.onresult = (event) => {
         const speechResult = event.results[0][0].transcript.toLowerCase();
         console.log('🎤 Heard:', speechResult);
+        
+        // Reset de estado
+        isListening = false;
         if(ui.voiceBtn) ui.voiceBtn.classList.remove('mic-listening');
+        
         checkVoiceAnswer(speechResult);
     };
 
-    recognition.onerror = () => { if(ui.voiceBtn) ui.voiceBtn.classList.remove('mic-listening'); };
-    recognition.onend = () => { if(ui.voiceBtn) ui.voiceBtn.classList.remove('mic-listening'); };
+    recognition.onerror = () => { 
+        isListening = false;
+        if(ui.voiceBtn) ui.voiceBtn.classList.remove('mic-listening'); 
+    };
+    recognition.onend = () => { 
+        isListening = false;
+        if(ui.voiceBtn) ui.voiceBtn.classList.remove('mic-listening'); 
+    };
 }
 
 function checkVoiceAnswer(text) {
