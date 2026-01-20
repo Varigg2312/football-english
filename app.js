@@ -94,10 +94,12 @@ async function initLeague() {
     console.log("🚀 Starting System...");
 
     // 🛡️ REGLA DE ORO: Activamos los sistemas ANTES de cargar datos.
-    // Esto asegura que el botón de Voz y Chat funcionen aunque falle el JSON.
     setupChat(); 
     setupAuth(); 
     setupVoiceControl();
+    
+    // Truco: Forzar la carga de voces ahora para que estén listas luego
+    if (window.speechSynthesis) window.speechSynthesis.getVoices();
 
     const startBtn = document.getElementById('start-btn');
     const landingPage = document.getElementById('landing-page');
@@ -137,7 +139,7 @@ async function initLeague() {
         allLessons = await response.json();
         
         console.log("✅ Lessons loaded:", allLessons.length);
-        setupSearch(); // Solo activamos buscador si hay lecciones
+        setupSearch(); 
         
     } catch (error) { 
         console.error("❌ Error loading data:", error);
@@ -292,10 +294,10 @@ function setupAuth() {
 }
 
 // ==========================================
-// 4. VOZ Y PARTIDO (ARREGLADO)
+// 4. VOZ Y PARTIDO (ARREGLADO DEFINITIVO)
 // ==========================================
 function setupVoiceControl() {
-    // 1. Verificar soporte del navegador
+    // 1. Verificar soporte
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
         if(ui.voiceBtn) ui.voiceBtn.style.display = 'none'; 
         return;
@@ -307,7 +309,8 @@ function setupVoiceControl() {
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
-    // VARIABLE DE SEGURIDAD (Para que no explote si le das 2 veces)
+    // --- ESCUDO ANTI-CRASH ---
+    // Esta variable evita que el navegador explote si pulsas rápido
     let isListening = false;
 
     if(ui.voiceBtn) {
@@ -324,6 +327,11 @@ function setupVoiceControl() {
                 recognition.start();
                 isListening = true;
                 ui.voiceBtn.classList.add('mic-listening');
+                // Feedback visual para que sepas que funciona
+                if(ui.feedback) {
+                    ui.feedback.innerHTML = `<p class="fade-in" style="color:#666">👂 Listening...</p>`;
+                    ui.feedback.classList.remove('hidden');
+                }
             } catch(e) {
                 console.log("Mic busy:", e);
                 isListening = false;
@@ -343,9 +351,11 @@ function setupVoiceControl() {
         checkVoiceAnswer(speechResult);
     };
 
-    recognition.onerror = () => { 
+    recognition.onerror = (e) => { 
+        console.log("Mic Error:", e);
         isListening = false;
         if(ui.voiceBtn) ui.voiceBtn.classList.remove('mic-listening'); 
+        if(ui.feedback) ui.feedback.innerHTML = `<p class="feedback-box feedback-error">❌ Audio Error. Try again.</p>`;
     };
     recognition.onend = () => { 
         isListening = false;
@@ -509,7 +519,7 @@ function handleAnswer(option, btnClicked) {
 }
 
 // ==========================================
-// 5. CHATBOT Y AUDIO
+// 5. CHATBOT Y AUDIO (ARREGLADO DEFINITIVO)
 // ==========================================
 function setupChat() {
     if(!ui.chatTrigger) return;
@@ -595,14 +605,28 @@ function addMessage(t, c) {
     return d; 
 }
 
-function speak(t) { 
+// --- FUNCIÓN DE HABLAR (SPEAK) MEJORADA ---
+function speak(text) { 
     if (!window.speechSynthesis) return; 
-    const s = window.speechSynthesis; 
-    if (s.speaking) s.cancel(); 
-    const u = new SpeechSynthesisUtterance(t); 
-    u.lang = 'en-GB'; 
-    u.rate = 0.8; 
-    s.speak(u); 
+    const synth = window.speechSynthesis; 
+    
+    // Si ya habla, lo callamos para empezar de nuevo
+    if (synth.speaking) synth.cancel(); 
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    
+    // Intentamos buscar una voz británica
+    let voices = synth.getVoices();
+    const britishVoice = voices.find(v => v.lang.includes('GB') || v.lang.includes('UK'));
+    
+    if (britishVoice) {
+        utterance.voice = britishVoice;
+    } else {
+        utterance.lang = 'en-GB';
+    }
+    
+    utterance.rate = 0.9; 
+    synth.speak(utterance); 
 }
 
 // ARRANQUE FINAL
