@@ -88,9 +88,19 @@ const ui = {
 let allLessons = [];
 
 // ==========================================
-// 1. INICIALIZACIÓN (EL ARRANQUE)
+// 1. INICIALIZACIÓN (EL ARRANQUE BLINDADO)
 // ==========================================
 async function initLeague() {
+    console.log("🚀 Starting System...");
+
+    // --- 🛡️ ZONA DE SEGURIDAD ---
+    // Activamos esto PRIMERO. Si la base de datos falla luego, 
+    // al menos el Chat, el Login y la Voz funcionan.
+    setupChat(); 
+    setupAuth(); 
+    setupVoiceControl();
+    // ---------------------------
+
     const startBtn = document.getElementById('start-btn');
     const landingPage = document.getElementById('landing-page');
     const appInterface = document.getElementById('app-interface');
@@ -108,9 +118,7 @@ async function initLeague() {
 
     // Auto-Login Check
     const savedUser = localStorage.getItem('current_session_user');
-    
     if (savedUser && usersDB[savedUser]) {
-        // Usuario registrado vuelve
         loginUser(savedUser); 
         if(landingPage) landingPage.classList.add('hidden');
         if(appInterface) { 
@@ -118,32 +126,30 @@ async function initLeague() {
             appInterface.style.display = 'flex'; 
         }
     } else {
-        // Usuario invitado (AQUÍ DABA EL ERROR ANTES)
         loadGuestData(); 
     }
 
     if(ui.hud) ui.hud.classList.remove('hidden');
 
-    // Cargar Datos
+    // Cargar Datos (Lo hacemos al final y con protección)
     try {
+        console.log("📂 Loading Index...");
         const response = await fetch(DB_FOLDER + 'index.json');
         if (!response.ok) throw new Error("Index not found");
         allLessons = await response.json();
         
-        // Activar sistemas
-        setupSearch(); 
-        setupChat(); 
-        setupAuth(); 
-        setupVoiceControl();
+        console.log("✅ Lessons loaded:", allLessons.length);
+        setupSearch(); // Solo activamos el buscador si hay lecciones
         
-    } catch (error) { console.error("Error loading system:", error); }
+    } catch (error) { 
+        console.error("❌ ERROR CRÍTICO CARGANDO DATOS:", error);
+        // Aquí no pasa nada grave, el chat sigue vivo gracias al cambio de orden.
+    }
 }
 
 // ==========================================
-// 2. GESTIÓN DE DATOS (INVITADO / USUARIO)
+// 2. GESTIÓN DE DATOS
 // ==========================================
-
-// --- ESTA ES LA FUNCIÓN QUE FALTABA O FALLABA ---
 function loadGuestData() {
     playerXP = parseInt(localStorage.getItem('guest_xp') || '0');
     usedMessages = parseInt(localStorage.getItem('guest_msgs') || '0');
@@ -161,7 +167,6 @@ function loadGuestData() {
     updateHUD();
     updateChatStatus();
 }
-// -----------------------------------------------
 
 function loginUser(username) {
     currentUser = username;
