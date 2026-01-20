@@ -88,7 +88,7 @@ const ui = {
 let allLessons = [];
 
 // ==========================================
-// 1. INICIALIZACIÓN (EL ARRANQUE BLINDADO)
+// 1. INICIALIZACIÓN
 // ==========================================
 async function initLeague() {
     console.log("🚀 Starting System...");
@@ -98,14 +98,29 @@ async function initLeague() {
     setupAuth(); 
     setupVoiceControl();
     
-    // Truco: Forzar la carga de voces ahora para que estén listas luego
+    // Truco: Forzar la carga de voces ahora
     if (window.speechSynthesis) window.speechSynthesis.getVoices();
+    
+    // === 🕵️ DETECTIVE DE URL (PAGO VIP) ===
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('status') === 'vip_unlocked') {
+        const passInput = document.getElementById('api-key-input');
+        if(passInput) {
+            passInput.value = VIP_PASSWORD; 
+            localStorage.setItem('user_is_vip', 'true');
+        }
+        alert("🏆 TRANSFER COMPLETE! Welcome to the Pro League.");
+    }
+    if (localStorage.getItem('user_is_vip') === 'true') {
+         const passInput = document.getElementById('api-key-input');
+         if(passInput) passInput.value = VIP_PASSWORD;
+    }
+    // ===================================
 
     const startBtn = document.getElementById('start-btn');
     const landingPage = document.getElementById('landing-page');
     const appInterface = document.getElementById('app-interface');
 
-    // Botón Portada
     if (startBtn) {
         startBtn.onclick = () => {
             if(landingPage) landingPage.classList.add('hidden');
@@ -116,7 +131,6 @@ async function initLeague() {
         };
     }
 
-    // Auto-Login Check
     const savedUser = localStorage.getItem('current_session_user');
     if (savedUser && usersDB[savedUser]) {
         loginUser(savedUser); 
@@ -131,7 +145,6 @@ async function initLeague() {
 
     if(ui.hud) ui.hud.classList.remove('hidden');
 
-    // Cargar Datos (Protegido)
     try {
         console.log("📂 Loading Index...");
         const response = await fetch(DB_FOLDER + 'index.json');
@@ -422,27 +435,26 @@ async function loadMatch(filename) {
 function renderTactics(lesson) {
     playSound('whistle'); 
     
-    // 🎥 GESTIÓN INTELIGENTE DE VÍDEO (MP4 o YOUTUBE)
-    // ----------------------------------------------------
+    // 🎥 CORRECCIÓN DE ESTILOS DE VÍDEO
+    // ==========================================
     if (lesson.video_id) {
         ui.videoSection.classList.remove('hidden');
         
-        // Si el enlace es largo (MP4 directo), usamos <video>
         if (lesson.video_id.includes('http')) {
+             // ⚠️ AQUÍ ESTÁ EL ARREGLO: position: absolute y height: 100%
              ui.videoContainer.innerHTML = `
-                <video controls autoplay muted style="width: 100%; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                <video controls autoplay muted style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); object-fit: cover;">
                     <source src="${lesson.video_id}" type="video/mp4">
                     Tu navegador no soporta vídeo HTML5.
                 </video>`;
         } else {
-            // Si es corto, asumimos que es YouTube
             ui.videoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${lesson.video_id}?rel=0&modestbranding=1" frameborder="0" allowfullscreen></iframe>`;
         }
     } else {
         ui.videoSection.classList.add('hidden');
         ui.videoContainer.innerHTML = '';
     }
-    // ----------------------------------------------------
+    // ==========================================
 
     ui.title.innerText = lesson.content.title;
     if(ui.level) ui.level.innerText = `${lesson.meta.difficulty_elo || '1500'} ELO`;
@@ -611,17 +623,12 @@ function addMessage(t, c) {
     return d; 
 }
 
-// --- FUNCIÓN DE HABLAR (SPEAK) MEJORADA ---
 function speak(text) { 
     if (!window.speechSynthesis) return; 
     const synth = window.speechSynthesis; 
-    
-    // Si ya habla, lo callamos para empezar de nuevo
     if (synth.speaking) synth.cancel(); 
     
     const utterance = new SpeechSynthesisUtterance(text);
-    
-    // Intentamos buscar una voz británica
     let voices = synth.getVoices();
     const britishVoice = voices.find(v => v.lang.includes('GB') || v.lang.includes('UK'));
     
@@ -630,7 +637,6 @@ function speak(text) {
     } else {
         utterance.lang = 'en-GB';
     }
-    
     utterance.rate = 0.9; 
     synth.speak(utterance); 
 }
