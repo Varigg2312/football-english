@@ -1,0 +1,30 @@
+{
+  "file": "video_match.json",
+  "title": "Video Demo: The Bicycle Kick",
+  "video_id": "VjW166zM708",
+  "meta": { "difficulty_elo": 2000, "lesson_id": "vid_001" },
+  "content": {
+    "title": "The Bicycle Kick",
+    "intro_hook": "Watch greatness in motion.",
+    "core_concept": { 
+        "explanation": "A bicycle kick is an acrobatic strike where a player kicks an airborne ball rearward in midair.", 
+        "analogy": "Like a ninja backflip but with a ball." 
+    },
+    "vocabulary_rich": [
+      { "term": "Overhead Kick", "meaning": "Another name for bicycle kick." },
+      { "term": "Acrobatic", "meaning": "Performing difficult gymnastic feats." }
+    ]
+  },
+  "interactive_engine": {
+    "questions": [
+      {
+        "id": 1,
+        "scenario": "Did you see the goal? What part of the foot did he use?",
+        "options": [
+          { "text": "The laces (instep)", "outcome": "CORRECT", "feedback": "Bang on! Maximum power." },
+          { "text": "The heel", "outcome": "WRONG", "feedback": "No, that would be a scorpion kick." }
+        ]
+      }
+    ]
+  }
+}
