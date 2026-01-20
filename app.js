@@ -310,24 +310,20 @@ function setupVoiceControl() {
     recognition.maxAlternatives = 1;
 
     // --- ESCUDO ANTI-CRASH ---
-    // Esta variable evita que el navegador explote si pulsas rápido
     let isListening = false;
 
     if(ui.voiceBtn) {
         ui.voiceBtn.onclick = () => {
-            // Si ya está escuchando, lo paramos y salimos
             if (isListening) {
                 recognition.stop();
                 return;
             }
 
-            // Si no, arrancamos
             playSound('whistle'); 
             try {
                 recognition.start();
                 isListening = true;
                 ui.voiceBtn.classList.add('mic-listening');
-                // Feedback visual para que sepas que funciona
                 if(ui.feedback) {
                     ui.feedback.innerHTML = `<p class="fade-in" style="color:#666">👂 Listening...</p>`;
                     ui.feedback.classList.remove('hidden');
@@ -343,11 +339,8 @@ function setupVoiceControl() {
     recognition.onresult = (event) => {
         const speechResult = event.results[0][0].transcript.toLowerCase();
         console.log('🎤 Heard:', speechResult);
-        
-        // Reset de estado
         isListening = false;
         if(ui.voiceBtn) ui.voiceBtn.classList.remove('mic-listening');
-        
         checkVoiceAnswer(speechResult);
     };
 
@@ -429,14 +422,27 @@ async function loadMatch(filename) {
 function renderTactics(lesson) {
     playSound('whistle'); 
     
-    // VIDEO
+    // 🎥 GESTIÓN INTELIGENTE DE VÍDEO (MP4 o YOUTUBE)
+    // ----------------------------------------------------
     if (lesson.video_id) {
         ui.videoSection.classList.remove('hidden');
-        ui.videoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${lesson.video_id}?rel=0&modestbranding=1" frameborder="0" allowfullscreen></iframe>`;
+        
+        // Si el enlace es largo (MP4 directo), usamos <video>
+        if (lesson.video_id.includes('http')) {
+             ui.videoContainer.innerHTML = `
+                <video controls autoplay muted style="width: 100%; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                    <source src="${lesson.video_id}" type="video/mp4">
+                    Tu navegador no soporta vídeo HTML5.
+                </video>`;
+        } else {
+            // Si es corto, asumimos que es YouTube
+            ui.videoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${lesson.video_id}?rel=0&modestbranding=1" frameborder="0" allowfullscreen></iframe>`;
+        }
     } else {
         ui.videoSection.classList.add('hidden');
         ui.videoContainer.innerHTML = '';
     }
+    // ----------------------------------------------------
 
     ui.title.innerText = lesson.content.title;
     if(ui.level) ui.level.innerText = `${lesson.meta.difficulty_elo || '1500'} ELO`;
@@ -519,7 +525,7 @@ function handleAnswer(option, btnClicked) {
 }
 
 // ==========================================
-// 5. CHATBOT Y AUDIO (ARREGLADO DEFINITIVO)
+// 5. CHATBOT Y AUDIO
 // ==========================================
 function setupChat() {
     if(!ui.chatTrigger) return;
