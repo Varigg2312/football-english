@@ -1,5 +1,14 @@
 [
   {
+    "title": "🎥 VIDEO DEMO: Bicycle Kick",
+    "file": "video_match.json",
+    "difficulty": "Legend",
+    "id": "vid_001"
+  },
+  ... (tus otras lecciones)
+]
+[
+  {
     "title": "The Post-Match Interview: Talking Tactics",
     "file": "post_match_interview.json",
     "difficulty": "Pro",
@@ -29,4 +38,5 @@
     "difficulty": "Pro",
     "id": "gen_1768864380"
   }
+
 ]
