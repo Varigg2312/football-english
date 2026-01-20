@@ -103,10 +103,16 @@ body {
 .result-item { padding: 15px 20px; cursor: pointer; border-bottom: 1px solid #f3f4f6; display: flex; justify-content: space-between; }
 .result-item:hover { background: #f9fafb; }
 
-/* CARDS */
+/* CARDS & VIDEO */
 .card { background: var(--card-bg); border-radius: var(--radius); padding: 25px; margin-bottom: 25px; box-shadow: var(--shadow-soft); border: 1px solid #f3f4f6; }
 .card-header { font-size: 0.85rem; color: #6b7280; font-weight: 700; text-transform: uppercase; margin-bottom: 15px; }
 .card-header i { margin-right: 8px; color: var(--primary); }
+
+.video-responsive {
+    position: relative; padding-bottom: 56.25%; /* 16:9 */ height: 0; overflow: hidden; border-radius: 12px; margin-bottom: 15px; background: #000;
+}
+.video-responsive iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
 .premium-card { background: #111827; color: white; display: flex; justify-content: space-between; align-items: center; }
 .cta-button { background: var(--accent-gradient); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
 button.option-btn { background: white; border: 1px solid #e5e7eb; padding: 15px; border-radius: 10px; cursor: pointer; text-align: left; width: 100%; font-size: 1rem; color: var(--text); margin-bottom: 10px; }
@@ -118,9 +124,22 @@ button.option-btn:hover { border-color: var(--primary); }
 .fade-in { animation: fadeIn 0.5s ease; }
 @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
 
-/* AUDIO BUTTON */
+/* AUDIO & VOICE BUTTONS */
 .audio-btn { background: #e0e7ff; color: var(--primary); border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; margin-right: 10px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; }
 .audio-btn:hover { transform: scale(1.2); background: var(--primary); color: white; }
+
+.mic-container { text-align: center; margin-bottom: 15px; }
+.mic-btn {
+    background: #f1f5f9; color: #64748b; border: 2px solid #e2e8f0;
+    width: 60px; height: 60px; border-radius: 50%; font-size: 1.5rem; cursor: pointer;
+    transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+.mic-btn:hover { background: #e2e8f0; color: #334155; }
+.mic-listening {
+    background: #fee2e2 !important; color: #ef4444 !important; border-color: #ef4444 !important;
+    animation: pulse 1.5s infinite;
+}
+@keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
 
 /* CHATBOT & AUTH */
 .coach-btn { position: fixed; bottom: 30px; right: 30px; background: var(--chat-bg); color: var(--chat-accent); padding: 15px 25px; border-radius: 50px; font-weight: 800; cursor: pointer; border: 2px solid var(--chat-accent); z-index: 9999; display: flex; align-items: center; gap: 10px; }
