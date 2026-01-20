@@ -21,36 +21,13 @@
         <div class="landing-content">
             <span class="landing-badge">OFFICIAL ACADEMY 2026</span>
             <h1 class="hero-title">Don't just watch football.<br>Speak it.</h1>
-            <p class="hero-subtitle">
-                La academia táctica definitiva.<br>
-                Entrena con <strong>IA</strong>, mantén tu <strong>Racha</strong> y ficha por la élite.
-            </p>
-
+            <p class="hero-subtitle">Entrena con <strong>IA</strong>, Video Análisis y Reconocimiento de Voz.</p>
             <div class="features-grid">
-                <div class="feature-box">
-                    <i class="fa-solid fa-brain"></i>
-                    <h3>Tactical AI</h3>
-                    <p>Análisis en tiempo real con "The Gaffer".</p>
-                </div>
-                <div class="feature-box">
-                    <i class="fa-solid fa-fire"></i>
-                    <h3>Daily Streak</h3>
-                    <p>Entra cada día o pierde tu progreso.</p>
-                </div>
-                <div class="feature-box">
-                    <i class="fa-solid fa-volume-high"></i>
-                    <h3>Native Audio</h3>
-                    <p>Pronunciación británica técnica.</p>
-                </div>
+                <div class="feature-box"><i class="fa-solid fa-video"></i><h3>Video Match</h3><p>Análisis de jugadas reales.</p></div>
+                <div class="feature-box"><i class="fa-solid fa-microphone"></i><h3>Voice Coach</h3><p>Habla, no escribas.</p></div>
+                <div class="feature-box"><i class="fa-solid fa-fire"></i><h3>Daily Streak</h3><p>Mantén la racha.</p></div>
             </div>
-
-            <button id="start-btn" class="enter-btn">
-                ENTER STADIUM <i class="fa-solid fa-arrow-right"></i>
-            </button>
-            
-            <p style="margin-top: 20px; font-size: 0.8rem; color: #64748b;">
-                *Progreso guardado automáticamente en tu navegador.
-            </p>
+            <button id="start-btn" class="enter-btn">ENTER STADIUM <i class="fa-solid fa-arrow-right"></i></button>
         </div>
     </section>
 
@@ -58,33 +35,18 @@
         
         <div id="player-hud" class="player-hud">
             <div class="hud-group">
-                <div class="hud-item">
-                    <span class="hud-label">RANK</span>
-                    <span id="player-rank" class="hud-value">ROOKIE</span>
-                </div>
-                <div class="hud-item">
-                    <span class="hud-label">STREAK</span>
-                    <span id="player-streak" class="hud-value fire-text">0 🔥</span>
-                </div>
-                <div class="hud-progress">
-                    <div id="xp-bar" class="xp-fill" style="width: 0%"></div>
-                </div>
-                <div class="hud-item">
-                    <span class="hud-label">XP</span>
-                    <span id="player-xp" class="hud-value">0 pts</span>
-                </div>
+                <div class="hud-item"><span class="hud-label">RANK</span><span id="player-rank" class="hud-value">ROOKIE</span></div>
+                <div class="hud-item"><span class="hud-label">STREAK</span><span id="player-streak" class="hud-value fire-text">0 🔥</span></div>
+                <div class="hud-progress"><div id="xp-bar" class="xp-fill" style="width: 0%"></div></div>
+                <div class="hud-item"><span class="hud-label">XP</span><span id="player-xp" class="hud-value">0 pts</span></div>
             </div>
             <button id="auth-btn" class="auth-btn"><i class="fa-solid fa-user"></i> Login</button>
         </div>
 
         <div id="auth-modal" class="coach-window auth-window hidden">
-            <div class="coach-header">
-                <span><i class="fa-solid fa-locker"></i> Locker Room</span>
-                <button id="close-auth"><i class="fa-solid fa-xmark"></i></button>
-            </div>
+            <div class="coach-header"><span><i class="fa-solid fa-locker"></i> Locker Room</span><button id="close-auth"><i class="fa-solid fa-xmark"></i></button></div>
             <div class="auth-body">
                 <h3 id="auth-title">Sign In</h3>
-                <p class="auth-subtitle">Accede a tus estadísticas de carrera.</p>
                 <input type="text" id="auth-user" placeholder="Username" class="auth-input">
                 <input type="password" id="auth-pass" placeholder="Password" class="auth-input">
                 <button id="submit-auth" class="cta-button full-width">Sign In</button>
@@ -100,7 +62,7 @@
                 <div class="search-wrapper">
                     <div class="search-bar">
                         <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                        <input type="text" id="magic-search" placeholder="Busca 'VAR', 'Penalty', 'Pressing'..." autocomplete="off">
+                        <input type="text" id="magic-search" placeholder="Busca 'VAR', 'Penalty'..." autocomplete="off">
                         <button class="search-btn"><i class="fa-solid fa-arrow-right"></i></button>
                     </div>
                     <div id="search-results" class="results-dropdown hidden"></div>
@@ -114,15 +76,12 @@
                 </div>
             </header>
 
-            <div id="premium-banner" class="card premium-card">
-                <div class="premium-text">
-                    <h2>🚀 Go Pro Career</h2>
-                    <p>Desbloquea el Tutor IA y Certificaciones Avanzadas.</p>
-                </div>
-                <a href="https://buy.stripe.com/00w5kEccv9ur6r3eMl9R600" target="_blank" class="cta-button">Get PRO (5€)</a>
-            </div>
-
             <main id="main-content" class="hidden">
+                <section id="video-section" class="card hidden">
+                    <div class="card-header"><i class="fa-solid fa-film"></i> Video Analysis</div>
+                    <div id="video-container" class="video-responsive"></div>
+                </section>
+
                 <section class="card">
                     <div class="card-header"><i class="fa-solid fa-chalkboard-user"></i> Core Concept</div>
                     <div id="core-concept"></div>
@@ -133,6 +92,12 @@
                 </section>
                 <section class="card highlight-card">
                     <div class="card-header"><i class="fa-solid fa-whistle"></i> The Decision</div>
+                    
+                    <div class="mic-container">
+                        <button id="voice-btn" class="mic-btn"><i class="fa-solid fa-microphone"></i></button>
+                        <p style="font-size: 0.8rem; color: #64748b; margin-top:5px;">Tap & Speak the Answer</p>
+                    </div>
+
                     <p id="quiz-question" class="quiz-q">...</p>
                     <div id="options-container" class="buttons-grid"></div>
                     <div id="feedback-zone" class="hidden"></div>
@@ -143,31 +108,20 @@
         </div>
 
         <div id="coach-trigger" class="coach-btn"><i class="fa-solid fa-headset"></i> Talk to Coach</div>
-        
         <div id="coach-modal" class="coach-window hidden">
             <div class="coach-header">
-                <span><i class="fa-solid fa-user-tie"></i> The Gaffer (AI Tutor)</span>
-                <div class="window-controls">
-                    <button id="maximize-chat"><i class="fa-solid fa-expand"></i></button>
-                    <button id="close-chat"><i class="fa-solid fa-xmark"></i></button>
-                </div>
+                <span><i class="fa-solid fa-user-tie"></i> The Gaffer</span>
+                <div class="window-controls"><button id="maximize-chat"><i class="fa-solid fa-expand"></i></button><button id="close-chat"><i class="fa-solid fa-xmark"></i></button></div>
             </div>
-            <div id="chat-history" class="chat-body">
-                <div class="message bot-msg">Alright lad? Unlock PRO access to chat properly.</div>
-            </div>
+            <div id="chat-history" class="chat-body"><div class="message bot-msg">Alright lad? Unlock PRO access.</div></div>
             <div class="chat-input-area">
                 <input type="password" id="api-key-input" placeholder="🔒 Enter VIP Password..." class="key-input">
-                <div class="input-row">
-                    <input type="text" id="user-msg" placeholder="Ask a question..." disabled>
-                    <button id="send-msg" disabled><i class="fa-solid fa-paper-plane"></i></button>
-                </div>
-                <p style="font-size: 0.7rem; color: #999; margin-top: 5px; text-align: center;">*Solo PRO. <a href="https://buy.stripe.com/00w5kEccv9ur6r3eMl9R600" target="_blank">Clave aquí</a>.</p>
+                <div class="input-row"><input type="text" id="user-msg" placeholder="Ask a question..." disabled><button id="send-msg" disabled><i class="fa-solid fa-paper-plane"></i></button></div>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
     <script src="app.js"></script>
 </body>
 </html>
