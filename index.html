@@ -3,96 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Football English Academy | Elite Training</title>
+    <title>Football English Academy</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#020617">
+    <meta name="theme-color" content="#0f172a">
     <link rel="apple-touch-icon" href="https://img.icons8.com/color/480/football2--v1.png">
     <link rel="icon" type="image/png" href="https://img.icons8.com/color/96/football2--v1.png">
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="football.css">
 </head>
 <body>
 
     <section id="landing-page" class="landing-page">
-        
-        <div class="news-ticker">
-            <div class="ticker-content">
-                🔥 <strong>BREAKING:</strong> New "Ball Mastery" Module added • 🎓 1,240 Players active now • 🏆 Next Tournament starts in 2 days • ⚽ Master the Vocabulary of the Premier League •
-            </div>
-        </div>
-
-        <nav class="navbar">
-            <div class="logo"><i class="fa-solid fa-futbol"></i> FE<span>ACADEMY</span></div>
-            <div class="version-tag">BETA v2.0</div>
-        </nav>
-
         <div class="landing-content">
-            <span class="landing-badge">OFFICIAL PARTNER OF WINNERS</span>
-            
-            <h1 class="hero-title">
-                DON'T JUST WATCH.<br>
-                <span>SPEAK THE GAME.</span>
-            </h1>
-            
+            <span class="landing-badge">OFFICIAL ACADEMY 2026</span>
+            <h1 class="hero-title">Don't just watch football.<br>Speak it.</h1>
             <p class="hero-subtitle">
-                The first AI-powered tactical language training platform. 
-                Real match analysis, real-time voice correction, and PRO certification.
+                Entrena con <strong>IA</strong>, Video Análisis y Reconocimiento de Voz.<br>
+                La academia táctica definitiva.
             </p>
-
-            <button id="start-btn" class="enter-btn">
-                ENTER ACADEMY <i class="fa-solid fa-arrow-right"></i>
-            </button>
-
-            <div class="hero-stats">
-                <div class="stat-item">
-                    <span class="stat-number">12k+</span>
-                    <span class="stat-label">Drills</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">4.9/5</span>
-                    <span class="stat-label">Rating</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">PRO</span>
-                    <span class="stat-label">Certified</span>
-                </div>
-            </div>
 
             <div class="features-grid">
                 <div class="feature-box">
-                    <i class="fa-solid fa-video video-icon"></i>
-                    <h3>Video Intel</h3>
-                    <p>Tactical analysis with 4K clips.</p>
+                    <i class="fa-solid fa-video"></i>
+                    <h3>Video Match</h3>
+                    <p>Análisis de jugadas reales.</p>
                 </div>
                 <div class="feature-box">
-                    <i class="fa-solid fa-microphone-lines voice-icon"></i>
-                    <h3>Voice Engine</h3>
-                    <p>AI that rates your pronunciation.</p>
+                    <i class="fa-solid fa-microphone"></i>
+                    <h3>Voice Coach</h3>
+                    <p>Habla, no escribas.</p>
                 </div>
                 <div class="feature-box">
-                    <i class="fa-solid fa-brain brain-icon"></i>
-                    <h3>Tactical IQ</h3>
-                    <p>Learn concepts, not just words.</p>
+                    <i class="fa-solid fa-fire"></i>
+                    <h3>Daily Streak</h3>
+                    <p>Mantén la racha.</p>
                 </div>
             </div>
 
-            <div class="trust-section">
-                <p>Trusted by grassroots coaches</p>
-                <div class="trust-logos">
-                    <i class="fa-brands fa-nike"></i>
-                    <i class="fa-brands fa-adidas"></i>
-                    <i class="fa-brands fa-spotify"></i>
-                    <i class="fa-brands fa-discord"></i>
-                </div>
-            </div>
+            <button id="start-btn" class="enter-btn">
+                ENTER STADIUM <i class="fa-solid fa-arrow-right"></i>
+            </button>
             
-            <p class="disclaimer">
-                *Progress saved locally via LocalStorage API.
+            <p style="margin-top: 20px; font-size: 0.8rem; color: #64748b;">
+                *Progreso guardado automáticamente en tu navegador.
             </p>
         </div>
     </section>
@@ -131,7 +89,7 @@
             </div>
             <div class="auth-body">
                 <h3 id="auth-title">Sign In</h3>
-                <p class="auth-subtitle">Access your career stats.</p>
+                <p class="auth-subtitle">Accede a tus estadísticas de carrera.</p>
                 <input type="text" id="auth-user" placeholder="Username" class="auth-input">
                 <input type="password" id="auth-pass" placeholder="Password" class="auth-input">
                 <button id="submit-auth" class="cta-button full-width">Sign In</button>
@@ -144,12 +102,12 @@
             
             <header class="hero-section">
                 <div class="brand-badge">TRAINING GROUND</div>
-                <h1 class="gradient-title">What's the drill today?</h1>
+                <h1 class="gradient-title">¿Qué aprendemos hoy?</h1>
                 
                 <div class="search-wrapper">
                     <div class="search-bar">
                         <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                        <input type="text" id="magic-search" placeholder="Search 'VAR', 'Penalty', 'Pressing'..." autocomplete="off">
+                        <input type="text" id="magic-search" placeholder="Busca 'VAR', 'Penalty', 'Pressing'..." autocomplete="off">
                         <button class="search-btn"><i class="fa-solid fa-arrow-right"></i></button>
                     </div>
                     <div id="search-results" class="results-dropdown hidden"></div>
@@ -160,14 +118,14 @@
                         <h2 id="lesson-title">Select a match...</h2>
                         <span id="lesson-level" class="level-badge">LEVEL 0</span>
                     </div>
-                    <p id="lesson-intro">Use the search bar to start session.</p>
+                    <p id="lesson-intro">Usa el buscador para iniciar sesión de entrenamiento.</p>
                 </div>
             </header>
 
             <div id="premium-banner" class="card premium-card">
                 <div class="premium-text">
                     <h2>🚀 Go Pro Career</h2>
-                    <p>Unlock AI Tutor and Advanced Certifications.</p>
+                    <p>Desbloquea el Tutor IA y Certificaciones Avanzadas.</p>
                 </div>
                 <a href="https://buy.stripe.com/00w5kEccv9ur6r3eMl9R600" target="_blank" class="cta-button">Get PRO (5€)</a>
             </div>
@@ -176,8 +134,7 @@
                 
                 <section id="video-section" class="card hidden">
                     <div class="card-header"><i class="fa-solid fa-film"></i> Video Analysis</div>
-                    <div id="video-container" class="video-responsive">
-                        </div>
+                    <div id="video-container" class="video-responsive"></div>
                 </section>
 
                 <section class="card">
@@ -211,7 +168,7 @@
         
         <div id="coach-modal" class="coach-window hidden">
             <div class="coach-header">
-                <span><i class="fa-solid fa-user-tie"></i> The Gaffer</span>
+                <span><i class="fa-solid fa-user-tie"></i> The Gaffer (AI Tutor)</span>
                 <div class="window-controls">
                     <button id="maximize-chat"><i class="fa-solid fa-expand"></i></button>
                     <button id="close-chat"><i class="fa-solid fa-xmark"></i></button>
@@ -229,7 +186,7 @@
                     <button id="send-msg" disabled><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
                 <p style="font-size: 0.7rem; color: #999; margin-top: 5px; text-align: center;">
-                    *PRO Only. <a href="https://buy.stripe.com/00w5kEccv9ur6r3eMl9R600" target="_blank">Get key here</a>.
+                    *Solo PRO. <a href="https://buy.stripe.com/00w5kEccv9ur6r3eMl9R600" target="_blank">Consigue clave aquí</a>.
                 </p>
             </div>
         </div>
