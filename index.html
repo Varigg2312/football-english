@@ -19,7 +19,6 @@
 <body>
 
     <section id="landing-page" class="landing-page">
-        
         <div class="news-ticker">
             <div class="ticker-content">
                 🔥 <strong>BREAKING:</strong> New "Knuckleball" Module added • 🎓 1,240 Players active now • 🏆 Next Tournament starts in 2 days • ⚽ Master the Vocabulary of the Premier League •
@@ -33,12 +32,10 @@
 
         <div class="landing-content">
             <span class="landing-badge">OFFICIAL PARTNER OF WINNERS</span>
-            
             <h1 class="hero-title">
                 DON'T JUST WATCH.<br>
                 <span>SPEAK THE GAME.</span>
             </h1>
-            
             <p class="hero-subtitle">
                 The first AI-powered tactical language training platform. 
                 Real match analysis, real-time voice correction, and PRO certification.
@@ -49,18 +46,9 @@
             </button>
 
             <div class="hero-stats">
-                <div class="stat-item">
-                    <span class="stat-number">12k+</span>
-                    <span class="stat-label">Drills</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">4.9/5</span>
-                    <span class="stat-label">Rating</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">PRO</span>
-                    <span class="stat-label">Certified</span>
-                </div>
+                <div class="stat-item"><span class="stat-number">12k+</span><span class="stat-label">Drills</span></div>
+                <div class="stat-item"><span class="stat-number">4.9/5</span><span class="stat-label">Rating</span></div>
+                <div class="stat-item"><span class="stat-number">PRO</span><span class="stat-label">Certified</span></div>
             </div>
 
             <div class="features-grid">
@@ -91,31 +79,17 @@
                 </div>
             </div>
             
-            <p class="disclaimer">
-                *Progress saved locally via LocalStorage API.
-            </p>
+            <p class="disclaimer">*Progress saved locally via LocalStorage API.</p>
         </div>
     </section>
 
     <div id="app-interface" class="hidden">
-        
         <div id="player-hud" class="player-hud">
             <div class="hud-group">
-                <div class="hud-item">
-                    <span class="hud-label">RANK</span>
-                    <span id="player-rank" class="hud-value">ROOKIE</span>
-                </div>
-                <div class="hud-item">
-                    <span class="hud-label">STREAK</span>
-                    <span id="player-streak" class="hud-value fire-text">0 🔥</span>
-                </div>
-                <div class="hud-progress">
-                    <div id="xp-bar" class="xp-fill" style="width: 0%"></div>
-                </div>
-                <div class="hud-item">
-                    <span class="hud-label">XP</span>
-                    <span id="player-xp" class="hud-value">0 pts</span>
-                </div>
+                <div class="hud-item"><span class="hud-label">RANK</span><span id="player-rank" class="hud-value">ROOKIE</span></div>
+                <div class="hud-item"><span class="hud-label">STREAK</span><span id="player-streak" class="hud-value fire-text">0 🔥</span></div>
+                <div class="hud-progress"><div id="xp-bar" class="xp-fill" style="width: 0%"></div></div>
+                <div class="hud-item"><span class="hud-label">XP</span><span id="player-xp" class="hud-value">0 pts</span></div>
             </div>
             <button id="auth-btn" class="auth-btn"><i class="fa-solid fa-user"></i> Login</button>
         </div>
@@ -137,11 +111,9 @@
         </div>
 
         <div class="container">
-            
             <header class="hero-section">
                 <div class="brand-badge">TRAINING GROUND</div>
                 <h1 class="gradient-title">What's the drill today?</h1>
-                
                 <div class="search-wrapper">
                     <div class="search-bar">
                         <i class="fa-solid fa-magnifying-glass search-icon"></i>
@@ -150,7 +122,6 @@
                     </div>
                     <div id="search-results" class="results-dropdown hidden"></div>
                 </div>
-
                 <div id="match-info" class="fade-in hidden">
                     <div class="match-meta">
                         <h2 id="lesson-title">Select a match...</h2>
@@ -186,17 +157,14 @@
 
                 <section class="card highlight-card">
                     <div class="card-header"><i class="fa-solid fa-whistle"></i> The Decision</div>
-                    
                     <div class="mic-container" style="display:none">
                         <button id="voice-btn" class="mic-btn"><i class="fa-solid fa-microphone"></i></button>
                     </div>
-
                     <p id="quiz-question" class="quiz-q">...</p>
                     <div id="options-container" class="buttons-grid"></div>
                     <div id="feedback-zone" class="hidden"></div>
                 </section>
             </main>
-            
             <footer><p>© 2026 Football English Academy • Built for Winners</p></footer>
         </div>
 
@@ -210,11 +178,9 @@
                     <button id="close-chat"><i class="fa-solid fa-xmark"></i></button>
                 </div>
             </div>
-            
             <div id="chat-history" class="chat-body">
                 <div class="message bot-msg">Alright lad? I'm here 24/7. Unlock PRO access to chat properly.</div>
             </div>
-            
             <div class="chat-input-area">
                 <input type="password" id="api-key-input" placeholder="🔒 Enter VIP Key..." class="key-input">
                 <div class="input-row">
