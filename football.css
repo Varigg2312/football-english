@@ -10,7 +10,7 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f8fafc; /* Fondo claro original */
+    background-color: #f8fafc; /* FONDO CLARO RESTAURADO */
     color: #1e293b;
     overflow-x: hidden;
 }
@@ -61,9 +61,17 @@ body {
 .enter-btn:active { transform: scale(0.95); }
 
 /* =========================================
-   3. APP INTERFACE
+   3. APP INTERFACE (LAYOUT FIXED)
    ========================================= */
 .hidden { display: none !important; }
+
+/* Contenedor principal de la app */
+#app-interface {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* ESTO CENTRA TODO */
+}
 
 /* HUD */
 .player-hud {
@@ -84,8 +92,14 @@ body {
 .auth-btn { background: #f1f5f9; border: none; padding: 8px 15px; border-radius: 20px; font-weight: 600; cursor: pointer; color: #475569; }
 .auth-btn.logged-in { background: #dcfce7; color: #166534; }
 
-/* MAIN CONTAINER */
-.container { max-width: 600px; width: 100%; padding: 20px; margin: 0 auto; padding-bottom: 100px; }
+/* MAIN CONTAINER (ARREGLO DE ALINEACIÓN) */
+.container { 
+    max-width: 600px; 
+    width: 100%; 
+    padding: 20px; 
+    margin: 0 auto; /* ESTO LO CENTRA */
+    padding-bottom: 100px; 
+}
 
 /* SEARCH & HEADER */
 .hero-section { text-align: center; margin-bottom: 30px; }
@@ -106,11 +120,20 @@ body {
 .card { background: white; border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9; }
 .card-header { font-size: 0.9rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
 
-/* PREMIUM BANNER */
+/* PREMIUM BANNER (ARREGLADO: BOTÓN ROSA VISIBLE) */
 .premium-card { background: #1e1b4b; color: white; display: flex; justify-content: space-between; align-items: center; }
 .premium-text h2 { font-size: 1.2rem; margin-bottom: 5px; color: #818cf8; }
 .premium-text p { font-size: 0.8rem; color: #c7d2fe; }
-.premium-card .cta-button { background: white; color: #1e1b4b; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; font-size: 0.9rem; }
+.premium-card .cta-button { 
+    background: #ec4899; /* ROSA FUERTE */
+    color: white; 
+    text-decoration: none; 
+    padding: 10px 20px; 
+    border-radius: 8px; 
+    font-weight: 700; 
+    font-size: 0.9rem; 
+    box-shadow: 0 0 10px rgba(236, 72, 153, 0.5);
+}
 
 /* VIDEO */
 .video-responsive { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 12px; overflow: hidden; background: #000; }
@@ -137,6 +160,10 @@ body {
 /* MODALS */
 .coach-btn { position: fixed; bottom: 20px; right: 20px; background: #0f172a; color: white; padding: 12px 20px; border-radius: 30px; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.2); cursor: pointer; z-index: 90; display: flex; align-items: center; gap: 10px; }
 .coach-window { position: fixed; bottom: 90px; right: 20px; width: 350px; height: 500px; background: white; border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); z-index: 100; display: flex; flex-direction: column; overflow: hidden; border: 1px solid #e2e8f0; }
+
+/* ARREGLO MAXIMIZAR CHAT */
+.coach-window.fullscreen { width: 100%; height: 100%; top: 0; left: 0; border-radius: 0; bottom: 0; right: 0; }
+
 .coach-header { background: #0f172a; color: white; padding: 15px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
 .window-controls button { background: none; border: none; color: white; cursor: pointer; margin-left: 10px; }
 .chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #f8fafc; }
