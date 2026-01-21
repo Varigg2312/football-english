@@ -11,7 +11,7 @@ const RANKS = [
     { name: "LEGEND", limit: 5000 } 
 ];
 
-// === SONIDOS DEL SISTEMA ===
+// SONIDOS
 const sfx = {
     whistle: new Audio('https://cdn.pixabay.com/audio/2021/08/04/audio_0625c1539c.mp3'), 
     correct: new Audio('https://cdn.pixabay.com/audio/2021/08/09/audio_9ec164287d.mp3'),
@@ -21,13 +21,12 @@ const sfx = {
 
 function playSound(name) { 
     try { 
-        sfx[name].volume = 0.3; 
-        sfx[name].currentTime = 0; 
-        sfx[name].play().catch(e => console.log("Audio play blocked - interaction needed")); 
+        sfx[name].volume = 0.3; sfx[name].currentTime = 0; 
+        sfx[name].play().catch(e => console.log("Audio blocked")); 
     } catch(e){} 
 }
 
-// === ESTADO GLOBAL ===
+// ESTADO
 let currentUser = null; 
 let usersDB = JSON.parse(localStorage.getItem('football_users_db') || '{}');
 let usedMessages = 0;
@@ -36,7 +35,7 @@ let playerStreak = 0;
 let currentQuizQuestions = [];
 let currentQuestionIndex = 0;
 
-// === REFERENCIAS AL DOM (ELEMENTOS UI) ===
+// UI
 const ui = {
     search: document.getElementById('magic-search'),
     results: document.getElementById('search-results'),
@@ -47,26 +46,18 @@ const ui = {
     intro: document.getElementById('lesson-intro'),
     concept: document.getElementById('core-concept'),
     vocabList: document.getElementById('vocabulary-list'),
-    
-    // VIDEO & VOZ
     videoSection: document.getElementById('video-section'),
     videoContainer: document.getElementById('video-container'),
     voiceBtn: document.getElementById('voice-btn'),
-    
-    // QUIZ (EL PARTIDO)
     quizHeader: document.querySelector('.highlight-card .card-header'),
     quizQuestion: document.getElementById('quiz-question'),
     quizOptions: document.getElementById('options-container'),
     feedback: document.getElementById('feedback-zone'),
-    
-    // HUD (BARRA SUPERIOR)
     hud: document.getElementById('player-hud'),
     rankDisplay: document.getElementById('player-rank'),
     xpDisplay: document.getElementById('player-xp'),
     streakDisplay: document.getElementById('player-streak'),
     xpBar: document.getElementById('xp-bar'),
-    
-    // CHAT & LOGIN
     chatTrigger: document.getElementById('coach-trigger'),
     chatModal: document.getElementById('coach-modal'),
     chatClose: document.getElementById('close-chat'),
@@ -87,37 +78,21 @@ const ui = {
 
 let allLessons = [];
 
-// ==========================================
-// 1. INICIALIZACIÓN (EL ARRANQUE)
-// ==========================================
 async function initLeague() {
-    console.log("🚀 Starting System...");
-
-    // Activamos sistemas secundarios primero
-    setupChat(); 
-    setupAuth(); 
-    setupVoiceControl();
-    
-    // Pre-carga de voces sintéticas
+    setupChat(); setupAuth(); setupVoiceControl();
     if (window.speechSynthesis) window.speechSynthesis.getVoices();
 
-    // === DETECTIVE DE URL (BYPASS VIP) ===
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('status') === 'vip_unlocked') {
         const passInput = document.getElementById('api-key-input');
-        if(passInput) {
-            passInput.value = VIP_PASSWORD; 
-            localStorage.setItem('user_is_vip', 'true');
-        }
-        alert("🏆 TRANSFER COMPLETE! Welcome to the Pro League.");
+        if(passInput) { passInput.value = VIP_PASSWORD; localStorage.setItem('user_is_vip', 'true'); }
+        alert("🏆 PRO UNLOCKED!");
     }
-    // Recuperar VIP si ya pagó
     if (localStorage.getItem('user_is_vip') === 'true') {
          const passInput = document.getElementById('api-key-input');
          if(passInput) passInput.value = VIP_PASSWORD;
     }
 
-    // Gestión de Portada vs App
     const startBtn = document.getElementById('start-btn');
     const landingPage = document.getElementById('landing-page');
     const appInterface = document.getElementById('app-interface');
@@ -125,61 +100,36 @@ async function initLeague() {
     if (startBtn) {
         startBtn.onclick = () => {
             if(landingPage) landingPage.classList.add('hidden');
-            if(appInterface) { 
-                appInterface.classList.remove('hidden'); 
-                appInterface.style.display = 'flex'; 
-            }
+            if(appInterface) { appInterface.classList.remove('hidden'); appInterface.style.display = 'flex'; }
         };
     }
 
-    // Auto-Login
     const savedUser = localStorage.getItem('current_session_user');
     if (savedUser && usersDB[savedUser]) {
         loginUser(savedUser); 
-        // Si ya está logueado, saltamos la portada
         if(landingPage) landingPage.classList.add('hidden');
-        if(appInterface) { 
-            appInterface.classList.remove('hidden'); 
-            appInterface.style.display = 'flex'; 
-        }
+        if(appInterface) { appInterface.classList.remove('hidden'); appInterface.style.display = 'flex'; }
     } else {
         loadGuestData(); 
     }
 
-    // Cargar Base de Datos (JSON)
+    if(ui.hud) ui.hud.classList.remove('hidden');
+
     try {
-        console.log("📂 Loading Index...");
         const response = await fetch(DB_FOLDER + 'index.json');
-        if (!response.ok) throw new Error("Index not found");
         allLessons = await response.json();
-        
-        console.log("✅ Lessons loaded:", allLessons.length);
         setupSearch(); 
-        
-    } catch (error) { 
-        console.error("❌ Error loading data:", error);
-    }
+    } catch (error) { console.error("Error loading data:", error); }
 }
 
-// ==========================================
-// 2. GESTIÓN DE DATOS DE USUARIO
-// ==========================================
 function loadGuestData() {
     playerXP = parseInt(localStorage.getItem('guest_xp') || '0');
     usedMessages = parseInt(localStorage.getItem('guest_msgs') || '0');
-    
-    const guestData = { 
-        streak: parseInt(localStorage.getItem('guest_streak') || '0'), 
-        lastVisit: localStorage.getItem('guest_last_visit') 
-    };
-    
+    const guestData = { streak: parseInt(localStorage.getItem('guest_streak') || '0'), lastVisit: localStorage.getItem('guest_last_visit') };
     calculateStreak(guestData);
-    
     localStorage.setItem('guest_streak', guestData.streak);
     localStorage.setItem('guest_last_visit', guestData.lastVisit);
-    
-    updateHUD();
-    updateChatStatus();
+    updateHUD(); updateChatStatus();
 }
 
 function loginUser(username) {
@@ -187,19 +137,15 @@ function loginUser(username) {
     localStorage.setItem('current_session_user', username);
     playerXP = usersDB[username].xp;
     usedMessages = usersDB[username].msgs || 0;
-    
     calculateStreak(usersDB[username]);
     saveUsersDB();
-
     ui.authBtn.innerHTML = `<i class="fa-solid fa-user-check"></i> ${username} (Exit)`;
     ui.authBtn.classList.add('logged-in');
-    updateHUD();
-    updateChatStatus();
+    updateHUD(); updateChatStatus();
 }
 
 function logoutUser() {
-    currentUser = null;
-    localStorage.removeItem('current_session_user');
+    currentUser = null; localStorage.removeItem('current_session_user');
     loadGuestData();
     ui.authBtn.innerHTML = `<i class="fa-solid fa-user"></i> Login`;
     ui.authBtn.classList.remove('logged-in');
@@ -208,14 +154,9 @@ function logoutUser() {
 function calculateStreak(userData) {
     const today = new Date().toDateString();
     if (userData.lastVisit !== today) {
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        
-        if (userData.lastVisit === yesterday.toDateString()) {
-            userData.streak = (userData.streak || 0) + 1;
-        } else {
-            userData.streak = 1;
-        }
+        const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+        if (userData.lastVisit === yesterday.toDateString()) { userData.streak = (userData.streak || 0) + 1; } 
+        else { userData.streak = 1; }
         userData.lastVisit = today;
     }
     playerStreak = userData.streak || 0;
@@ -224,55 +165,26 @@ function calculateStreak(userData) {
 function saveUsersDB() { localStorage.setItem('football_users_db', JSON.stringify(usersDB)); }
 
 function saveUserData() { 
-    if(currentUser){ 
-        usersDB[currentUser].xp = playerXP; 
-        usersDB[currentUser].msgs = usedMessages; 
-        saveUsersDB(); 
-    } else { 
-        localStorage.setItem('guest_xp', playerXP); 
-        localStorage.setItem('guest_msgs', usedMessages); 
-    } 
+    if(currentUser){ usersDB[currentUser].xp = playerXP; usersDB[currentUser].msgs = usedMessages; saveUsersDB(); } 
+    else { localStorage.setItem('guest_xp', playerXP); localStorage.setItem('guest_msgs', usedMessages); } 
 }
 
 function addXP(amount) { 
-    playerXP += amount; 
-    saveUserData(); 
-    updateHUD(); 
-    if(ui.xpDisplay){ 
-        ui.xpDisplay.classList.add('xp-gained'); 
-        setTimeout(() => ui.xpDisplay.classList.remove('xp-gained'), 300); 
-    } 
+    playerXP += amount; saveUserData(); updateHUD(); 
 }
 
 function updateHUD() { 
     if(!ui.rankDisplay) return; 
-    
-    let currentRank = RANKS[0];
-    let nextRankXP = RANKS[1].limit;
-    
+    let currentRank = RANKS[0]; let nextRankXP = RANKS[1].limit;
     for(let i=0; i<RANKS.length; i++){ 
-        if(playerXP >= RANKS[i].limit){ 
-            currentRank = RANKS[i]; 
-            nextRankXP = RANKS[i+1] ? RANKS[i+1].limit : playerXP * 1.5; 
-        } 
+        if(playerXP >= RANKS[i].limit){ currentRank = RANKS[i]; nextRankXP = RANKS[i+1] ? RANKS[i+1].limit : playerXP * 1.5; } 
     } 
-    
     ui.rankDisplay.innerText = currentRank.name; 
     ui.xpDisplay.innerText = `${playerXP} pts`; 
-    
-    if(ui.streakDisplay){ 
-        ui.streakDisplay.innerText = `${playerStreak} 🔥`; 
-        if(playerStreak > 1) ui.streakDisplay.classList.add('streak-active'); 
-        else ui.streakDisplay.classList.remove('streak-active'); 
-    } 
-    
+    ui.streakDisplay.innerText = `${playerStreak} 🔥`; 
     ui.xpBar.style.width = `${Math.min(100, (playerXP/nextRankXP)*100)}%`; 
 }
 
-// ==========================================
-// 3. SISTEMA DE LOGIN (UI)
-// ==========================================
-let isRegisterMode = false;
 function setupAuth() {
     if(!ui.authBtn) return;
     ui.authBtn.onclick = () => { if (currentUser) logoutUser(); else ui.authModal.classList.remove('hidden'); };
@@ -287,140 +199,67 @@ function setupAuth() {
     };
     
     ui.submitAuth.onclick = () => { 
-        const user = ui.authUser.value.trim(); 
-        const pass = ui.authPass.value.trim(); 
+        const user = ui.authUser.value.trim(); const pass = ui.authPass.value.trim(); 
         if (!user || !pass) { ui.authMsg.innerText = "Fill all fields."; return; } 
-        
         if (isRegisterMode) { 
             if (usersDB[user]) { ui.authMsg.innerText = "User exists!"; } 
-            else { 
-                usersDB[user] = { pass: pass, xp: 0, msgs: 0, streak: 1, lastVisit: new Date().toDateString() }; 
-                saveUsersDB(); 
-                loginUser(user); 
-                ui.authModal.classList.add('hidden'); 
-            } 
+            else { usersDB[user] = { pass: pass, xp: 0, msgs: 0, streak: 1, lastVisit: new Date().toDateString() }; saveUsersDB(); loginUser(user); ui.authModal.classList.add('hidden'); } 
         } else { 
-            if (usersDB[user] && usersDB[user].pass === pass) { 
-                loginUser(user); 
-                ui.authModal.classList.add('hidden'); 
-            } else { ui.authMsg.innerText = "Invalid credentials."; } 
+            if (usersDB[user] && usersDB[user].pass === pass) { loginUser(user); ui.authModal.classList.add('hidden'); } else { ui.authMsg.innerText = "Invalid credentials."; } 
         } 
     };
 }
 
-// ==========================================
-// 4. VOZ Y MOTOR DEL JUEGO (ARREGLADO)
-// ==========================================
 function setupVoiceControl() {
-    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-        if(ui.voiceBtn) ui.voiceBtn.style.display = 'none'; 
-        return;
-    }
-    
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) { if(ui.voiceBtn) ui.voiceBtn.style.display = 'none'; return; }
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
-    recognition.lang = 'en-US'; 
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    let isListening = false; // Prevención de doble clic
+    recognition.lang = 'en-US'; recognition.interimResults = false; recognition.maxAlternatives = 1;
+    let isListening = false;
 
     if(ui.voiceBtn) {
         ui.voiceBtn.onclick = () => {
-            if (isListening) {
-                recognition.stop();
-                return;
-            }
-
+            if (isListening) { recognition.stop(); return; }
             playSound('whistle'); 
-            try {
-                recognition.start();
-                isListening = true;
-                ui.voiceBtn.classList.add('mic-listening');
-                if(ui.feedback) {
-                    ui.feedback.innerHTML = `<p class="fade-in" style="color:#666">👂 Listening...</p>`;
-                    ui.feedback.classList.remove('hidden');
-                }
-            } catch(e) {
-                console.log("Mic busy:", e);
-                isListening = false;
-                ui.voiceBtn.classList.remove('mic-listening');
-            }
+            try { recognition.start(); isListening = true; ui.voiceBtn.classList.add('mic-listening'); } 
+            catch(e) { isListening = false; ui.voiceBtn.classList.remove('mic-listening'); }
         };
     }
-
     recognition.onresult = (event) => {
         const speechResult = event.results[0][0].transcript.toLowerCase();
-        console.log('🎤 Heard:', speechResult);
-        isListening = false;
-        if(ui.voiceBtn) ui.voiceBtn.classList.remove('mic-listening');
+        isListening = false; if(ui.voiceBtn) ui.voiceBtn.classList.remove('mic-listening');
         checkVoiceAnswer(speechResult);
     };
-
-    recognition.onerror = (e) => { 
-        console.log("Mic Error:", e);
-        isListening = false;
-        if(ui.voiceBtn) ui.voiceBtn.classList.remove('mic-listening'); 
-        if(ui.feedback) ui.feedback.innerHTML = `<p class="feedback-box feedback-error">❌ Audio Error. Try again.</p>`;
-    };
-    recognition.onend = () => { 
-        isListening = false;
-        if(ui.voiceBtn) ui.voiceBtn.classList.remove('mic-listening'); 
-    };
+    recognition.onend = () => { isListening = false; if(ui.voiceBtn) ui.voiceBtn.classList.remove('mic-listening'); };
 }
 
 function checkVoiceAnswer(text) {
     const buttons = ui.quizOptions.querySelectorAll('button');
     let matchFound = false;
-
     buttons.forEach(btn => {
         if(btn.disabled) return;
         const btnText = btn.innerText.toLowerCase();
-        if (text.includes(btnText) || btnText.includes(text)) {
-            matchFound = true;
-            btn.click(); 
-            ui.feedback.innerHTML = `<p class="fade-in">🎤 Voice matched: "<strong>${text}</strong>"</p>` + ui.feedback.innerHTML;
-        }
+        if (text.includes(btnText) || btnText.includes(text)) { matchFound = true; btn.click(); }
     });
-
-    if (!matchFound) {
-        ui.feedback.innerHTML = `<p class="feedback-box feedback-error fade-in">🎤 Heard: "<strong>${text}</strong>". Try again!</p>`;
-        ui.feedback.classList.remove('hidden');
-    }
 }
 
 function setupSearch() {
     if(!ui.search) return;
     ui.search.addEventListener('keyup', (e) => {
         const query = e.target.value.toLowerCase();
-        ui.results.innerHTML = ''; // Limpiar resultados previos
-        
+        ui.results.innerHTML = ''; 
         if (query.length < 1) { ui.results.classList.add('hidden'); return; }
-        
-        const matches = allLessons.filter(lesson => 
-            lesson.title.toLowerCase().includes(query) || 
-            lesson.file.toLowerCase().includes(query)
-        );
-        
+        const matches = allLessons.filter(lesson => lesson.title.toLowerCase().includes(query));
         if (matches.length > 0) { 
             ui.results.classList.remove('hidden'); 
             matches.forEach(lesson => { 
-                const div = document.createElement('div'); 
-                div.className = 'result-item'; 
+                const div = document.createElement('div'); div.className = 'result-item'; 
                 div.innerHTML = `<span>${lesson.title}</span> <strong>GO <i class="fa-solid fa-arrow-right"></i></strong>`; 
-                div.onclick = () => { 
-                    loadMatch(lesson.file); 
-                    ui.search.value = lesson.title; 
-                    ui.results.classList.add('hidden'); 
-                }; 
+                div.onclick = () => { loadMatch(lesson.file); ui.search.value = lesson.title; ui.results.classList.add('hidden'); }; 
                 ui.results.appendChild(div); 
             }); 
-        } else { 
-            ui.results.innerHTML = '<div class="result-item" style="color:#999">No matches found...</div>'; 
-            ui.results.classList.remove('hidden'); 
-        }
+        } else { ui.results.innerHTML = '<div class="result-item" style="color:#999">No matches...</div>'; ui.results.classList.remove('hidden'); }
     });
-    // Cerrar buscador al hacer clic fuera
     document.addEventListener('click', (e) => { if (!ui.search.contains(e.target)) ui.results.classList.add('hidden'); });
 }
 
@@ -436,28 +275,14 @@ async function loadMatch(filename) {
 
 function renderTactics(lesson) {
     playSound('whistle'); 
-    
-    // 🎥 GESTIÓN INTELIGENTE DE VÍDEO (MP4 o YOUTUBE)
-    // ==================================================
     if (lesson.video_id) {
         ui.videoSection.classList.remove('hidden');
-        
-        // Si el enlace incluye "http", asumimos que es un archivo de video directo (MP4)
         if (lesson.video_id.includes('http')) {
-             ui.videoContainer.innerHTML = `
-                <video controls autoplay muted style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); object-fit: cover;">
-                    <source src="${lesson.video_id}" type="video/mp4">
-                    Tu navegador no soporta vídeo HTML5.
-                </video>`;
+             ui.videoContainer.innerHTML = `<video controls autoplay muted style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"><source src="${lesson.video_id}" type="video/mp4"></video>`;
         } else {
-            // Si no tiene http, es un ID de YouTube
             ui.videoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${lesson.video_id}?rel=0&modestbranding=1" frameborder="0" allowfullscreen></iframe>`;
         }
-    } else {
-        ui.videoSection.classList.add('hidden');
-        ui.videoContainer.innerHTML = '';
-    }
-    // ==================================================
+    } else { ui.videoSection.classList.add('hidden'); ui.videoContainer.innerHTML = ''; }
 
     ui.title.innerText = lesson.content.title;
     if(ui.level) ui.level.innerText = `${lesson.meta.difficulty_elo || '1500'} ELO`;
@@ -467,35 +292,26 @@ function renderTactics(lesson) {
     ui.vocabList.innerHTML = '';
     lesson.content.vocabulary_rich.forEach(word => {
         const li = document.createElement('li');
-        const audioBtn = document.createElement('button');
-        audioBtn.className = 'audio-btn';
+        const audioBtn = document.createElement('button'); audioBtn.className = 'audio-btn';
         audioBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
         audioBtn.onclick = () => speak(word.term);
-        li.appendChild(audioBtn);
-        li.innerHTML += ` <strong>${word.term}</strong>: ${word.meaning}`;
+        li.appendChild(audioBtn); li.innerHTML += ` <strong>${word.term}</strong>: ${word.meaning}`;
         ui.vocabList.appendChild(li);
     });
 
     if (lesson.interactive_engine.questions) { currentQuizQuestions = lesson.interactive_engine.questions; } 
     else { currentQuizQuestions = [{ scenario: lesson.interactive_engine.scenario_text, options: lesson.interactive_engine.options }]; }
-    
-    currentQuestionIndex = 0;
-    showQuestion();
+    currentQuestionIndex = 0; showQuestion();
 }
 
 function showQuestion() {
     const qData = currentQuizQuestions[currentQuestionIndex];
     if(ui.quizHeader) ui.quizHeader.innerHTML = `<i class="fa-solid fa-whistle"></i> Match Scenario ${currentQuestionIndex + 1}/${currentQuizQuestions.length}`;
     ui.quizQuestion.innerText = qData.scenario || qData.scenario_text;
-    ui.quizOptions.innerHTML = ''; 
-    ui.feedback.className = 'hidden';
-
+    ui.quizOptions.innerHTML = ''; ui.feedback.className = 'hidden';
     qData.options.forEach(option => {
-        const btn = document.createElement('button');
-        btn.className = 'option-btn';
-        btn.innerText = option.text;
-        btn.onclick = () => handleAnswer(option, btn);
-        ui.quizOptions.appendChild(btn);
+        const btn = document.createElement('button'); btn.className = 'option-btn'; btn.innerText = option.text;
+        btn.onclick = () => handleAnswer(option, btn); ui.quizOptions.appendChild(btn);
     });
 }
 
@@ -504,22 +320,13 @@ function handleAnswer(option, btnClicked) {
     ui.feedback.innerHTML = `<p>${option.feedback}</p>`;
     ui.feedback.className = isCorrect ? 'feedback-box feedback-success' : 'feedback-box feedback-error';
     ui.feedback.style.display = 'block';
-    
-    const allBtns = ui.quizOptions.querySelectorAll('button');
-    allBtns.forEach(b => b.disabled = true);
+    const allBtns = ui.quizOptions.querySelectorAll('button'); allBtns.forEach(b => b.disabled = true);
 
     if (isCorrect) { 
-        playSound('correct'); 
-        addXP(20); 
-        btnClicked.style.borderColor = "#4ade80"; 
-        btnClicked.style.backgroundColor = "#f0fdf4"; 
-        // Corrección de color de texto para feedback positivo
-        btnClicked.style.color = "#000"; 
+        playSound('correct'); addXP(20); 
+        btnClicked.style.borderColor = "#4ade80"; btnClicked.style.backgroundColor = "#f0fdf4"; 
         ui.feedback.innerHTML += " <strong>(+20 XP 🎯)</strong>"; 
-    } else { 
-        playSound('wrong'); 
-        btnClicked.style.borderColor = "#fee2e2"; 
-    }
+    } else { playSound('wrong'); btnClicked.style.borderColor = "#fee2e2"; }
 
     const nextBtn = document.createElement('button');
     nextBtn.className = 'cta-button'; nextBtn.style.marginTop = '15px'; nextBtn.style.width = '100%';
@@ -533,125 +340,66 @@ function handleAnswer(option, btnClicked) {
             playSound('win');
             if (typeof confetti === "function") confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
             if(ui.quizHeader) ui.quizHeader.innerHTML = `<i class="fa-solid fa-trophy"></i> Match Results`;
-            ui.quizQuestion.innerText = "Training Session Completed! Great job, lad.";
-            ui.quizOptions.innerHTML = "";
-            ui.feedback.classList.add('hidden');
+            ui.quizQuestion.innerText = "Session Completed!";
+            ui.quizOptions.innerHTML = ""; ui.feedback.classList.add('hidden');
         };
     }
     ui.feedback.appendChild(nextBtn);
 }
 
-// ==========================================
-// 5. CHATBOT Y AUDIO
-// ==========================================
 function setupChat() {
     if(!ui.chatTrigger) return;
     ui.chatTrigger.onclick = () => ui.chatModal.classList.remove('hidden');
     ui.chatClose.onclick = () => ui.chatModal.classList.add('hidden');
-    
     const mb = document.getElementById('maximize-chat');
     if (mb) mb.onclick = () => { 
         ui.chatModal.classList.toggle('fullscreen'); 
         mb.querySelector('i').className = ui.chatModal.classList.contains('fullscreen') ? "fa-solid fa-compress" : "fa-solid fa-expand"; 
     };
-    
-    updateChatStatus();
-    ui.passwordInput.addEventListener('input', updateChatStatus);
-    ui.chatSend.onclick = sendMessage;
-    ui.chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
+    updateChatStatus(); ui.passwordInput.addEventListener('input', updateChatStatus);
+    ui.chatSend.onclick = sendMessage; ui.chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
 }
 
 function updateChatStatus() {
     const isVip = (ui.passwordInput.value === VIP_PASSWORD);
     const msgsLeft = FREE_LIMIT - usedMessages;
-    
-    if (isVip) { 
-        ui.passwordInput.style.borderColor = "#00ff88"; 
-        ui.passwordInput.style.backgroundColor = "#dcfce7"; 
-        ui.passwordInput.style.color = "#000"; // Texto legible
-        ui.chatInput.disabled = false; 
-        ui.chatSend.disabled = false; 
-        ui.chatInput.placeholder = "VIP ACCESS: The Gaffer is listening..."; 
-        return; 
-    }
-    
-    if (msgsLeft > 0) { 
-        ui.passwordInput.style.borderColor = "#e5e7eb"; 
-        ui.passwordInput.style.backgroundColor = "#fff"; 
-        ui.passwordInput.style.color = "#000";
-        ui.chatInput.disabled = false; 
-        ui.chatSend.disabled = false; 
-        ui.chatInput.placeholder = `BETA TRIAL: ${msgsLeft} messages remaining...`; 
-    } else { 
-        ui.passwordInput.style.borderColor = "#fee2e2"; 
-        ui.chatInput.disabled = true; 
-        ui.chatSend.disabled = true; 
-        ui.chatInput.placeholder = "⛔ Trial ended. Buy PRO to continue."; 
-    }
+    if (isVip) { ui.passwordInput.style.borderColor = "#00ff88"; ui.chatInput.disabled = false; ui.chatSend.disabled = false; return; }
+    if (msgsLeft > 0) { ui.passwordInput.style.borderColor = "#e5e7eb"; ui.chatInput.disabled = false; ui.chatSend.disabled = false; } 
+    else { ui.passwordInput.style.borderColor = "#fee2e2"; ui.chatInput.disabled = true; ui.chatSend.disabled = true; }
 }
 
 async function sendMessage() {
-    const text = ui.chatInput.value; 
-    const isVip = (ui.passwordInput.value === VIP_PASSWORD);
-    
-    if (!text) return; 
-    if (!isVip && usedMessages >= FREE_LIMIT) { alert("🚨 Trial ended!"); return; }
-    
-    addMessage(text, 'user-msg'); 
-    ui.chatInput.value = '';
-    
+    const text = ui.chatInput.value; const isVip = (ui.passwordInput.value === VIP_PASSWORD);
+    if (!text) return; if (!isVip && usedMessages >= FREE_LIMIT) { alert("🚨 Trial ended!"); return; }
+    addMessage(text, 'user-msg'); ui.chatInput.value = '';
     if (!isVip) { usedMessages++; saveUserData(); updateChatStatus(); }
-    
     const loadingDiv = addMessage('Thinking...', 'bot-msg');
-    
     try {
         const response = await fetch("https://api.deepseek.com/v1/chat/completions", { 
-            method: "POST", 
-            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${SYSTEM_KEY}` }, 
+            method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${SYSTEM_KEY}` }, 
             body: JSON.stringify({ 
                 model: "deepseek-chat", 
                 messages: [ 
-                    { role: "system", content: "You are 'The Gaffer'. Brief, motivational, football metaphors." }, 
+                    { 
+                        role: "system", 
+                        content: "You are a specialized Technical Football Analyst AI. RULES: 1. If the input is NOT in English, return EXACTLY and ONLY this message: 'I am a tactical AI trained to analyze football in English. Please provide your input in English.' 2. If the input is in English, provide highly technical, precise, and analytical responses using professional coaching terminology (e.g., 'low block', 'transitions', 'half-spaces'). Keep answers concise and analytical. No small talk." 
+                    }, 
                     { role: "user", content: text } 
                 ] 
             }) 
         });
-        const data = await response.json(); 
-        loadingDiv.innerText = data.choices[0].message.content;
+        const data = await response.json(); loadingDiv.innerText = data.choices[0].message.content;
     } catch (error) { loadingDiv.innerText = "❌ Server error."; }
 }
 
 function addMessage(t, c) { 
-    const d = document.createElement('div'); 
-    d.className = `message ${c}`; 
-    d.innerText = t; 
-    ui.chatHistory.appendChild(d); 
-    ui.chatHistory.scrollTop = ui.chatHistory.scrollHeight; 
-    return d; 
+    const d = document.createElement('div'); d.className = `message ${c}`; d.innerText = t; 
+    ui.chatHistory.appendChild(d); ui.chatHistory.scrollTop = ui.chatHistory.scrollHeight; return d; 
 }
 
 function speak(text) { 
-    if (!window.speechSynthesis) return; 
-    const synth = window.speechSynthesis; 
-    
-    // Si ya habla, lo callamos para empezar de nuevo
-    if (synth.speaking) synth.cancel(); 
-    
-    const utterance = new SpeechSynthesisUtterance(text);
-    
-    // Intentamos buscar una voz británica
-    let voices = synth.getVoices();
-    const britishVoice = voices.find(v => v.lang.includes('GB') || v.lang.includes('UK'));
-    
-    if (britishVoice) {
-        utterance.voice = britishVoice;
-    } else {
-        utterance.lang = 'en-GB';
-    }
-    
-    utterance.rate = 0.9; 
-    synth.speak(utterance); 
+    if (!window.speechSynthesis) return; const synth = window.speechSynthesis; if (synth.speaking) synth.cancel(); 
+    const u = new SpeechSynthesisUtterance(text); u.lang = 'en-GB'; u.rate = 0.9; synth.speak(u); 
 }
 
-// ARRANQUE FINAL
 initLeague();
