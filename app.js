@@ -11,7 +11,7 @@ const RANKS = [
     { name: "LEGEND", limit: 5000 } 
 ];
 
-// === SONIDOS ===
+// === SONIDOS DEL SISTEMA ===
 const sfx = {
     whistle: new Audio('https://cdn.pixabay.com/audio/2021/08/04/audio_0625c1539c.mp3'), 
     correct: new Audio('https://cdn.pixabay.com/audio/2021/08/09/audio_9ec164287d.mp3'),
@@ -27,7 +27,7 @@ function playSound(name) {
     } catch(e){} 
 }
 
-// === ESTADO ===
+// === ESTADO GLOBAL ===
 let currentUser = null; 
 let usersDB = JSON.parse(localStorage.getItem('football_users_db') || '{}');
 let usedMessages = 0;
@@ -36,7 +36,7 @@ let playerStreak = 0;
 let currentQuizQuestions = [];
 let currentQuestionIndex = 0;
 
-// === UI ELEMENTS ===
+// === REFERENCIAS AL DOM (ELEMENTOS UI) ===
 const ui = {
     search: document.getElementById('magic-search'),
     results: document.getElementById('search-results'),
@@ -48,25 +48,25 @@ const ui = {
     concept: document.getElementById('core-concept'),
     vocabList: document.getElementById('vocabulary-list'),
     
-    // VIDEO & VOICE
+    // VIDEO & VOZ
     videoSection: document.getElementById('video-section'),
     videoContainer: document.getElementById('video-container'),
     voiceBtn: document.getElementById('voice-btn'),
     
-    // QUIZ
+    // QUIZ (EL PARTIDO)
     quizHeader: document.querySelector('.highlight-card .card-header'),
     quizQuestion: document.getElementById('quiz-question'),
     quizOptions: document.getElementById('options-container'),
     feedback: document.getElementById('feedback-zone'),
     
-    // HUD
+    // HUD (BARRA SUPERIOR)
     hud: document.getElementById('player-hud'),
     rankDisplay: document.getElementById('player-rank'),
     xpDisplay: document.getElementById('player-xp'),
     streakDisplay: document.getElementById('player-streak'),
     xpBar: document.getElementById('xp-bar'),
     
-    // CHAT & AUTH
+    // CHAT & LOGIN
     chatTrigger: document.getElementById('coach-trigger'),
     chatModal: document.getElementById('coach-modal'),
     chatClose: document.getElementById('close-chat'),
@@ -88,20 +88,20 @@ const ui = {
 let allLessons = [];
 
 // ==========================================
-// 1. INICIALIZACIÓN
+// 1. INICIALIZACIÓN (EL ARRANQUE)
 // ==========================================
 async function initLeague() {
     console.log("🚀 Starting System...");
 
-    // 🛡️ REGLA DE ORO: Activamos los sistemas ANTES de cargar datos.
+    // Activamos sistemas secundarios primero
     setupChat(); 
     setupAuth(); 
     setupVoiceControl();
     
-    // Truco: Forzar la carga de voces ahora
+    // Pre-carga de voces sintéticas
     if (window.speechSynthesis) window.speechSynthesis.getVoices();
-    
-    // === 🕵️ DETECTIVE DE URL (PAGO VIP) ===
+
+    // === DETECTIVE DE URL (BYPASS VIP) ===
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('status') === 'vip_unlocked') {
         const passInput = document.getElementById('api-key-input');
@@ -111,12 +111,13 @@ async function initLeague() {
         }
         alert("🏆 TRANSFER COMPLETE! Welcome to the Pro League.");
     }
+    // Recuperar VIP si ya pagó
     if (localStorage.getItem('user_is_vip') === 'true') {
          const passInput = document.getElementById('api-key-input');
          if(passInput) passInput.value = VIP_PASSWORD;
     }
-    // ===================================
 
+    // Gestión de Portada vs App
     const startBtn = document.getElementById('start-btn');
     const landingPage = document.getElementById('landing-page');
     const appInterface = document.getElementById('app-interface');
@@ -131,9 +132,11 @@ async function initLeague() {
         };
     }
 
+    // Auto-Login
     const savedUser = localStorage.getItem('current_session_user');
     if (savedUser && usersDB[savedUser]) {
         loginUser(savedUser); 
+        // Si ya está logueado, saltamos la portada
         if(landingPage) landingPage.classList.add('hidden');
         if(appInterface) { 
             appInterface.classList.remove('hidden'); 
@@ -143,8 +146,7 @@ async function initLeague() {
         loadGuestData(); 
     }
 
-    if(ui.hud) ui.hud.classList.remove('hidden');
-
+    // Cargar Base de Datos (JSON)
     try {
         console.log("📂 Loading Index...");
         const response = await fetch(DB_FOLDER + 'index.json');
@@ -160,7 +162,7 @@ async function initLeague() {
 }
 
 // ==========================================
-// 2. GESTIÓN DE DATOS
+// 2. GESTIÓN DE DATOS DE USUARIO
 // ==========================================
 function loadGuestData() {
     playerXP = parseInt(localStorage.getItem('guest_xp') || '0');
@@ -268,7 +270,7 @@ function updateHUD() {
 }
 
 // ==========================================
-// 3. LOGIN UI LOGIC
+// 3. SISTEMA DE LOGIN (UI)
 // ==========================================
 let isRegisterMode = false;
 function setupAuth() {
@@ -307,10 +309,9 @@ function setupAuth() {
 }
 
 // ==========================================
-// 4. VOZ Y PARTIDO (ARREGLADO DEFINITIVO)
+// 4. VOZ Y MOTOR DEL JUEGO (ARREGLADO)
 // ==========================================
 function setupVoiceControl() {
-    // 1. Verificar soporte
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
         if(ui.voiceBtn) ui.voiceBtn.style.display = 'none'; 
         return;
@@ -322,8 +323,7 @@ function setupVoiceControl() {
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
-    // --- ESCUDO ANTI-CRASH ---
-    let isListening = false;
+    let isListening = false; // Prevención de doble clic
 
     if(ui.voiceBtn) {
         ui.voiceBtn.onclick = () => {
@@ -393,7 +393,8 @@ function setupSearch() {
     if(!ui.search) return;
     ui.search.addEventListener('keyup', (e) => {
         const query = e.target.value.toLowerCase();
-        ui.results.innerHTML = ''; 
+        ui.results.innerHTML = ''; // Limpiar resultados previos
+        
         if (query.length < 1) { ui.results.classList.add('hidden'); return; }
         
         const matches = allLessons.filter(lesson => 
@@ -419,6 +420,7 @@ function setupSearch() {
             ui.results.classList.remove('hidden'); 
         }
     });
+    // Cerrar buscador al hacer clic fuera
     document.addEventListener('click', (e) => { if (!ui.search.contains(e.target)) ui.results.classList.add('hidden'); });
 }
 
@@ -435,26 +437,27 @@ async function loadMatch(filename) {
 function renderTactics(lesson) {
     playSound('whistle'); 
     
-    // 🎥 CORRECCIÓN DE ESTILOS DE VÍDEO
-    // ==========================================
+    // 🎥 GESTIÓN INTELIGENTE DE VÍDEO (MP4 o YOUTUBE)
+    // ==================================================
     if (lesson.video_id) {
         ui.videoSection.classList.remove('hidden');
         
+        // Si el enlace incluye "http", asumimos que es un archivo de video directo (MP4)
         if (lesson.video_id.includes('http')) {
-             // ⚠️ AQUÍ ESTÁ EL ARREGLO: position: absolute y height: 100%
              ui.videoContainer.innerHTML = `
                 <video controls autoplay muted style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); object-fit: cover;">
                     <source src="${lesson.video_id}" type="video/mp4">
                     Tu navegador no soporta vídeo HTML5.
                 </video>`;
         } else {
+            // Si no tiene http, es un ID de YouTube
             ui.videoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${lesson.video_id}?rel=0&modestbranding=1" frameborder="0" allowfullscreen></iframe>`;
         }
     } else {
         ui.videoSection.classList.add('hidden');
         ui.videoContainer.innerHTML = '';
     }
-    // ==========================================
+    // ==================================================
 
     ui.title.innerText = lesson.content.title;
     if(ui.level) ui.level.innerText = `${lesson.meta.difficulty_elo || '1500'} ELO`;
@@ -510,6 +513,8 @@ function handleAnswer(option, btnClicked) {
         addXP(20); 
         btnClicked.style.borderColor = "#4ade80"; 
         btnClicked.style.backgroundColor = "#f0fdf4"; 
+        // Corrección de color de texto para feedback positivo
+        btnClicked.style.color = "#000"; 
         ui.feedback.innerHTML += " <strong>(+20 XP 🎯)</strong>"; 
     } else { 
         playSound('wrong'); 
@@ -563,6 +568,7 @@ function updateChatStatus() {
     if (isVip) { 
         ui.passwordInput.style.borderColor = "#00ff88"; 
         ui.passwordInput.style.backgroundColor = "#dcfce7"; 
+        ui.passwordInput.style.color = "#000"; // Texto legible
         ui.chatInput.disabled = false; 
         ui.chatSend.disabled = false; 
         ui.chatInput.placeholder = "VIP ACCESS: The Gaffer is listening..."; 
@@ -572,6 +578,7 @@ function updateChatStatus() {
     if (msgsLeft > 0) { 
         ui.passwordInput.style.borderColor = "#e5e7eb"; 
         ui.passwordInput.style.backgroundColor = "#fff"; 
+        ui.passwordInput.style.color = "#000";
         ui.chatInput.disabled = false; 
         ui.chatSend.disabled = false; 
         ui.chatInput.placeholder = `BETA TRIAL: ${msgsLeft} messages remaining...`; 
@@ -626,9 +633,13 @@ function addMessage(t, c) {
 function speak(text) { 
     if (!window.speechSynthesis) return; 
     const synth = window.speechSynthesis; 
+    
+    // Si ya habla, lo callamos para empezar de nuevo
     if (synth.speaking) synth.cancel(); 
     
     const utterance = new SpeechSynthesisUtterance(text);
+    
+    // Intentamos buscar una voz británica
     let voices = synth.getVoices();
     const britishVoice = voices.find(v => v.lang.includes('GB') || v.lang.includes('UK'));
     
@@ -637,6 +648,7 @@ function speak(text) {
     } else {
         utterance.lang = 'en-GB';
     }
+    
     utterance.rate = 0.9; 
     synth.speak(utterance); 
 }
