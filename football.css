@@ -312,3 +312,24 @@ body {
     .premium-card { flex-direction: column; text-align: center; gap: 15px; }
     .premium-text h2, .premium-text p { text-align: center; }
 }
+/* =========================================
+   FIX: BOTÓN PREMIUM VISIBLE
+   ========================================= */
+.premium-card .cta-button {
+    /* Gradiente Rosa/Púrpura brillante para destacar */
+    background: linear-gradient(135deg, #ec4899, #a855f7) !important;
+    /* Texto blanco forzado */
+    color: white !important;
+    /* Sombra de neón rosa */
+    box-shadow: 0 0 20px rgba(236, 72, 153, 0.6) !important;
+    /* Aseguramos que se vea bien */
+    border: none;
+    opacity: 1;
+    text-decoration: none;
+}
+
+/* Efecto al pasar el mouse por encima */
+.premium-card .cta-button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 0 30px rgba(236, 72, 153, 0.9) !important;
+}
