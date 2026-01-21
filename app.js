@@ -368,6 +368,9 @@ function updateChatStatus() {
     else { ui.passwordInput.style.borderColor = "#fee2e2"; ui.chatInput.disabled = true; ui.chatSend.disabled = true; }
 }
 
+// ==========================================
+// FIX: CHAT MENOS ESTRICTO (MODO TÉCNICO)
+// ==========================================
 async function sendMessage() {
     const text = ui.chatInput.value; const isVip = (ui.passwordInput.value === VIP_PASSWORD);
     if (!text) return; if (!isVip && usedMessages >= FREE_LIMIT) { alert("🚨 Trial ended!"); return; }
@@ -382,7 +385,8 @@ async function sendMessage() {
                 messages: [ 
                     { 
                         role: "system", 
-                        content: "You are a specialized Technical Football Analyst AI. RULES: 1. If the input is NOT in English, return EXACTLY and ONLY this message: 'I am a tactical AI trained to analyze football in English. Please provide your input in English.' 2. If the input is in English, provide highly technical, precise, and analytical responses using professional coaching terminology (e.g., 'low block', 'transitions', 'half-spaces'). Keep answers concise and analytical. No small talk." 
+                        // Prompt Calibrado: Prioriza responder en inglés si es posible.
+                        content: "You are a specialized Technical Football Analyst AI. RULES: 1. Your outputs must ALWAYS be in English. 2. If the user writes in English (even if imperfect), provide a technical, data-driven, and concise tactical analysis. 3. ONLY if the user clearly writes in Spanish or another non-English language, reply EXACTLY: 'I am a tactical AI trained to analyze football in English. Please provide your input in English.'" 
                     }, 
                     { role: "user", content: text } 
                 ] 
