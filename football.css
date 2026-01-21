@@ -1,5 +1,5 @@
 /* =========================================
-   1. RESET & BASICS
+   1. RESET & BASICS (MODO CLARO)
    ========================================= */
 * {
     box-sizing: border-box;
@@ -10,7 +10,7 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f8fafc; /* FONDO CLARO RESTAURADO */
+    background-color: #f8fafc; /* FONDO CLARO */
     color: #1e293b;
     overflow-x: hidden;
 }
@@ -61,43 +61,73 @@ body {
 .enter-btn:active { transform: scale(0.95); }
 
 /* =========================================
-   3. APP INTERFACE (LAYOUT FIXED)
+   3. APP INTERFACE (AQUÍ ESTÁN TUS CAMBIOS)
    ========================================= */
 .hidden { display: none !important; }
 
-/* Contenedor principal de la app */
-#app-interface {
-    width: 100%;
+/* --- HUD SUPERIOR REPARADO --- */
+.player-hud {
+    background: white;
+    padding: 15px 20px;
     display: flex;
-    flex-direction: column;
-    align-items: center; /* ESTO CENTRA TODO */
+    justify-content: center; /* ESTO CENTRA EL RANGO/XP */
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    position: relative; /* Necesario para el botón absoluto */
 }
 
-/* HUD */
-.player-hud {
-    background: white; padding: 15px 20px;
-    display: flex; justify-content: space-between; align-items: center;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100;
-    width: 100%;
+/* Grupo de estadísticas (Centrado) */
+.hud-group {
+    display: flex;
+    align-items: center;
+    gap: 30px; /* Más espacio entre elementos */
 }
-.hud-group { display: flex; align-items: center; gap: 15px; }
 .hud-item { text-align: center; }
 .hud-label { font-size: 0.6rem; color: #64748b; font-weight: 700; letter-spacing: 1px; }
 .hud-value { font-size: 1rem; font-weight: 800; color: #0f172a; }
 .fire-text { color: #f59e0b; }
 
-.hud-progress { width: 80px; height: 6px; background: #e2e8f0; border-radius: 10px; overflow: hidden; }
+.hud-progress { width: 100px; height: 8px; background: #e2e8f0; border-radius: 10px; overflow: hidden; margin: 0 10px; }
 .xp-fill { height: 100%; background: #3b82f6; width: 0%; transition: width 0.5s; }
 
-.auth-btn { background: #f1f5f9; border: none; padding: 8px 15px; border-radius: 20px; font-weight: 600; cursor: pointer; color: #475569; }
-.auth-btn.logged-in { background: #dcfce7; color: #166534; }
+/* --- BOTÓN LOGIN CON "TONTERÍA" (Animación) --- */
+.auth-btn {
+    position: absolute; /* Lo mandamos a la derecha a la fuerza */
+    right: 20px; 
+    background: #0f172a; /* Fondo oscuro elegante */
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 50px; /* Redondito */
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efecto rebote */
+    display: flex; align-items: center; gap: 8px;
+}
 
-/* MAIN CONTAINER (ARREGLO DE ALINEACIÓN) */
+/* La "Tontería": Efecto al pasar el ratón */
+.auth-btn:hover {
+    transform: scale(1.1) rotate(-2deg); /* Crece y se inclina un poco */
+    background: #3b82f6; /* Cambia a azul */
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+}
+
+.auth-btn.logged-in {
+    background: #dcfce7; color: #166534; box-shadow: none; right: 20px; position: absolute;
+}
+.auth-btn.logged-in:hover { transform: none; background: #bbf7d0; }
+
+/* --- CONTENEDOR PRINCIPAL CENTRADO --- */
 .container { 
     max-width: 600px; 
     width: 100%; 
     padding: 20px; 
-    margin: 0 auto; /* ESTO LO CENTRA */
+    margin: 0 auto; /* CENTRADO AUTOMÁTICO */
     padding-bottom: 100px; 
 }
 
@@ -120,19 +150,19 @@ body {
 .card { background: white; border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9; }
 .card-header { font-size: 0.9rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
 
-/* PREMIUM BANNER (ARREGLADO: BOTÓN ROSA VISIBLE) */
+/* PREMIUM BANNER */
 .premium-card { background: #1e1b4b; color: white; display: flex; justify-content: space-between; align-items: center; }
 .premium-text h2 { font-size: 1.2rem; margin-bottom: 5px; color: #818cf8; }
 .premium-text p { font-size: 0.8rem; color: #c7d2fe; }
 .premium-card .cta-button { 
-    background: #ec4899; /* ROSA FUERTE */
+    background: #ec4899; /* ROSA */
     color: white; 
     text-decoration: none; 
     padding: 10px 20px; 
     border-radius: 8px; 
     font-weight: 700; 
     font-size: 0.9rem; 
-    box-shadow: 0 0 10px rgba(236, 72, 153, 0.5);
+    box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
 }
 
 /* VIDEO */
@@ -160,9 +190,7 @@ body {
 /* MODALS */
 .coach-btn { position: fixed; bottom: 20px; right: 20px; background: #0f172a; color: white; padding: 12px 20px; border-radius: 30px; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.2); cursor: pointer; z-index: 90; display: flex; align-items: center; gap: 10px; }
 .coach-window { position: fixed; bottom: 90px; right: 20px; width: 350px; height: 500px; background: white; border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); z-index: 100; display: flex; flex-direction: column; overflow: hidden; border: 1px solid #e2e8f0; }
-
-/* ARREGLO MAXIMIZAR CHAT */
-.coach-window.fullscreen { width: 100%; height: 100%; top: 0; left: 0; border-radius: 0; bottom: 0; right: 0; }
+.coach-window.fullscreen { width: 100% !important; height: 100% !important; top: 0; left: 0; bottom: 0; right: 0; border-radius: 0; }
 
 .coach-header { background: #0f172a; color: white; padding: 15px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
 .window-controls button { background: none; border: none; color: white; cursor: pointer; margin-left: 10px; }
@@ -176,7 +204,7 @@ body {
 .input-row input { flex: 1; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; }
 #send-msg { background: #0f172a; color: white; border: none; padding: 0 15px; border-radius: 6px; cursor: pointer; }
 
-/* AUTH MODAL SPECIFIC */
+/* AUTH MODAL */
 .auth-window { top: 50%; left: 50%; transform: translate(-50%, -50%); bottom: auto; right: auto; height: auto; width: 90%; max-width: 400px; }
 .auth-body { padding: 30px; text-align: center; }
 .auth-input { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 15px; }
@@ -185,7 +213,6 @@ body {
 .error-msg { color: #ef4444; font-size: 0.8rem; margin-top: 10px; }
 
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
 /* RESPONSIVE */
 @media (max-width: 600px) {
