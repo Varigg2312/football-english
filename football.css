@@ -1,5 +1,5 @@
 /* =========================================
-   1. RESET & BASICS (MODO CLARO)
+   1. RESET & BASICS (MODO CLARO LIMPIO)
    ========================================= */
 * {
     box-sizing: border-box;
@@ -10,13 +10,13 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f8fafc; /* FONDO CLARO */
-    color: #1e293b;
+    background-color: #f8fafc; /* Fondo blanco/gris muy claro */
+    color: #1e293b; /* Texto oscuro */
     overflow-x: hidden;
 }
 
 /* =========================================
-   2. LANDING PAGE
+   2. PORTADA (LANDING PAGE)
    ========================================= */
 .landing-page {
     position: fixed;
@@ -61,30 +61,38 @@ body {
 .enter-btn:active { transform: scale(0.95); }
 
 /* =========================================
-   3. APP INTERFACE (AQUÍ ESTÁN TUS CAMBIOS)
+   3. APP INTERFACE (DISEÑO BLANCO)
    ========================================= */
 .hidden { display: none !important; }
 
-/* --- HUD SUPERIOR REPARADO --- */
+/* Contenedor principal para centrar todo */
+#app-interface {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* --- HUD SUPERIOR (ARREGLADO) --- */
 .player-hud {
     background: white;
+    width: 100%; /* Ocupa todo el ancho */
     padding: 15px 20px;
     display: flex;
-    justify-content: center; /* ESTO CENTRA EL RANGO/XP */
+    justify-content: center; /* Centra el contenido */
     align-items: center;
     box-shadow: 0 4px 20px rgba(0,0,0,0.05);
     position: sticky;
     top: 0;
-    z-index: 100;
-    width: 100%;
+    z-index: 500;
     position: relative; /* Necesario para el botón absoluto */
 }
 
-/* Grupo de estadísticas (Centrado) */
+/* Grupo de estadísticas (Centrado visualmente) */
 .hud-group {
     display: flex;
     align-items: center;
-    gap: 30px; /* Más espacio entre elementos */
+    gap: 30px;
 }
 .hud-item { text-align: center; }
 .hud-label { font-size: 0.6rem; color: #64748b; font-weight: 700; letter-spacing: 1px; }
@@ -94,45 +102,46 @@ body {
 .hud-progress { width: 100px; height: 8px; background: #e2e8f0; border-radius: 10px; overflow: hidden; margin: 0 10px; }
 .xp-fill { height: 100%; background: #3b82f6; width: 0%; transition: width 0.5s; }
 
-/* --- BOTÓN LOGIN CON "TONTERÍA" (Animación) --- */
+/* --- BOTÓN LOGIN (LA "TONTERÍA") --- */
 .auth-btn {
-    position: absolute; /* Lo mandamos a la derecha a la fuerza */
+    position: absolute; /* Lo anclamos a la derecha */
     right: 20px; 
-    background: #0f172a; /* Fondo oscuro elegante */
+    background: #0f172a; /* Oscuro para destacar sobre blanco */
     color: white;
     border: none;
-    padding: 10px 25px;
-    border-radius: 50px; /* Redondito */
+    padding: 10px 20px;
+    border-radius: 50px;
     font-weight: 700;
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efecto rebote */
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Rebote */
     display: flex; align-items: center; gap: 8px;
 }
 
-/* La "Tontería": Efecto al pasar el ratón */
+/* Animación al pasar el ratón */
 .auth-btn:hover {
-    transform: scale(1.1) rotate(-2deg); /* Crece y se inclina un poco */
-    background: #3b82f6; /* Cambia a azul */
+    transform: scale(1.1) rotate(-3deg); /* Crece y se tuerce */
+    background: #3b82f6; /* Se vuelve azul */
     box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
 }
 
 .auth-btn.logged-in {
-    background: #dcfce7; color: #166534; box-shadow: none; right: 20px; position: absolute;
+    background: #dcfce7; color: #166534; box-shadow: none;
 }
 .auth-btn.logged-in:hover { transform: none; background: #bbf7d0; }
 
-/* --- CONTENEDOR PRINCIPAL CENTRADO --- */
+
+/* --- CONTENEDOR DE CONTENIDO (CENTRADO) --- */
 .container { 
     max-width: 600px; 
     width: 100%; 
     padding: 20px; 
-    margin: 0 auto; /* CENTRADO AUTOMÁTICO */
+    margin: 0 auto; /* ESTO ES LA CLAVE DEL CENTRADO */
     padding-bottom: 100px; 
 }
 
-/* SEARCH & HEADER */
-.hero-section { text-align: center; margin-bottom: 30px; }
+/* HEADER & SEARCH */
+.hero-section { text-align: center; margin-bottom: 30px; margin-top: 20px; }
 .brand-badge { background: #e0f2fe; color: #0284c7; padding: 5px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; display: inline-block; margin-bottom: 10px; }
 .gradient-title { font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, #0f172a 0%, #334155 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; }
 
@@ -146,11 +155,11 @@ body {
 .result-item { padding: 15px; border-bottom: 1px solid #f1f5f9; cursor: pointer; display: flex; justify-content: space-between; }
 .result-item:hover { background: #f8fafc; }
 
-/* CARDS */
+/* CARDS (TARJETAS BLANCAS LIMPIAS) */
 .card { background: white; border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9; }
 .card-header { font-size: 0.9rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
 
-/* PREMIUM BANNER */
+/* PREMIUM BANNER (BOTÓN ROSA) */
 .premium-card { background: #1e1b4b; color: white; display: flex; justify-content: space-between; align-items: center; }
 .premium-text h2 { font-size: 1.2rem; margin-bottom: 5px; color: #818cf8; }
 .premium-text p { font-size: 0.8rem; color: #c7d2fe; }
@@ -163,18 +172,19 @@ body {
     font-weight: 700; 
     font-size: 0.9rem; 
     box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+    transition: transform 0.2s;
 }
+.premium-card .cta-button:hover { transform: scale(1.05); }
 
 /* VIDEO */
 .video-responsive { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 12px; overflow: hidden; background: #000; }
 .video-responsive iframe, .video-responsive video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
-/* VOCABULARY */
+/* VOCABULARY & QUIZ */
 .vocab-grid { list-style: none; display: grid; gap: 10px; }
 .vocab-grid li { background: #f8fafc; padding: 15px; border-radius: 8px; display: flex; align-items: center; gap: 10px; border: 1px solid #e2e8f0; }
 .audio-btn { background: none; border: none; color: #3b82f6; cursor: pointer; font-size: 1.1rem; }
 
-/* QUIZ */
 .highlight-card { border: 2px solid #3b82f6; background: #eff6ff; }
 .mic-btn { width: 60px; height: 60px; border-radius: 50%; background: #3b82f6; color: white; border: none; font-size: 1.5rem; cursor: pointer; margin: 0 auto 20px; display: block; box-shadow: 0 4px 15px rgba(59,130,246,0.3); }
 .mic-listening { background: #ef4444; animation: pulse 1s infinite; }
@@ -187,13 +197,15 @@ body {
 .feedback-success { background: #dcfce7; color: #166534; }
 .feedback-error { background: #fee2e2; color: #991b1b; }
 
-/* MODALS */
+/* MODALS & CHAT (ARREGLADO MAXIMIZAR) */
 .coach-btn { position: fixed; bottom: 20px; right: 20px; background: #0f172a; color: white; padding: 12px 20px; border-radius: 30px; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.2); cursor: pointer; z-index: 90; display: flex; align-items: center; gap: 10px; }
 .coach-window { position: fixed; bottom: 90px; right: 20px; width: 350px; height: 500px; background: white; border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); z-index: 100; display: flex; flex-direction: column; overflow: hidden; border: 1px solid #e2e8f0; }
+
+/* CLASE VITAL PARA MAXIMIZAR */
 .coach-window.fullscreen { width: 100% !important; height: 100% !important; top: 0; left: 0; bottom: 0; right: 0; border-radius: 0; }
 
 .coach-header { background: #0f172a; color: white; padding: 15px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
-.window-controls button { background: none; border: none; color: white; cursor: pointer; margin-left: 10px; }
+.window-controls button { background: none; border: none; color: white; cursor: pointer; margin-left: 10px; font-size: 1rem; }
 .chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #f8fafc; }
 .message { margin-bottom: 10px; padding: 10px 15px; border-radius: 12px; font-size: 0.9rem; max-width: 80%; }
 .bot-msg { background: white; border: 1px solid #e2e8f0; align-self: flex-start; }
@@ -213,10 +225,12 @@ body {
 .error-msg { color: #ef4444; font-size: 0.8rem; margin-top: 10px; }
 
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
 /* RESPONSIVE */
 @media (max-width: 600px) {
     .features-grid { grid-template-columns: 1fr; }
     .hero-title { font-size: 2.2rem; }
     .coach-window { width: 90%; right: 5%; left: 5%; bottom: 80px; }
+    .premium-card { flex-direction: column; text-align: center; gap: 15px; }
 }
