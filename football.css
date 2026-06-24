@@ -109,60 +109,80 @@ body {
     align-items: center;
 }
 
-/* --- HUD SUPERIOR (ARREGLADO) --- */
+/* --- HUD SUPERIOR --- */
 .player-hud {
     background: white;
-    width: 100%; /* Ocupa todo el ancho */
-    padding: 15px 20px;
+    width: 100%;
+    padding: 12px 20px;
     display: flex;
-    justify-content: center; /* Centra el contenido */
+    justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 20px rgba(0,0,0,0.05);
     position: sticky;
     top: 0;
     z-index: 500;
+    gap: 12px;
 }
 
-/* Grupo de estadísticas (Centrado visualmente) */
 .hud-group {
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 20px;
+    flex: 1;
+    justify-content: center;
 }
+
+/* Right-side controls: lang selector + auth button */
+.hud-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.lang-select {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    color: #0f172a;
+    padding: 6px 8px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+.lang-select:focus { outline: none; border-color: #3b82f6; }
+
 .hud-item { text-align: center; }
 .hud-label { font-size: 0.6rem; color: #64748b; font-weight: 700; letter-spacing: 1px; }
 .hud-value { font-size: 1rem; font-weight: 800; color: #0f172a; }
 .fire-text { color: #f59e0b; }
 
-.hud-progress { width: 100px; height: 8px; background: #e2e8f0; border-radius: 10px; overflow: hidden; margin: 0 10px; }
+.hud-progress { width: 80px; height: 8px; background: #e2e8f0; border-radius: 10px; overflow: hidden; margin: 0 6px; }
 .xp-fill { height: 100%; background: #3b82f6; width: 0%; transition: width 0.5s; }
 
-/* --- BOTÓN LOGIN (LA "TONTERÍA") --- */
+/* --- BOTÓN LOGIN --- */
 .auth-btn {
-    position: absolute; /* Lo anclamos a la derecha */
-    right: 20px; 
-    background: #0f172a; /* Oscuro para destacar sobre blanco */
+    background: #0f172a;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 8px 16px;
     border-radius: 50px;
     font-weight: 700;
+    font-size: 0.85rem;
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Rebote */
-    display: flex; align-items: center; gap: 8px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex; align-items: center; gap: 6px;
+    white-space: nowrap;
 }
-
-/* Animación al pasar el ratón */
 .auth-btn:hover {
-    transform: scale(1.1) rotate(-3deg); /* Crece y se tuerce */
-    background: #3b82f6; /* Se vuelve azul */
+    transform: scale(1.08) rotate(-2deg);
+    background: #3b82f6;
     box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
 }
-
-.auth-btn.logged-in {
-    background: #dcfce7; color: #166534; box-shadow: none;
-}
+.auth-btn.logged-in { background: #dcfce7; color: #166534; box-shadow: none; }
 .auth-btn.logged-in:hover { transform: none; background: #bbf7d0; }
 
 
@@ -268,6 +288,10 @@ body {
     .hero-title { font-size: 2.2rem; }
     .coach-window { width: 90%; right: 5%; left: 5%; bottom: 80px; }
     .premium-card { flex-direction: column; text-align: center; gap: 15px; }
+    .hud-group { gap: 12px; }
+    .hud-progress { width: 60px; }
+    .lang-select { font-size: 0.72rem; padding: 5px 6px; }
+    .auth-btn { padding: 7px 12px; font-size: 0.78rem; }
 }
 .legal-disclaimer { margin-top: 20px; font-size: 0.8rem; color: #94a3b8; }
 .mic-hint { font-size: 0.8rem; color: #64748b; margin-top: 5px; text-align: center; }
@@ -304,6 +328,7 @@ body {
     .hud-label { color: #94a3b8; }
     .hud-progress { background: #334155; }
     .auth-btn { background: #334155; }
+    .lang-select { background: #334155; border-color: #475569; color: #f1f5f9; }
 
     .gradient-title { background: linear-gradient(135deg, #f1f5f9 0%, #94a3b8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .brand-badge { background: #1e3a5f; color: #60a5fa; }

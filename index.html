@@ -4,138 +4,166 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Football English Academy</title>
-    
+
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0f172a">
-    
+
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" href="favicon-96.png">
     <link rel="manifest" href="manifest.json">
-    
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="football.css">
+
+    <!-- i18n must load before app.js -->
+    <script src="i18n.js"></script>
 </head>
 <body>
 
     <main id="landing-page" class="landing-page">
-        <!-- LA MANCHA DE COLOR LÍQUIDA (EFECTO LIQUID GLASS) -->
         <div class="forma-liquida"></div>
 
         <section class="landing-content">
-            <span class="landing-badge">OFFICIAL ACADEMY 2026</span>
-            <h1 class="hero-title">Don't just watch football.<br>Speak it.</h1>
-            <p class="hero-subtitle">
-                Entrena con <strong>IA</strong>, Video Análisis y Reconocimiento de Voz.<br>
-                La academia táctica definitiva.
+            <span class="landing-badge" data-i18n="landing.badge">OFFICIAL ACADEMY 2026</span>
+            <h1 class="hero-title" data-i18n-html="landing.title">Don't just watch football.<br>Speak it.</h1>
+            <p class="hero-subtitle" data-i18n-html="landing.subtitle">
+                Train with <strong>AI</strong>, Video Analysis &amp; Voice Recognition.<br>
+                The ultimate tactical academy.
             </p>
 
             <div class="features-grid">
                 <article class="feature-box">
                     <i class="fa-solid fa-video"></i>
-                    <h3>Video Match</h3>
-                    <p>Análisis de jugadas reales.</p>
+                    <h3 data-i18n="landing.feature_video_title">Video Match</h3>
+                    <p data-i18n="landing.feature_video_desc">Real match play analysis.</p>
                 </article>
                 <article class="feature-box">
                     <i class="fa-solid fa-microphone"></i>
-                    <h3>Voice Coach</h3>
-                    <p>Habla, no escribas.</p>
+                    <h3 data-i18n="landing.feature_voice_title">Voice Coach</h3>
+                    <p data-i18n="landing.feature_voice_desc">Speak, don't type.</p>
                 </article>
                 <article class="feature-box">
                     <i class="fa-solid fa-fire"></i>
-                    <h3>Daily Streak</h3>
-                    <p>Mantén la racha.</p>
+                    <h3 data-i18n="landing.feature_streak_title">Daily Streak</h3>
+                    <p data-i18n="landing.feature_streak_desc">Keep the streak alive.</p>
                 </article>
             </div>
 
             <button id="start-btn" class="enter-btn">
-                ENTER STADIUM <i class="fa-solid fa-arrow-right"></i>
+                <span data-i18n="landing.enter_btn">ENTER STADIUM</span>
+                <i class="fa-solid fa-arrow-right"></i>
             </button>
-            
-            <p class="legal-disclaimer">
-                *Progreso guardado automáticamente en tu navegador.
+
+            <p class="legal-disclaimer" data-i18n="landing.disclaimer">
+                *Progress auto-saved in your browser.
             </p>
         </section>
     </main>
 
     <div id="app-interface" class="hidden">
-        
+
         <header id="player-hud" class="player-hud">
             <div class="hud-group">
                 <div class="hud-item">
-                    <span class="hud-label">RANK</span>
+                    <span class="hud-label" data-i18n="hud.rank_label">RANK</span>
                     <span id="player-rank" class="hud-value">ROOKIE</span>
                 </div>
                 <div class="hud-item">
-                    <span class="hud-label">STREAK</span>
+                    <span class="hud-label" data-i18n="hud.streak_label">STREAK</span>
                     <span id="player-streak" class="hud-value fire-text">0 🔥</span>
                 </div>
-                <div class="hud-progress" aria-label="Experiencia del jugador">
+                <div class="hud-progress" aria-label="Player experience">
                     <div id="xp-bar" class="xp-fill" style="width: 0%"></div>
                 </div>
                 <div class="hud-item">
-                    <span class="hud-label">XP</span>
+                    <span class="hud-label" data-i18n="hud.xp_label">XP</span>
                     <span id="player-xp" class="hud-value">0 pts</span>
                 </div>
             </div>
-            <button id="auth-btn" class="auth-btn"><i class="fa-solid fa-user"></i> Login</button>
+            <div class="hud-controls">
+                <select id="lang-selector" class="lang-select" aria-label="Language">
+                    <option value="en">🌍 EN</option>
+                    <option value="es">🇪🇸 ES</option>
+                </select>
+                <button id="auth-btn" class="auth-btn">
+                    <i class="fa-solid fa-user"></i>
+                    <span data-i18n="hud.login_btn">Login</span>
+                </button>
+            </div>
         </header>
 
         <div class="container">
             <section class="hero-section">
-                <div class="brand-badge">TRAINING GROUND</div>
-                <h1 class="gradient-title">¿Qué aprendemos hoy?</h1>
-                
+                <div class="brand-badge" data-i18n="app.training_badge">TRAINING GROUND</div>
+                <h1 class="gradient-title" data-i18n="app.app_title">What are we learning today?</h1>
+
                 <div class="search-wrapper">
                     <div class="search-bar">
                         <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                        <input type="text" id="magic-search" placeholder="Busca 'VAR', 'Penalty'..." autocomplete="off">
-                        <button class="search-btn" aria-label="Buscar"><i class="fa-solid fa-arrow-right"></i></button>
+                        <input type="text" id="magic-search"
+                               data-i18n-placeholder="app.search_placeholder"
+                               placeholder="Search 'VAR', 'Penalty'..."
+                               autocomplete="off">
+                        <button class="search-btn" aria-label="Search"><i class="fa-solid fa-arrow-right"></i></button>
                     </div>
                     <div id="search-results" class="results-dropdown hidden"></div>
                 </div>
 
                 <article id="match-info" class="fade-in hidden">
                     <div class="match-meta">
-                        <h2 id="lesson-title">Select a match...</h2>
+                        <h2 id="lesson-title" data-i18n="app.lesson_default_title">Select a match...</h2>
                         <span id="lesson-level" class="level-badge">LEVEL 0</span>
                     </div>
-                    <p id="lesson-intro">Usa el buscador para iniciar sesión de entrenamiento.</p>
+                    <p id="lesson-intro" data-i18n="app.lesson_default_intro">Use the search bar to start a training session.</p>
                 </article>
             </section>
 
             <aside id="premium-banner" class="card premium-card">
                 <div class="premium-text">
-                    <h2>🚀 Go Pro Career</h2>
-                    <p>Desbloquea el Tutor IA y Certificaciones Avanzadas.</p>
+                    <h2 data-i18n="app.premium_title">🚀 Go Pro Career</h2>
+                    <p data-i18n="app.premium_desc">Unlock the AI Tutor and Advanced Certifications.</p>
                 </div>
-                <a href="https://buy.stripe.com/00w5kEccv9ur6r3eMl9R600" target="_blank" class="cta-button">Get PRO (5€)</a>
+                <a href="https://buy.stripe.com/00w5kEccv9ur6r3eMl9R600" target="_blank" class="cta-button" data-i18n="app.premium_cta">Get PRO (5€)</a>
             </aside>
 
             <main id="main-content" class="hidden">
                 <section id="video-section" class="card hidden">
-                    <header class="card-header"><i class="fa-solid fa-film"></i> Video Analysis</header>
+                    <header class="card-header">
+                        <i class="fa-solid fa-film"></i>
+                        <span data-i18n="app.video_header">Video Analysis</span>
+                    </header>
                     <div id="video-container" class="video-responsive"></div>
                 </section>
 
                 <section class="card">
-                    <header class="card-header"><i class="fa-solid fa-chalkboard-user"></i> Core Concept</header>
+                    <header class="card-header">
+                        <i class="fa-solid fa-chalkboard-user"></i>
+                        <span data-i18n="app.concept_header">Core Concept</span>
+                    </header>
                     <div id="core-concept"></div>
                 </section>
 
                 <section class="card">
-                    <header class="card-header"><i class="fa-solid fa-book"></i> Vocabulary</header>
+                    <header class="card-header">
+                        <i class="fa-solid fa-book"></i>
+                        <span data-i18n="app.vocab_header">Vocabulary</span>
+                    </header>
                     <ul id="vocabulary-list" class="vocab-grid"></ul>
                 </section>
 
                 <section class="card highlight-card">
-                    <header class="card-header"><i class="fa-solid fa-whistle"></i> The Decision</header>
-                    
+                    <header class="card-header">
+                        <i class="fa-solid fa-whistle"></i>
+                        <span id="quiz-header-text" data-i18n="app.quiz_header">The Decision</span>
+                    </header>
+
                     <div class="mic-container hidden" id="voice-control-wrapper">
-                        <button id="voice-btn" class="mic-btn" aria-label="Activar micrófono"><i class="fa-solid fa-microphone"></i></button>
-                        <p class="mic-hint">Tap & Speak the Answer</p>
+                        <button id="voice-btn" class="mic-btn" aria-label="Activate microphone">
+                            <i class="fa-solid fa-microphone"></i>
+                        </button>
+                        <p class="mic-hint" data-i18n="app.mic_hint">Tap & Speak the Answer</p>
                     </div>
 
                     <p id="quiz-question" class="quiz-q">...</p>
@@ -143,49 +171,73 @@
                     <div id="feedback-zone" class="hidden"></div>
                 </section>
             </main>
-            
-            <footer><p>© 2026 Football English Academy • Built for Winners</p></footer>
+
+            <footer><p data-i18n="app.footer">© 2026 Football English Academy • Built for Winners</p></footer>
         </div>
 
-        <button id="coach-trigger" class="coach-btn"><i class="fa-solid fa-headset"></i> Talk to Coach</button>
-        
+        <button id="coach-trigger" class="coach-btn">
+            <i class="fa-solid fa-headset"></i>
+            <span data-i18n="app.coach_btn">Talk to Coach</span>
+        </button>
+
         <div id="coach-modal" class="coach-window hidden" role="dialog" aria-labelledby="coach-title">
             <header class="coach-header">
-                <span id="coach-title"><i class="fa-solid fa-user-tie"></i> The Gaffer (AI Tutor)</span>
+                <span id="coach-title">
+                    <i class="fa-solid fa-user-tie"></i>
+                    <span data-i18n="app.coach_title">The Gaffer (AI Tutor)</span>
+                </span>
                 <div class="window-controls">
-                    <button id="maximize-chat" aria-label="Maximizar"><i class="fa-solid fa-expand"></i></button>
-                    <button id="close-chat" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+                    <button id="maximize-chat" aria-label="Maximize"><i class="fa-solid fa-expand"></i></button>
+                    <button id="close-chat" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
                 </div>
             </header>
-            
+
             <div id="chat-history" class="chat-body">
-                <div class="message bot-msg">Alright lad? I'm here 24/7. Unlock PRO access to chat properly.</div>
-            </div>
-            
-            <div class="chat-input-area">
-                <input type="password" id="api-key-input" placeholder="🔒 Enter VIP Password..." class="key-input">
-                <div class="input-row">
-                    <input type="text" id="user-msg" placeholder="Ask a question..." disabled>
-                    <button id="send-msg" disabled aria-label="Enviar mensaje"><i class="fa-solid fa-paper-plane"></i></button>
+                <div class="message bot-msg" data-i18n="app.coach_welcome">
+                    Alright lad? I'm here 24/7. Unlock PRO access to chat properly.
                 </div>
-                <p class="premium-hint">
-                    *Solo PRO. <a href="https://buy.stripe.com/00w5kEccv9ur6r3eMl9R600" target="_blank">Consigue clave aquí</a>.
+            </div>
+
+            <div class="chat-input-area">
+                <input type="password" id="api-key-input"
+                       data-i18n-placeholder="app.password_placeholder"
+                       placeholder="🔒 Enter VIP Password..."
+                       class="key-input">
+                <div class="input-row">
+                    <input type="text" id="user-msg"
+                           data-i18n-placeholder="app.chat_placeholder"
+                           placeholder="Ask a question..."
+                           disabled>
+                    <button id="send-msg" disabled aria-label="Send message"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+                <p class="premium-hint" data-i18n-html="app.premium_hint">
+                    *PRO only. <a href="https://buy.stripe.com/00w5kEccv9ur6r3eMl9R600" target="_blank">Get your key here</a>.
                 </p>
             </div>
         </div>
 
         <div id="auth-modal" class="coach-window auth-window hidden" role="dialog" aria-labelledby="auth-title">
             <header class="coach-header">
-                <span><i class="fa-solid fa-locker"></i> Locker Room</span>
-                <button id="close-auth" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+                <span><i class="fa-solid fa-lock"></i> <span data-i18n="app.locker_room">Locker Room</span></span>
+                <button id="close-auth" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
             </header>
             <div class="auth-body">
-                <h3 id="auth-title">Sign In</h3>
-                <p class="auth-subtitle">Accede a tus estadísticas de carrera.</p>
-                <input type="text" id="auth-user" placeholder="Username" class="auth-input">
-                <input type="password" id="auth-pass" placeholder="Password" class="auth-input">
-                <button id="submit-auth" class="cta-button full-width">Sign In</button>
-                <p class="auth-footer"><span id="toggle-auth-mode">Need an account? <strong>Register</strong></span></p>
+                <h3 id="auth-title" data-i18n="app.auth_title_signin">Sign In</h3>
+                <p class="auth-subtitle" data-i18n="app.auth_subtitle">Access your career stats.</p>
+                <input type="text" id="auth-user"
+                       data-i18n-placeholder="app.auth_user_placeholder"
+                       placeholder="Username"
+                       class="auth-input">
+                <input type="password" id="auth-pass"
+                       data-i18n-placeholder="app.auth_pass_placeholder"
+                       placeholder="Password"
+                       class="auth-input">
+                <button id="submit-auth" class="cta-button full-width" data-i18n="app.auth_submit_signin">Sign In</button>
+                <p class="auth-footer">
+                    <span id="toggle-auth-mode" data-i18n-html="app.auth_toggle_register">
+                        Need an account? <strong>Register</strong>
+                    </span>
+                </p>
                 <p id="auth-msg" class="error-msg"></p>
             </div>
         </div>
@@ -193,7 +245,7 @@
 
     <div id="offline-banner" class="offline-banner hidden" role="alert" aria-live="assertive">
         <i class="fa-solid fa-wifi-slash"></i>
-        <span>You're offline. Check your connection to keep training.</span>
+        <span data-i18n="app.offline_msg">You're offline. Check your connection to keep training.</span>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -202,11 +254,10 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('Vigilante de fondo activado.', reg))
-                    .catch(err => console.error('Fallo en el vigilante.', err));
+                    .then(reg => console.log('SW active.', reg))
+                    .catch(err => console.error('SW failed.', err));
             });
         }
-
         (function () {
             const banner = document.getElementById('offline-banner');
             function showBanner() { banner.classList.remove('hidden'); }
