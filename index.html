@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Football English Academy</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0f172a">
+    
+    <link rel="apple-touch-icon" href="https://img.icons8.com/color/480/football2--v1.png">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/color/96/football2--v1.png">
+    <link rel="manifest" href="manifest.json">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="football.css">
+</head>
+<body>
+
+    <main id="landing-page" class="landing-page">
+        <!-- LA MANCHA DE COLOR LÍQUIDA (EFECTO LIQUID GLASS) -->
+        <div class="forma-liquida"></div>
+
+        <section class="landing-content">
+            <span class="landing-badge">OFFICIAL ACADEMY 2026</span>
+            <h1 class="hero-title">Don't just watch football.<br>Speak it.</h1>
+            <p class="hero-subtitle">
+                Entrena con <strong>IA</strong>, Video Análisis y Reconocimiento de Voz.<br>
+                La academia táctica definitiva.
+            </p>
+
+            <div class="features-grid">
+                <article class="feature-box">
+                    <i class="fa-solid fa-video"></i>
+                    <h3>Video Match</h3>
+                    <p>Análisis de jugadas reales.</p>
+                </article>
+                <article class="feature-box">
+                    <i class="fa-solid fa-microphone"></i>
+                    <h3>Voice Coach</h3>
+                    <p>Habla, no escribas.</p>
+                </article>
+                <article class="feature-box">
+                    <i class="fa-solid fa-fire"></i>
+                    <h3>Daily Streak</h3>
+                    <p>Mantén la racha.</p>
+                </article>
+            </div>
+
+            <button id="start-btn" class="enter-btn">
+                ENTER STADIUM <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            
+            <p class="legal-disclaimer">
+                *Progreso guardado automáticamente en tu navegador.
+            </p>
+        </section>
+    </main>
+
+    <div id="app-interface" class="hidden">
+        
+        <header id="player-hud" class="player-hud">
+            <div class="hud-group">
+                <div class="hud-item">
+                    <span class="hud-label">RANK</span>
+                    <span id="player-rank" class="hud-value">ROOKIE</span>
+                </div>
+                <div class="hud-item">
+                    <span class="hud-label">STREAK</span>
+                    <span id="player-streak" class="hud-value fire-text">0 🔥</span>
+                </div>
+                <div class="hud-progress" aria-label="Experiencia del jugador">
+                    <div id="xp-bar" class="xp-fill" style="width: 0%"></div>
+                </div>
+                <div class="hud-item">
+                    <span class="hud-label">XP</span>
+                    <span id="player-xp" class="hud-value">0 pts</span>
+                </div>
+            </div>
+            <button id="auth-btn" class="auth-btn"><i class="fa-solid fa-user"></i> Login</button>
+        </header>
+
+        <div class="container">
+            <section class="hero-section">
+                <div class="brand-badge">TRAINING GROUND</div>
+                <h1 class="gradient-title">¿Qué aprendemos hoy?</h1>
+                
+                <div class="search-wrapper">
+                    <div class="search-bar">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="magic-search" placeholder="Busca 'VAR', 'Penalty'..." autocomplete="off">
+                        <button class="search-btn" aria-label="Buscar"><i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                    <div id="search-results" class="results-dropdown hidden"></div>
+                </div>
+
+                <article id="match-info" class="fade-in hidden">
+                    <div class="match-meta">
+                        <h2 id="lesson-title">Select a match...</h2>
+                        <span id="lesson-level" class="level-badge">LEVEL 0</span>
+                    </div>
+                    <p id="lesson-intro">Usa el buscador para iniciar sesión de entrenamiento.</p>
+                </article>
+            </section>
+
+            <aside id="premium-banner" class="card premium-card">
+                <div class="premium-text">
+                    <h2>🚀 Go Pro Career</h2>
+                    <p>Desbloquea el Tutor IA y Certificaciones Avanzadas.</p>
+                </div>
+                <a href="https://buy.stripe.com/00w5kEccv9ur6r3eMl9R600" target="_blank" class="cta-button">Get PRO (5€)</a>
+            </aside>
+
+            <main id="main-content" class="hidden">
+                <section id="video-section" class="card hidden">
+                    <header class="card-header"><i class="fa-solid fa-film"></i> Video Analysis</header>
+                    <div id="video-container" class="video-responsive"></div>
+                </section>
+
+                <section class="card">
+                    <header class="card-header"><i class="fa-solid fa-chalkboard-user"></i> Core Concept</header>
+                    <div id="core-concept"></div>
+                </section>
+
+                <section class="card">
+                    <header class="card-header"><i class="fa-solid fa-book"></i> Vocabulary</header>
+                    <ul id="vocabulary-list" class="vocab-grid"></ul>
+                </section>
+
+                <section class="card highlight-card">
+                    <header class="card-header"><i class="fa-solid fa-whistle"></i> The Decision</header>
+                    
+                    <div class="mic-container hidden" id="voice-control-wrapper">
+                        <button id="voice-btn" class="mic-btn" aria-label="Activar micrófono"><i class="fa-solid fa-microphone"></i></button>
+                        <p class="mic-hint">Tap & Speak the Answer</p>
+                    </div>
+
+                    <p id="quiz-question" class="quiz-q">...</p>
+                    <div id="options-container" class="buttons-grid"></div>
+                    <div id="feedback-zone" class="hidden"></div>
+                </section>
+            </main>
+            
+            <footer><p>© 2026 Football English Academy • Built for Winners</p></footer>
+        </div>
+
+        <button id="coach-trigger" class="coach-btn"><i class="fa-solid fa-headset"></i> Talk to Coach</button>
+        
+        <div id="coach-modal" class="coach-window hidden" role="dialog" aria-labelledby="coach-title">
+            <header class="coach-header">
+                <span id="coach-title"><i class="fa-solid fa-user-tie"></i> The Gaffer (AI Tutor)</span>
+                <div class="window-controls">
+                    <button id="maximize-chat" aria-label="Maximizar"><i class="fa-solid fa-expand"></i></button>
+                    <button id="close-chat" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </header>
+            
+            <div id="chat-history" class="chat-body">
+                <div class="message bot-msg">Alright lad? I'm here 24/7. Unlock PRO access to chat properly.</div>
+            </div>
+            
+            <div class="chat-input-area">
+                <input type="password" id="api-key-input" placeholder="🔒 Enter VIP Password..." class="key-input">
+                <div class="input-row">
+                    <input type="text" id="user-msg" placeholder="Ask a question..." disabled>
+                    <button id="send-msg" disabled aria-label="Enviar mensaje"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+                <p class="premium-hint">
+                    *Solo PRO. <a href="https://buy.stripe.com/00w5kEccv9ur6r3eMl9R600" target="_blank">Consigue clave aquí</a>.
+                </p>
+            </div>
+        </div>
+
+        <div id="auth-modal" class="coach-window auth-window hidden" role="dialog" aria-labelledby="auth-title">
+            <header class="coach-header">
+                <span><i class="fa-solid fa-locker"></i> Locker Room</span>
+                <button id="close-auth" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+            </header>
+            <div class="auth-body">
+                <h3 id="auth-title">Sign In</h3>
+                <p class="auth-subtitle">Accede a tus estadísticas de carrera.</p>
+                <input type="text" id="auth-user" placeholder="Username" class="auth-input">
+                <input type="password" id="auth-pass" placeholder="Password" class="auth-input">
+                <button id="submit-auth" class="cta-button full-width">Sign In</button>
+                <p class="auth-footer"><span id="toggle-auth-mode">Need an account? <strong>Register</strong></span></p>
+                <p id="auth-msg" class="error-msg"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="app.js"></script>
+    <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('Vigilante de fondo activado.', reg))
+        .catch(err => console.error('Fallo en el vigilante.', err));
+    });
+  }
+</script>
+</body>
+</html>

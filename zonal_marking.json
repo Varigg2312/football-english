@@ -1,0 +1,248 @@
+{
+  "file": "zonal_marking.json",
+  "title": "Zonal Marking",
+  "meta": {
+    "difficulty_elo": 1500,
+    "lesson_id": "gen_1768864535"
+  },
+  "content": {
+    "title": "Zonal Marking: Defending Space, Not Players",
+    "intro_hook": "Don't chase shadows, control the ground they run on.",
+    "core_concept": {
+      "explanation": "Zonal marking is a defensive strategy where players are responsible for a specific zone or area of the pitch, rather than tracking a specific opponent. The primary objective is to protect dangerous spaces, force attackers into less threatening areas, and maintain the team's defensive shape. It relies on communication, spatial awareness, and collective responsibility.",
+      "analogy": "Think of it like a goalkeeper organizing a wall for a free-kick. Each player in the wall is responsible for blocking the ball from entering their specific section of the goal, not for marking the player taking the kick. They hold their zone."
+    },
+    "vocabulary_rich": [
+      {
+        "term": "Zone",
+        "meaning": "A designated area of the pitch for which a defender is responsible."
+      },
+      {
+        "term": "Defensive Shape",
+        "meaning": "The organized structure and formation of a team when not in possession of the ball."
+      },
+      {
+        "term": "Space-Oriented",
+        "meaning": "A tactical focus on controlling and denying areas of the pitch rather than directly engaging opponents."
+      },
+      {
+        "term": "Cover Shadow",
+        "meaning": "The area of the pitch that a defender blocks access to simply by their body position and presence, without making a tackle."
+      }
+    ]
+  },
+  "interactive_engine": {
+    "questions": [
+      {
+        "id": 1,
+        "scenario": "Your team is defending a corner kick. You are positioned at the near post zone. An attacking player makes a run directly towards you. What is your primary responsibility?",
+        "options": [
+          {
+            "text": "Follow the runner wherever they go, even if it leaves your zone.",
+            "outcome": "WRONG",
+            "feedback": "This breaks the zonal system. Chasing the player leaves your assigned space (near post) unguarded for a different attacker to exploit."
+          },
+          {
+            "text": "Hold your position in the near post zone and challenge any ball that enters it.",
+            "outcome": "CORRECT",
+            "feedback": "Correct. In zonal marking, you defend the space. You trust teammates in adjacent zones to pick up runners, and you focus on clearing the ball from your area."
+          },
+          {
+            "text": "Immediately run towards the penalty spot to help defend the central area.",
+            "outcome": "WRONG",
+            "feedback": "This abandons your critical zone. The near post is a high-danger area for short corners and flick-ons; leaving it undefended is a major risk."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "scenario": "You are a central defender in a zonal back four. The opposing striker drops deep into midfield, pulling your defensive partner with him. This creates a gap in your defensive line. What should you do?",
+        "options": [
+          {
+            "text": "Follow your defensive partner to maintain close contact with the striker.",
+            "outcome": "WRONG",
+            "feedback": "This would create a huge hole in your defensive line. In a zonal system, midfielders should pick up deep-lying forwards. Your job is to maintain the defensive line's shape and offside trap."
+          },
+          {
+            "text": "Hold your position in the defensive line and communicate for a midfielder to pick up the dropping striker.",
+            "outcome": "CORRECT",
+            "feedback": "Perfect. You prioritize maintaining the defensive shape and covering the space behind. You alert a midfielder to track the striker, ensuring all zones are covered."
+          },
+          {
+            "text": "Immediately sprint forward to try and offside the remaining attackers.",
+            "outcome": "WRONG",
+            "feedback": "This is a reckless gamble. Without a coordinated line, you'll play attackers onside and leave enormous space behind you for through balls."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "scenario": "During open play, a winger is dribbling towards your full-back. You are the nearest central defender. How do you apply zonal principles?",
+        "options": [
+          {
+            "text": "Rush out of your central zone to double-team the winger with your full-back.",
+            "outcome": "WRONG",
+            "feedback": "This leaves your central zone vulnerable. If you are drawn out, a simple pass inside finds an attacker in the now-unmarked space you vacated."
+          },
+          {
+            "text": "Stay in your zone, providing 'cover' behind your full-back, ready to intercept a cut-back or cross.",
+            "outcome": "CORRECT",
+            "feedback": "Exactly. You provide defensive balance. Your position blocks the direct path to goal and covers the space your full-back might be beaten in, forcing the winger into a less dangerous option (e.g., a cross from wide)."
+          },
+          {
+            "text": "Ignore the winger completely and focus only on marking the central striker.",
+            "outcome": "WRONG",
+            "feedback": "While you shouldn't leave your zone, you must be aware of threats developing around it. Complete ignorance removes your ability to provide cover, which is a key part of zonal defending."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "scenario": "What is the main weakness often cited against zonal marking from set-pieces?",
+        "options": [
+          {
+            "text": "It requires less communication than man-marking.",
+            "outcome": "WRONG",
+            "feedback": "The opposite is true. Zonal marking requires intense, constant communication to coordinate movement and hand over attackers between zones."
+          },
+          {
+            "text": "Attackers can get a running start to attack the ball in a static zone.",
+            "outcome": "CORRECT",
+            "feedback": "Correct. This is the classic criticism. A well-timed run and jump can give an attacker momentum over a defender who is primarily focused on holding their ground in a specific spot."
+          },
+          {
+            "text": "It makes it easier for defenders to track their direct opponent.",
+            "outcome": "WRONG",
+            "feedback": "That is the strength of man-marking, not zonal. In zonal marking, you are not tasked with tracking one specific player from the start."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "scenario": "In a zonal system, an opponent makes a pass into the space between your zone and your teammate's zone. Who is responsible?",
+        "options": [
+          {
+            "text": "The defender closest to the ball when the pass is made.",
+            "outcome": "CORRECT",
+            "feedback": "Yes. Zonal marking requires adaptability. The defender who can best intervene to protect the threatened space must take responsibility. This requires quick decision-making and understanding between players."
+          },
+          {
+            "text": "Neither defender; it's a flaw in the system and the goalkeeper's problem.",
+            "outcome": "WRONG",
+            "feedback": "This is a failure of the defenders. Zones are not rigid boxes; they are dynamic areas of responsibility. Defenders must work together to cover gaps."
+          },
+          {
+            "text": "The defender whose zone the ball ends up in, regardless of who was closer.",
+            "outcome": "WRONG",
+            "feedback": "This is too rigid. By the time the ball arrives, it may be too late. The principle is to defend the space, so the player best positioned to cut out the pass or pressure the receiver must act."
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "scenario": "Your team uses a high defensive line with zonal marking. The opposition plays a long ball over the top for a fast striker. What is the collective action of the back line?",
+        "options": [
+          {
+            "text": "Each defender turns and sprints after the striker as fast as they can individually.",
+            "outcome": "WRONG",
+            "feedback": "This loses all shape and discipline. The fastest defender may catch up, but others will be out of position for any second ball or pass."
+          },
+          {
+            "text": "Hold the offside line, then drop back together in a coordinated line to recover.",
+            "outcome": "CORRECT",
+            "feedback": "Correct. Maintaining the zonal line is crucial. You move as a unit to preserve defensive compactness, reduce the space behind, and keep the play in front of you as much as possible."
+          },
+          {
+            "text": "The central defenders split wide to cover the channels, leaving the center open.",
+            "outcome": "WRONG",
+            "feedback": "This is the opposite of coordinated recovery. It creates a massive gap in the most dangerous central area, making it easy for the striker to cut inside and score."
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "scenario": "What is a key physical and mental attribute for a defender in a zonal system?",
+        "options": [
+          {
+            "text": "Exceptional pace to recover from mistakes.",
+            "outcome": "WRONG",
+            "feedback": "Pace is helpful but not the defining attribute. A well-executed zonal system aims to prevent situations where pure recovery pace is needed."
+          },
+          {
+            "text": "Superior strength to win all individual physical duels.",
+            "outcome": "WRONG",
+            "feedback": "Strength is important in duels, but zonal marking is more about positioning and intelligence to avoid being isolated in unfair 1v1 duels."
+          },
+          {
+            "text": "Excellent spatial awareness and anticipation to read the game.",
+            "outcome": "CORRECT",
+            "feedback": "Spot on. A zonal defender must constantly scan the field, understand passing lanes, anticipate opponents' movements, and know when to step out of their zone or hold position."
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "scenario": "How does zonal marking help in initiating a counter-attack?",
+        "options": [
+          {
+            "text": "It doesn't; it's purely a defensive, safety-first tactic.",
+            "outcome": "WRONG",
+            "feedback": "Incorrect. A major benefit of zonal marking is its link to positive possession. By defending space, players are often better positioned to win the ball and immediately transition to attack."
+          },
+          {
+            "text": "Defenders are already in structured positions, making it easier to find passing options after winning the ball.",
+            "outcome": "CORRECT",
+            "feedback": "Exactly. Because the team maintains its shape, players know where their teammates will be. Winning the ball in an organized structure allows for quicker, more coherent ball circulation to start a counter."
+          },
+          {
+            "text": "It allows the fastest defender to immediately sprint forward once the ball is won.",
+            "outcome": "WRONG",
+            "feedback": "This is individualistic and can break the team structure. The counter should be a coordinated team movement from a solid base, not a lone sprint."
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "scenario": "When an attacker moves from one defensive zone into another, what should happen?",
+        "options": [
+          {
+            "text": "The first defender should follow them into the new zone to maintain pressure.",
+            "outcome": "WRONG",
+            "feedback": "This is 'man-marking' logic and disrupts the zonal system. It pulls defenders out of position and can create chain reactions that break the defensive shape."
+          },
+          {
+            "text": "The defender of the new zone should communicate 'I've got him' and take over responsibility, while the first defender holds their position or adjusts to cover.",
+            "outcome": "CORRECT",
+            "feedback": "Perfect. This is the 'handover' or 'baton pass' in zonal marking. Clear communication ensures the attacker is always pressured while the team shape remains intact."
+          },
+          {
+            "text": "Both defenders should momentarily double-mark the attacker until the danger passes.",
+            "outcome": "WRONG",
+            "feedback": "Temporary doubling can occur, but as a standard procedure, it's inefficient. It leaves another zone understaffed and is a reactive rather than proactive solution."
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "scenario": "Which famous manager is most closely associated with perfecting and popularizing zonal marking in English football in the 2000s?",
+        "options": [
+          {
+            "text": "Sir Alex Ferguson",
+            "outcome": "WRONG",
+            "feedback": "Ferguson's teams were adaptable but not defined by a strict zonal system. He often used a mix of tactics."
+          },
+          {
+            "text": "Rafael Ben\u00edtez",
+            "outcome": "CORRECT",
+            "feedback": "Correct. Rafael Ben\u00edtez, particularly during his time at Liverpool, was a staunch advocate and master of zonal marking from defensive set-pieces and in open play, despite frequent media criticism."
+          },
+          {
+            "text": "Ars\u00e8ne Wenger",
+            "outcome": "WRONG",
+            "feedback": "Wenger's Arsenal focused on a high line and offside trap, which incorporates zonal principles, but he wasn't its most famous proponent in the face of scrutiny."
+          }
+        ]
+      }
+    ]
+  }
+}

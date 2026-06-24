@@ -1,0 +1,17 @@
+{
+  "name": "Football English Academy",
+  "short_name": "Gaffer PRO",
+  "start_url": "/?source=pwa",
+  "display": "standalone",
+  "background_color": "#1e293b",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

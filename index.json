@@ -1,0 +1,38 @@
+[
+  {
+    "title": "🎥 VIDEO DEMO: Ball Mastery",
+    "file": "video_match.json",
+    "difficulty": "Legend",
+    "id": "vid_001"
+  },
+  {
+    "title": "The Post-Match Interview: Talking Tactics",
+    "file": "post_match_interview.json",
+    "difficulty": "Pro",
+    "id": "gen_1768864692"
+  },
+  {
+    "title": "Corner Kick Tactics: Turning Set-Pieces into Goals",
+    "file": "corner_kick_tactics.json",
+    "difficulty": "Pro",
+    "id": "gen_1768864622"
+  },
+  {
+    "title": "Zonal Marking: Defending Space, Not Players",
+    "file": "zonal_marking.json",
+    "difficulty": "Pro",
+    "id": "gen_1768864535"
+  },
+  {
+    "title": "The Offside Trap",
+    "file": "the_offside_trap.json",
+    "difficulty": "Pro",
+    "id": "gen_1768864458"
+  },
+  {
+    "title": "The Professional Foul: A Tactical Tool",
+    "file": "tactical_fouls.json",
+    "difficulty": "Pro",
+    "id": "gen_1768864380"
+  }
+]
