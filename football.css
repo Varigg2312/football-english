@@ -252,7 +252,7 @@ body {
 #send-msg { background: #0f172a; color: white; border: none; padding: 0 15px; border-radius: 6px; cursor: pointer; }
 
 /* AUTH MODAL */
-.auth-window { top: 50%; left: 50%; transform: translate(-50%, -50%); bottom: auto; right: auto; height: auto; width: 90%; max-width: 400px; }
+.auth-window { position: fixed; top: 50%; left: 0; right: 0; bottom: auto; transform: translateY(-50%); height: auto; width: 90%; max-width: 400px; margin: 0 auto; }
 .auth-body { padding: 30px; text-align: center; }
 .auth-input { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 15px; }
 .auth-subtitle { color: #64748b; margin-bottom: 20px; }
