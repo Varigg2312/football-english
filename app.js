@@ -24,58 +24,77 @@ function playSound(name) {
     } catch(e) {}
 }
 
-// STATE
+// ── STATE ──────────────────────────────────────────────────
 let currentUser = null;
 let usersDB = JSON.parse(localStorage.getItem('football_users_db') || '{}');
 let usedMessages = 0;
 let playerXP = 0;
 let playerStreak = 0;
-let currentQuizQuestions = [];
+let currentQuiz = [];
 let currentQuestionIndex = 0;
+let currentLessonId = null;
 
+// completedLessons: Set stored as JSON array in localStorage
+let completedLessons = new Set(
+    JSON.parse(localStorage.getItem('completed_lessons') || '[]')
+);
+
+function saveCompletedLessons() {
+    localStorage.setItem('completed_lessons', JSON.stringify([...completedLessons]));
+}
+
+function markLessonComplete(id) {
+    if (completedLessons.has(id)) return;
+    completedLessons.add(id);
+    saveCompletedLessons();
+    // Award completion XP bonus the first time only
+    addXP(50);
+}
+
+// ── DOM REFS ───────────────────────────────────────────────
 const ui = {
-    search:       document.getElementById('magic-search'),
-    results:      document.getElementById('search-results'),
-    matchInfo:    document.getElementById('match-info'),
-    main:         document.getElementById('main-content'),
-    title:        document.getElementById('lesson-title'),
-    level:        document.getElementById('lesson-level'),
-    intro:        document.getElementById('lesson-intro'),
-    concept:      document.getElementById('core-concept'),
-    vocabList:    document.getElementById('vocabulary-list'),
-    videoSection: document.getElementById('video-section'),
+    search:         document.getElementById('magic-search'),
+    results:        document.getElementById('search-results'),
+    matchInfo:      document.getElementById('match-info'),
+    main:           document.getElementById('main-content'),
+    title:          document.getElementById('lesson-title'),
+    level:          document.getElementById('lesson-level'),
+    intro:          document.getElementById('lesson-intro'),
+    concept:        document.getElementById('core-concept'),
+    vocabList:      document.getElementById('vocabulary-list'),
+    videoSection:   document.getElementById('video-section'),
     videoContainer: document.getElementById('video-container'),
-    voiceBtn:     document.getElementById('voice-btn'),
+    voiceBtn:       document.getElementById('voice-btn'),
     quizHeaderText: document.getElementById('quiz-header-text'),
-    quizQuestion: document.getElementById('quiz-question'),
-    quizOptions:  document.getElementById('options-container'),
-    feedback:     document.getElementById('feedback-zone'),
-    hud:          document.getElementById('player-hud'),
-    rankDisplay:  document.getElementById('player-rank'),
-    xpDisplay:    document.getElementById('player-xp'),
-    streakDisplay: document.getElementById('player-streak'),
-    xpBar:        document.getElementById('xp-bar'),
-    chatTrigger:  document.getElementById('coach-trigger'),
-    chatModal:    document.getElementById('coach-modal'),
-    chatClose:    document.getElementById('close-chat'),
-    chatHistory:  document.getElementById('chat-history'),
-    chatInput:    document.getElementById('user-msg'),
-    chatSend:     document.getElementById('send-msg'),
-    passwordInput: document.getElementById('api-key-input'),
-    authBtn:      document.getElementById('auth-btn'),
-    authModal:    document.getElementById('auth-modal'),
-    closeAuth:    document.getElementById('close-auth'),
-    authUser:     document.getElementById('auth-user'),
-    authPass:     document.getElementById('auth-pass'),
-    submitAuth:   document.getElementById('submit-auth'),
-    toggleAuth:   document.getElementById('toggle-auth-mode'),
-    authMsg:      document.getElementById('auth-msg'),
-    authTitle:    document.getElementById('auth-title')
+    quizQuestion:   document.getElementById('quiz-question'),
+    quizOptions:    document.getElementById('options-container'),
+    feedback:       document.getElementById('feedback-zone'),
+    hud:            document.getElementById('player-hud'),
+    rankDisplay:    document.getElementById('player-rank'),
+    xpDisplay:      document.getElementById('player-xp'),
+    streakDisplay:  document.getElementById('player-streak'),
+    xpBar:          document.getElementById('xp-bar'),
+    chatTrigger:    document.getElementById('coach-trigger'),
+    chatModal:      document.getElementById('coach-modal'),
+    chatClose:      document.getElementById('close-chat'),
+    chatHistory:    document.getElementById('chat-history'),
+    chatInput:      document.getElementById('user-msg'),
+    chatSend:       document.getElementById('send-msg'),
+    passwordInput:  document.getElementById('api-key-input'),
+    authBtn:        document.getElementById('auth-btn'),
+    authModal:      document.getElementById('auth-modal'),
+    closeAuth:      document.getElementById('close-auth'),
+    authUser:       document.getElementById('auth-user'),
+    authPass:       document.getElementById('auth-pass'),
+    submitAuth:     document.getElementById('submit-auth'),
+    toggleAuth:     document.getElementById('toggle-auth-mode'),
+    authMsg:        document.getElementById('auth-msg'),
+    authTitle:      document.getElementById('auth-title')
 };
 
-let allLessons = [];
+let allLessons = [];  // full lesson objects from lessons.json
 
-// Called by i18n.js whenever the language changes — refreshes dynamic strings
+// ── i18n BRIDGE ────────────────────────────────────────────
 window.onLangChange = function () {
     if (currentUser) {
         ui.authBtn.innerHTML = `<i class="fa-solid fa-user-check"></i> ${currentUser} (${t('hud.logout_suffix')})`;
@@ -84,6 +103,7 @@ window.onLangChange = function () {
     }
 };
 
+// ── INIT ───────────────────────────────────────────────────
 async function initLeague() {
     setupChat(); setupAuth(); setupVoiceControl();
     if (window.speechSynthesis) window.speechSynthesis.getVoices();
@@ -99,13 +119,13 @@ async function initLeague() {
         if (passInput) passInput.value = VIP_PASSWORD;
     }
 
-    const startBtn  = document.getElementById('start-btn');
-    const landing   = document.getElementById('landing-page');
-    const appIface  = document.getElementById('app-interface');
+    const startBtn = document.getElementById('start-btn');
+    const landing  = document.getElementById('landing-page');
+    const appIface = document.getElementById('app-interface');
 
     if (startBtn) {
         startBtn.onclick = () => {
-            if (landing) landing.classList.add('hidden');
+            if (landing)  landing.classList.add('hidden');
             if (appIface) { appIface.classList.remove('hidden'); appIface.style.display = 'flex'; }
         };
     }
@@ -113,7 +133,7 @@ async function initLeague() {
     const savedUser = localStorage.getItem('current_session_user');
     if (savedUser && usersDB[savedUser]) {
         loginUser(savedUser);
-        if (landing) landing.classList.add('hidden');
+        if (landing)  landing.classList.add('hidden');
         if (appIface) { appIface.classList.remove('hidden'); appIface.style.display = 'flex'; }
     } else {
         loadGuestData();
@@ -122,12 +142,13 @@ async function initLeague() {
     if (ui.hud) ui.hud.classList.remove('hidden');
 
     try {
-        const response = await fetch(DB_FOLDER + 'index.json');
-        allLessons = await response.json();
+        const res = await fetch(DB_FOLDER + 'lessons.json');
+        allLessons = await res.json();
         setupSearch();
-    } catch (error) { console.error("Error loading lesson catalogue:", error); }
+    } catch (err) { console.error("Error loading lessons catalogue:", err); }
 }
 
+// ── AUTH / SESSION ─────────────────────────────────────────
 function loadGuestData() {
     playerXP = parseInt(localStorage.getItem('guest_xp') || '0');
     usedMessages = parseInt(localStorage.getItem('guest_msgs') || '0');
@@ -144,7 +165,7 @@ function loadGuestData() {
 function loginUser(username) {
     currentUser = username;
     localStorage.setItem('current_session_user', username);
-    playerXP = usersDB[username].xp;
+    playerXP     = usersDB[username].xp;
     usedMessages = usersDB[username].msgs || 0;
     calculateStreak(usersDB[username]);
     saveUsersDB();
@@ -166,8 +187,7 @@ function calculateStreak(userData) {
     if (userData.lastVisit !== today) {
         const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
         userData.streak = (userData.lastVisit === yesterday.toDateString())
-            ? (userData.streak || 0) + 1
-            : 1;
+            ? (userData.streak || 0) + 1 : 1;
         userData.lastVisit = today;
     }
     playerStreak = userData.streak || 0;
@@ -177,11 +197,11 @@ function saveUsersDB() { localStorage.setItem('football_users_db', JSON.stringif
 
 function saveUserData() {
     if (currentUser) {
-        usersDB[currentUser].xp = playerXP;
+        usersDB[currentUser].xp   = playerXP;
         usersDB[currentUser].msgs = usedMessages;
         saveUsersDB();
     } else {
-        localStorage.setItem('guest_xp', playerXP);
+        localStorage.setItem('guest_xp',   playerXP);
         localStorage.setItem('guest_msgs', usedMessages);
     }
 }
@@ -190,34 +210,28 @@ function addXP(amount) { playerXP += amount; saveUserData(); updateHUD(); }
 
 function updateHUD() {
     if (!ui.rankDisplay) return;
-    let currentRank = RANKS[0]; let nextRankXP = RANKS[1].limit;
+    let rank = RANKS[0]; let nextXP = RANKS[1].limit;
     for (let i = 0; i < RANKS.length; i++) {
-        if (playerXP >= RANKS[i].limit) {
-            currentRank = RANKS[i];
-            nextRankXP = RANKS[i + 1] ? RANKS[i + 1].limit : playerXP * 1.5;
-        }
+        if (playerXP >= RANKS[i].limit) { rank = RANKS[i]; nextXP = RANKS[i + 1] ? RANKS[i + 1].limit : playerXP * 1.5; }
     }
-    ui.rankDisplay.innerText = currentRank.name;
-    ui.xpDisplay.innerText = `${playerXP} pts`;
+    ui.rankDisplay.innerText  = rank.name;
+    ui.xpDisplay.innerText    = `${playerXP} pts`;
     ui.streakDisplay.innerText = `${playerStreak} 🔥`;
-    ui.xpBar.style.width = `${Math.min(100, (playerXP / nextRankXP) * 100)}%`;
+    ui.xpBar.style.width       = `${Math.min(100, (playerXP / nextXP) * 100)}%`;
 }
 
 function setupAuth() {
     if (!ui.authBtn) return;
-    ui.authBtn.onclick = () => {
-        if (currentUser) logoutUser();
-        else ui.authModal.classList.remove('hidden');
-    };
+    ui.authBtn.onclick  = () => { if (currentUser) logoutUser(); else ui.authModal.classList.remove('hidden'); };
     ui.closeAuth.onclick = () => ui.authModal.classList.add('hidden');
 
     let isRegisterMode = false;
     ui.toggleAuth.onclick = () => {
         isRegisterMode = !isRegisterMode;
-        ui.authTitle.innerText    = t(isRegisterMode ? 'app.auth_title_register' : 'app.auth_title_signin');
-        ui.submitAuth.innerText   = t(isRegisterMode ? 'app.auth_submit_register' : 'app.auth_submit_signin');
-        ui.toggleAuth.innerHTML   = t(isRegisterMode ? 'app.auth_toggle_signin' : 'app.auth_toggle_register');
-        ui.authMsg.innerText = '';
+        ui.authTitle.innerText  = t(isRegisterMode ? 'app.auth_title_register' : 'app.auth_title_signin');
+        ui.submitAuth.innerText = t(isRegisterMode ? 'app.auth_submit_register' : 'app.auth_submit_signin');
+        ui.toggleAuth.innerHTML = t(isRegisterMode ? 'app.auth_toggle_signin' : 'app.auth_toggle_register');
+        ui.authMsg.innerText    = '';
     };
 
     ui.submitAuth.onclick = () => {
@@ -238,6 +252,7 @@ function setupAuth() {
     };
 }
 
+// ── VOICE ──────────────────────────────────────────────────
 function setupVoiceControl() {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
         if (ui.voiceBtn) ui.voiceBtn.style.display = 'none'; return;
@@ -255,22 +270,19 @@ function setupVoiceControl() {
             catch(e) { isListening = false; ui.voiceBtn.classList.remove('mic-listening'); }
         };
     }
-    recognition.onresult = (event) => {
-        const speechResult = event.results[0][0].transcript.toLowerCase();
+    recognition.onresult = (e) => {
+        const speech = e.results[0][0].transcript.toLowerCase();
         isListening = false; if (ui.voiceBtn) ui.voiceBtn.classList.remove('mic-listening');
-        checkVoiceAnswer(speechResult);
+        ui.quizOptions.querySelectorAll('button').forEach(btn => {
+            if (btn.disabled) return;
+            const t2 = btn.innerText.toLowerCase();
+            if (speech.includes(t2) || t2.includes(speech)) btn.click();
+        });
     };
     recognition.onend = () => { isListening = false; if (ui.voiceBtn) ui.voiceBtn.classList.remove('mic-listening'); };
 }
 
-function checkVoiceAnswer(text) {
-    ui.quizOptions.querySelectorAll('button').forEach(btn => {
-        if (btn.disabled) return;
-        const btnText = btn.innerText.toLowerCase();
-        if (text.includes(btnText) || btnText.includes(text)) btn.click();
-    });
-}
-
+// ── SEARCH ─────────────────────────────────────────────────
 function setupSearch() {
     if (!ui.search) return;
     ui.search.addEventListener('keyup', (e) => {
@@ -280,13 +292,7 @@ function setupSearch() {
         const matches = allLessons.filter(l => l.title.toLowerCase().includes(query));
         if (matches.length > 0) {
             ui.results.classList.remove('hidden');
-            matches.forEach(lesson => {
-                const div = document.createElement('div');
-                div.className = 'result-item';
-                div.innerHTML = `<span>${lesson.title}</span> <strong>GO <i class="fa-solid fa-arrow-right"></i></strong>`;
-                div.onclick = () => { loadMatch(lesson.file); ui.search.value = lesson.title; ui.results.classList.add('hidden'); };
-                ui.results.appendChild(div);
-            });
+            matches.forEach(lesson => renderSearchResult(lesson));
         } else {
             ui.results.innerHTML = `<div class="result-item" style="color:#999">${t('errors.no_matches')}</div>`;
             ui.results.classList.remove('hidden');
@@ -295,18 +301,39 @@ function setupSearch() {
     document.addEventListener('click', (e) => { if (!ui.search.contains(e.target)) ui.results.classList.add('hidden'); });
 }
 
-async function loadMatch(filename) {
-    ui.main.classList.add('hidden'); ui.matchInfo.classList.add('hidden');
-    try {
-        const response = await fetch(DB_FOLDER + filename);
-        const data = await response.json();
-        renderTactics(data);
-        ui.matchInfo.classList.remove('hidden'); ui.main.classList.remove('hidden');
-    } catch (error) { alert(t('errors.load_error')); }
+function renderSearchResult(lesson) {
+    const done = completedLessons.has(lesson.id);
+    const div  = document.createElement('div');
+    div.className = 'result-item';
+    div.innerHTML = `
+        <span>
+            ${done ? '<span class="lesson-done" title="Completed">✓</span>' : ''}
+            ${lesson.title}
+        </span>
+        <strong>GO <i class="fa-solid fa-arrow-right"></i></strong>`;
+    div.onclick = () => {
+        loadLesson(lesson.id);
+        ui.search.value = lesson.title;
+        ui.results.classList.add('hidden');
+    };
+    ui.results.appendChild(div);
 }
 
-function renderTactics(lesson) {
+// ── LESSON LOADER ──────────────────────────────────────────
+function loadLesson(id) {
+    const lesson = allLessons.find(l => l.id === id);
+    if (!lesson) { alert(t('errors.load_error')); return; }
+    currentLessonId = id;
+    ui.main.classList.add('hidden'); ui.matchInfo.classList.add('hidden');
+    renderLesson(lesson);
+    ui.matchInfo.classList.remove('hidden'); ui.main.classList.remove('hidden');
+}
+
+// ── LESSON RENDERER (new lessons.json schema) ──────────────
+function renderLesson(lesson) {
     playSound('whistle');
+
+    // Video
     if (lesson.video_id) {
         ui.videoSection.classList.remove('hidden');
         if (lesson.video_id.includes('http')) {
@@ -316,46 +343,58 @@ function renderTactics(lesson) {
         }
     } else { ui.videoSection.classList.add('hidden'); ui.videoContainer.innerHTML = ''; }
 
-    ui.title.innerText = lesson.content.title;
-    if (ui.level) ui.level.innerText = `${lesson.meta.difficulty_elo || '1500'} ELO`;
+    // Header info
+    ui.title.innerText = lesson.title;
+    if (ui.level) ui.level.innerText = `${lesson.difficulty_elo} ELO`;
     ui.intro.innerText = lesson.content.intro_hook;
-    ui.concept.innerHTML = `<p>${lesson.content.core_concept.explanation}</p>`;
 
+    // Core concept + analogy
+    ui.concept.innerHTML = `
+        <p>${lesson.content.core_concept}</p>
+        ${lesson.content.analogy ? `<p class="concept-analogy"><em>💡 ${lesson.content.analogy}</em></p>` : ''}`;
+
+    // Vocabulary
     ui.vocabList.innerHTML = '';
-    lesson.content.vocabulary_rich.forEach(word => {
+    (lesson.content.vocabulary || []).forEach(word => {
         const li = document.createElement('li');
-        const audioBtn = document.createElement('button');
-        audioBtn.className = 'audio-btn';
-        audioBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
-        audioBtn.onclick = () => speak(word.term);
-        li.appendChild(audioBtn);
+        const btn = document.createElement('button');
+        btn.className = 'audio-btn';
+        btn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+        btn.onclick = () => speak(word.term);
+        li.appendChild(btn);
         li.innerHTML += ` <strong>${word.term}</strong>: ${word.meaning}`;
         ui.vocabList.appendChild(li);
     });
 
-    currentQuizQuestions = lesson.interactive_engine.questions
-        || [{ scenario: lesson.interactive_engine.scenario_text, options: lesson.interactive_engine.options }];
+    // Quiz
+    currentQuiz = lesson.quiz || [];
     currentQuestionIndex = 0;
     showQuestion();
 }
 
+// ── QUIZ ENGINE ────────────────────────────────────────────
 function showQuestion() {
-    const qData = currentQuizQuestions[currentQuestionIndex];
+    const q = currentQuiz[currentQuestionIndex];
+    if (!q) return;
     if (ui.quizHeaderText) {
-        ui.quizHeaderText.textContent = `${t('quiz.scenario_label')} ${currentQuestionIndex + 1}/${currentQuizQuestions.length}`;
+        ui.quizHeaderText.textContent = `${t('quiz.scenario_label')} ${currentQuestionIndex + 1}/${currentQuiz.length}`;
     }
-    ui.quizQuestion.innerText = qData.scenario || qData.scenario_text;
-    ui.quizOptions.innerHTML = ''; ui.feedback.className = 'hidden';
-    qData.options.forEach(option => {
+    ui.quizQuestion.innerText = q.question;
+    ui.quizOptions.innerHTML  = '';
+    ui.feedback.className     = 'hidden';
+
+    q.options.forEach(option => {
         const btn = document.createElement('button');
-        btn.className = 'option-btn'; btn.innerText = option.text;
-        btn.onclick = () => handleAnswer(option, btn);
+        btn.className = 'option-btn';
+        btn.innerText = option.text;
+        btn.onclick   = () => handleAnswer(option, btn);
         ui.quizOptions.appendChild(btn);
     });
 }
 
 function handleAnswer(option, btnClicked) {
-    const isCorrect = /CORRECT|RIGHT/.test(option.outcome.toUpperCase());
+    const isCorrect = option.correct === true;
+
     ui.feedback.innerHTML = `<p>${option.feedback}</p>`;
     ui.feedback.className = isCorrect ? 'feedback-box feedback-success' : 'feedback-box feedback-error';
     ui.feedback.style.display = 'block';
@@ -363,31 +402,49 @@ function handleAnswer(option, btnClicked) {
 
     if (isCorrect) {
         playSound('correct'); addXP(20);
-        btnClicked.style.borderColor = "#4ade80"; btnClicked.style.backgroundColor = "#f0fdf4";
+        btnClicked.style.borderColor     = '#4ade80';
+        btnClicked.style.backgroundColor = '#f0fdf4';
         ui.feedback.innerHTML += ` <strong>${t('quiz.xp_gain')}</strong>`;
     } else {
-        playSound('wrong'); btnClicked.style.borderColor = "#fee2e2";
+        playSound('wrong');
+        btnClicked.style.borderColor = '#fca5a5';
     }
 
     const nextBtn = document.createElement('button');
-    nextBtn.className = 'cta-button'; nextBtn.style.marginTop = '15px'; nextBtn.style.width = '100%';
+    nextBtn.className = 'cta-button';
+    nextBtn.style.cssText = 'margin-top:15px;width:100%';
 
-    if (currentQuestionIndex < currentQuizQuestions.length - 1) {
+    const isLastQuestion = currentQuestionIndex >= currentQuiz.length - 1;
+
+    if (!isLastQuestion) {
         nextBtn.innerHTML = `${t('quiz.next_btn')} <i class="fa-solid fa-forward"></i>`;
-        nextBtn.onclick = () => { currentQuestionIndex++; showQuestion(); };
+        nextBtn.onclick   = () => { currentQuestionIndex++; showQuestion(); };
     } else {
         nextBtn.innerHTML = t('quiz.finish_btn');
-        nextBtn.onclick = () => {
-            playSound('win');
-            if (typeof confetti === 'function') confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-            if (ui.quizHeaderText) ui.quizHeaderText.textContent = t('quiz.results_header');
-            ui.quizQuestion.innerText = t('quiz.completed');
-            ui.quizOptions.innerHTML = ''; ui.feedback.classList.add('hidden');
-        };
+        nextBtn.onclick   = () => finishLesson();
     }
     ui.feedback.appendChild(nextBtn);
 }
 
+function finishLesson() {
+    playSound('win');
+    if (typeof confetti === 'function') confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    if (ui.quizHeaderText) ui.quizHeaderText.textContent = t('quiz.results_header');
+    ui.quizQuestion.innerText = t('quiz.completed');
+    ui.quizOptions.innerHTML  = '';
+    ui.feedback.classList.add('hidden');
+
+    // Mark lesson as completed
+    if (currentLessonId) markLessonComplete(currentLessonId);
+
+    // Show progress badge
+    const badge = document.createElement('div');
+    badge.className = 'lesson-complete-banner';
+    badge.innerHTML = `<span class="lesson-done-big">✓</span> ${t('quiz.completed')} <strong>+50 XP</strong>`;
+    ui.quizOptions.appendChild(badge);
+}
+
+// ── CHAT ───────────────────────────────────────────────────
 function setupChat() {
     if (!ui.chatTrigger) return;
     ui.chatTrigger.onclick = () => ui.chatModal.classList.remove('hidden');
@@ -405,15 +462,15 @@ function setupChat() {
 }
 
 function updateChatStatus() {
-    const isVip = (ui.passwordInput.value === VIP_PASSWORD);
+    const isVip    = (ui.passwordInput.value === VIP_PASSWORD);
     const msgsLeft = FREE_LIMIT - usedMessages;
-    if (isVip) { ui.passwordInput.style.borderColor = "#00ff88"; ui.chatInput.disabled = false; ui.chatSend.disabled = false; return; }
-    if (msgsLeft > 0) { ui.passwordInput.style.borderColor = "#e5e7eb"; ui.chatInput.disabled = false; ui.chatSend.disabled = false; }
-    else { ui.passwordInput.style.borderColor = "#fee2e2"; ui.chatInput.disabled = true; ui.chatSend.disabled = true; }
+    if (isVip) { ui.passwordInput.style.borderColor = '#00ff88'; ui.chatInput.disabled = false; ui.chatSend.disabled = false; return; }
+    if (msgsLeft > 0) { ui.passwordInput.style.borderColor = '#e5e7eb'; ui.chatInput.disabled = false; ui.chatSend.disabled = false; }
+    else { ui.passwordInput.style.borderColor = '#fee2e2'; ui.chatInput.disabled = true; ui.chatSend.disabled = true; }
 }
 
 async function sendMessage() {
-    const text = ui.chatInput.value;
+    const text  = ui.chatInput.value;
     const isVip = (ui.passwordInput.value === VIP_PASSWORD);
     if (!text) return;
     if (!isVip && usedMessages >= FREE_LIMIT) { alert(t('errors.chat_expired')); return; }
@@ -424,15 +481,15 @@ async function sendMessage() {
 
     const loadingDiv = addMessage(t('quiz.thinking'), 'bot-msg');
     try {
-        const response = await fetch("https://football-gaffer-api.alvaroggcasarabonela.workers.dev/", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
+        const res = await fetch('https://football-gaffer-api.alvaroggcasarabonela.workers.dev/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: text })
         });
-        if (!response.ok) throw new Error("API unavailable");
-        const data = await response.json();
+        if (!res.ok) throw new Error('API unavailable');
+        const data = await res.json();
         loadingDiv.innerText = data.reply;
-    } catch (error) {
+    } catch {
         loadingDiv.innerText = t('errors.chat_unavailable');
     }
 }
@@ -446,8 +503,8 @@ function addMessage(text, cls) {
 
 function speak(text) {
     if (!window.speechSynthesis) return;
-    const synth = window.speechSynthesis; if (synth.speaking) synth.cancel();
-    const u = new SpeechSynthesisUtterance(text); u.lang = 'en-GB'; u.rate = 0.9; synth.speak(u);
+    const s = window.speechSynthesis; if (s.speaking) s.cancel();
+    const u = new SpeechSynthesisUtterance(text); u.lang = 'en-GB'; u.rate = 0.9; s.speak(u);
 }
 
 initLeague();

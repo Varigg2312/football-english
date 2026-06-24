@@ -1,0 +1,358 @@
+[
+  {
+    "id": "vid_001",
+    "title": "🎥 Ball Mastery: Close Control Masterclass",
+    "difficulty": "Legend",
+    "difficulty_elo": 2000,
+    "video_id": "https://videos.pexels.com/video-files/3194247/3194247-hd_1920_1080_30fps.mp4",
+    "content": {
+      "intro_hook": "Control is everything. Watch the technique and own every touch.",
+      "core_concept": "Close control allows a player to manipulate the ball in tight spaces, keeping it away from defenders and creating time to make decisions.",
+      "analogy": "Like a magnet attached to your boots — the ball should feel like an extension of your body, not a separate object you are chasing.",
+      "vocabulary": [
+        { "term": "Juggling", "meaning": "Keeping the ball in the air repeatedly using feet, thighs, and head." },
+        { "term": "First touch", "meaning": "The initial contact made with the ball to bring it under control." },
+        { "term": "Agility", "meaning": "The ability to move quickly and change direction easily while maintaining balance." }
+      ]
+    },
+    "quiz": [
+      {
+        "id": 1,
+        "question": "Look at his knees while he controls the ball. Why are they slightly bent throughout the drill?",
+        "options": [
+          { "text": "For better balance and faster reaction to the ball's movement", "correct": true,  "feedback": "Spot on! A lower centre of gravity gives you a stable base and lets you adjust your touch instantly." },
+          { "text": "Because he is tired from the drill",                                  "correct": false, "feedback": "Negative. This is an active athletic stance, not a sign of fatigue." }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gen_1768864692",
+    "title": "The Post-Match Interview: Talking Tactics",
+    "difficulty": "Pro",
+    "difficulty_elo": 1500,
+    "video_id": null,
+    "content": {
+      "intro_hook": "The final whistle blows, but the game isn't over until you've faced the cameras.",
+      "core_concept": "A post-match interview is a conversation where a player or manager answers questions from journalists immediately after a game. It's a chance to explain performance, give credit, and show sportsmanship. The language used is often diplomatic, positive, and focused on the team.",
+      "analogy": "Think of it like the team's post-game debrief, but for the public. You analyse the key moments, praise your teammates' work rate, and set your sights on the next fixture — just as you would in the dressing room.",
+      "vocabulary": [
+        { "term": "Gutted",             "meaning": "Extremely disappointed or upset." },
+        { "term": "Over the moon",      "meaning": "Extremely happy or delighted." },
+        { "term": "A game of two halves", "meaning": "A match where each team dominated one half." },
+        { "term": "Credit to the lads", "meaning": "Praise for the effort and performance of the players." },
+        { "term": "We go again",        "meaning": "We move on and focus on the next match." },
+        { "term": "A tough place to come", "meaning": "Referring to an opponent's stadium that is difficult to play at." },
+        { "term": "The rub of the green", "meaning": "Luck, especially good luck during a match." },
+        { "term": "A proper shift",     "meaning": "A hard, honest effort from a player or the team." }
+      ]
+    },
+    "quiz": [
+      {
+        "id": 1,
+        "question": "Your team lost 1-0 to a last-minute penalty. The interviewer asks 'How do you feel about that result?' What is the most professional response?",
+        "options": [
+          { "text": "\"The referee was a disgrace. He cost us the game.\"", "correct": false, "feedback": "Blaming officials is unprofessional and can lead to fines. Always focus on your team's performance." },
+          { "text": "\"Absolutely gutted. We gave everything and to lose like that at the death is cruel, but we have to take it on the chin.\"", "correct": true, "feedback": "Perfect. Shows honest emotion, credits the team's effort, and demonstrates resilience." },
+          { "text": "\"I don't want to talk about it. Next question.\"", "correct": false, "feedback": "This is rude and uncooperative. Post-match interviews are part of a professional footballer's job." }
+        ]
+      },
+      {
+        "id": 2,
+        "question": "You've scored a hat-trick in a 3-2 win. The interviewer says 'Three goals! You must be delighted?' How do you respond?",
+        "options": [
+          { "text": "\"Yeah, of course. It's all about me today, I was on fire.\"", "correct": false, "feedback": "This sounds arrogant. Always try to share credit with the team." },
+          { "text": "\"Over the moon, but the most important thing is the three points. The lads were brilliant in creating the chances.\"", "correct": true, "feedback": "Excellent. Shows happiness but prioritises the team result and praises teammates — a hallmark of a top professional." },
+          { "text": "\"It was okay. I should have scored four, really.\"", "correct": false, "feedback": "This sounds ungrateful and dismissive of a brilliant individual achievement." }
+        ]
+      },
+      {
+        "id": 3,
+        "question": "Your team played poorly in the first half but improved massively to win in the second. The interviewer asks for your analysis.",
+        "options": [
+          { "text": "\"The manager gave us a proper rollicking at half-time, and it worked.\"", "correct": false, "feedback": "Revealing private dressing room details is generally frowned upon in the professional game." },
+          { "text": "\"It was a real game of two halves. We weren't at the races early on, but we showed great character to turn it around after the break.\"", "correct": true, "feedback": "Uses the perfect idiom, honestly acknowledges the poor start, and highlights the positive reaction." },
+          { "text": "\"We just decided to start playing football in the second half.\"", "correct": false, "feedback": "This implies you weren't trying in the first half — a very unhelpful admission to make publicly." }
+        ]
+      },
+      {
+        "id": 4,
+        "question": "You're the manager. A key player missed a sitter in the 89th minute. A journalist asks about that miss directly.",
+        "options": [
+          { "text": "\"If he scores that, we win. It's that simple. He knows he let us down.\"", "correct": false, "feedback": "Publicly criticising an individual player destroys team morale and your relationship with that player." },
+          { "text": "\"These things happen in football. He's been brilliant all season and we create and miss chances as a team. We'll support him.\"", "correct": true, "feedback": "Protects the player, spreads collective responsibility, and shows excellent man-management." },
+          { "text": "\"I didn't see it. I was already thinking about the next game.\"", "correct": false, "feedback": "Dismissive and clearly untrue. You must address the defining moment of the match." }
+        ]
+      },
+      {
+        "id": 5,
+        "question": "Your team drew 0-0 away at a top-four rival. The interviewer asks if it's a good point.",
+        "options": [
+          { "text": "\"No, we came to win. A draw is useless.\"", "correct": false, "feedback": "This devalues a solid result at a genuinely difficult ground and can demotivate the squad." },
+          { "text": "\"It's a solid point. This is a tough place to come, they're a top side, and we defended well. We go again next week.\"", "correct": true, "feedback": "Realistic, respectful to the opponent, highlights a positive (the defence), and looks forward positively." },
+          { "text": "\"We were lucky. They should have beaten us.\"", "correct": false, "feedback": "Undermines your team's achievement and makes the performance sound weak in the media." }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gen_1768864622",
+    "title": "Corner Kick Tactics: Turning Set-Pieces into Goals",
+    "difficulty": "Pro",
+    "difficulty_elo": 1500,
+    "video_id": null,
+    "content": {
+      "intro_hook": "Don't just cross it and hope. A well-drilled corner is a golden chance to score.",
+      "core_concept": "Corner kicks are planned attacking plays from the corner flag. Teams use specific routines to create scoring opportunities, involving player movement, blocking defenders, and precise delivery. The aim is to outsmart the organised defence.",
+      "analogy": "Think of it like a rehearsed play in basketball or American football. Everyone has a specific role and timing to create space for the key scorer.",
+      "vocabulary": [
+        { "term": "Near Post",  "meaning": "The goalpost closest to where the corner is being taken. A common target for flick-ons." },
+        { "term": "Far Post",   "meaning": "The goalpost furthest from the corner taker. Often targeted for deeper, lofted crosses." },
+        { "term": "Delivery",   "meaning": "The act of kicking the ball from the corner flag. Can be in-swinging (curving towards goal) or out-swinging (curving away)." },
+        { "term": "Block/Run",  "meaning": "An attacking player's movement to impede a defender, legally creating space for a teammate to attack the ball." }
+      ]
+    },
+    "quiz": [
+      {
+        "id": 1,
+        "question": "Your team wins a corner on the left. Your tallest player is marked by two defenders in the centre. What's the best tactical option?",
+        "options": [
+          { "text": "Lump the ball directly onto your tall player's head.", "correct": false, "feedback": "With two markers, it's a low-percentage play. The defence has the numbers to deal with a direct ball." },
+          { "text": "Play a short corner to a teammate to change the angle of attack.", "correct": true, "feedback": "Smart call. A short pass pulls defenders out of position, potentially freeing your key aerial player." },
+          { "text": "Take the corner quickly before your tall player gets into the box.", "correct": false, "feedback": "Rushing wastes your main aerial threat. Organisation and timing are key for effective corners." }
+        ]
+      },
+      {
+        "id": 2,
+        "question": "The opposition goalkeeper is poor at claiming crosses. What type of delivery is most effective?",
+        "options": [
+          { "text": "A low, driven cross along the six-yard box.", "correct": false, "feedback": "This is risky and often cleared by the first defender. It doesn't directly test the keeper." },
+          { "text": "A high, looping cross aimed at the penalty spot.", "correct": true, "feedback": "Perfect. A high ball into a crowded area forces the hesitant keeper to commit, causing chaos and chances." },
+          { "text": "A pass back to your centre-back 30 yards from goal.", "correct": false, "feedback": "This surrenders all attacking pressure from the corner — a wasted opportunity." }
+        ]
+      },
+      {
+        "id": 3,
+        "question": "You are taking an in-swinging corner from the right. Where should a teammate make a 'near-post run'?",
+        "options": [
+          { "text": "From the edge of the box to the far post.", "correct": false, "feedback": "That's a far-post run, not a near-post one. The near post is closest to the corner taker." },
+          { "text": "From a central position towards the front post (nearest to you).", "correct": true, "feedback": "Yes. They attack the ball's flight path early, aiming to flick it on or score directly." },
+          { "text": "They should stand still on the penalty spot.", "correct": false, "feedback": "Static players are easy to mark. Movement is essential to create separation from defenders." }
+        ]
+      },
+      {
+        "id": 4,
+        "question": "What is the primary purpose of a 'block' or 'screen' during a corner routine?",
+        "options": [
+          { "text": "To physically foul a key defender.", "correct": false, "feedback": "It's a tactical obstruction, not an illegal foul. The blocker must be stationary to be legal." },
+          { "text": "To create space for an attacker by impeding their marker.", "correct": true, "feedback": "Exactly. A teammate legally stands in the defender's path, giving the attacker a free run at the ball." },
+          { "text": "To protect the goalkeeper from opposing players.", "correct": false, "feedback": "This is not a standard tactic for attacking corners. Blocking is used to free attackers, not protect keepers." }
+        ]
+      },
+      {
+        "id": 5,
+        "question": "Your team is losing 1-0 in the 89th minute. Your goalkeeper is excellent in the air. What might you do?",
+        "options": [
+          { "text": "Send the goalkeeper up to join the attack in the opposition box.", "correct": true, "feedback": "In a desperate situation, this adds a powerful extra aerial threat — a high-risk, high-reward gamble." },
+          { "text": "Take the corner short to keep possession and build slowly.", "correct": false, "feedback": "There is no time for a slow build-up. You need the ball in the danger area immediately." },
+          { "text": "Have every player stay back to defend a potential counter-attack.", "correct": false, "feedback": "You must commit players to the box to score. You are losing — defence alone won't help you now." }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gen_1768864535",
+    "title": "Zonal Marking: Defending Space, Not Players",
+    "difficulty": "Pro",
+    "difficulty_elo": 1500,
+    "video_id": null,
+    "content": {
+      "intro_hook": "Don't chase shadows — control the ground they run on.",
+      "core_concept": "Zonal marking is a defensive strategy where players are responsible for a specific zone or area of the pitch, rather than tracking a specific opponent. The primary objective is to protect dangerous spaces, force attackers into less threatening areas, and maintain the team's defensive shape. It relies on communication, spatial awareness, and collective responsibility.",
+      "analogy": "Think of it like a goalkeeper organising a wall for a free-kick. Each player in the wall is responsible for blocking their specific section, not for marking the kicker. They hold their zone.",
+      "vocabulary": [
+        { "term": "Zone",             "meaning": "A designated area of the pitch for which a defender is responsible." },
+        { "term": "Defensive Shape",  "meaning": "The organised structure and formation of a team when not in possession of the ball." },
+        { "term": "Cover Shadow",     "meaning": "The area of the pitch that a defender blocks access to simply by their body position, without making a tackle." },
+        { "term": "Handover",         "meaning": "The moment a defender passes responsibility for an attacker to a teammate as they move between zones." }
+      ]
+    },
+    "quiz": [
+      {
+        "id": 1,
+        "question": "You are in the near-post zone defending a corner. An attacker runs directly at you. What is your primary responsibility?",
+        "options": [
+          { "text": "Follow the runner wherever they go, even if it leaves your zone.", "correct": false, "feedback": "This breaks the zonal system. Chasing the player leaves the near post unguarded for a different attacker." },
+          { "text": "Hold your position in the near-post zone and challenge any ball that enters it.", "correct": true, "feedback": "Correct. In zonal marking you defend the space. Trust your teammates in adjacent zones to pick up the runner." },
+          { "text": "Run towards the penalty spot to reinforce the central area.", "correct": false, "feedback": "This abandons your critical zone. The near post is a high-danger area for flick-ons — never leave it." }
+        ]
+      },
+      {
+        "id": 2,
+        "question": "A central defender drops too deep, following a striker who retreats into midfield. What should the other centre-back do?",
+        "options": [
+          { "text": "Follow your partner to maintain close contact with the striker.", "correct": false, "feedback": "This creates a massive hole in the defensive line. Midfielders should pick up deep-lying forwards." },
+          { "text": "Hold your position and communicate for a midfielder to pick up the dropping striker.", "correct": true, "feedback": "Perfect. Maintain the defensive shape and alert a midfielder — this preserves both the line and zonal coverage." },
+          { "text": "Sprint forward to play the remaining attackers offside.", "correct": false, "feedback": "Without a coordinated line, you'll play attackers onside and leave enormous space behind you." }
+        ]
+      },
+      {
+        "id": 3,
+        "question": "What is the main weakness often cited against zonal marking from set-pieces?",
+        "options": [
+          { "text": "It requires less communication than man-marking.", "correct": false, "feedback": "The opposite is true — zonal marking demands constant, precise communication to coordinate between zones." },
+          { "text": "Attackers can get a running start to attack the ball in a static zone.", "correct": true, "feedback": "Classic criticism. A well-timed run gives an attacker momentum over a defender focused on holding their ground." },
+          { "text": "It makes it easier for defenders to track their direct opponent.", "correct": false, "feedback": "That's the strength of man-marking. In zonal, you are not tasked with tracking one specific player." }
+        ]
+      },
+      {
+        "id": 4,
+        "question": "When an attacker moves from your zone into an adjacent zone, what is the correct action?",
+        "options": [
+          { "text": "Follow them into the new zone to maintain pressure.", "correct": false, "feedback": "This is man-marking logic and disrupts the system, pulling you out of position and potentially causing a chain reaction." },
+          { "text": "The next defender communicates 'I've got him' and takes over; you hold your zone.", "correct": true, "feedback": "Perfect — this is the 'handover'. Clear communication ensures pressure continues while the team shape remains intact." },
+          { "text": "Both defenders double-mark the attacker until the danger passes.", "correct": false, "feedback": "Temporary doubling happens, but as standard procedure it's inefficient — it leaves another zone understaffed." }
+        ]
+      },
+      {
+        "id": 5,
+        "question": "How does a well-executed zonal system help launch a counter-attack?",
+        "options": [
+          { "text": "It doesn't — it's purely a safety-first defensive tactic.", "correct": false, "feedback": "Incorrect. A major benefit is the link to positive possession. Organised defenders know where teammates will be." },
+          { "text": "Defenders are in structured positions, making it easy to find passing options after winning the ball.", "correct": true, "feedback": "Exactly. Winning the ball in an organised structure allows for quicker, more coherent ball circulation to counter-attack." },
+          { "text": "It allows the fastest defender to sprint forward immediately once the ball is won.", "correct": false, "feedback": "Individualistic sprinting breaks team structure. Counter-attacks must be coordinated, not lone sprints." }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gen_1768864458",
+    "title": "The Offside Trap",
+    "difficulty": "Pro",
+    "difficulty_elo": 1500,
+    "video_id": null,
+    "content": {
+      "intro_hook": "Master the art of timing and teamwork to catch attackers offside and turn defence into attack.",
+      "core_concept": "The offside trap is a coordinated defensive strategy where defenders step forward in unison just before an opponent's pass is played, aiming to leave an attacking player in an offside position. It requires perfect timing, communication, and a high defensive line. When executed correctly, it stops an attack and awards your team a free-kick.",
+      "analogy": "It's like a perfectly timed jump in a game of jump rope. The defenders are the rope-turners, deciding the exact moment to 'swing' the rope (the defensive line) up, catching the attacker (the jumper) who mistimed their entry.",
+      "vocabulary": [
+        { "term": "Offside Line",    "meaning": "The imaginary line across the pitch, level with the second-last defender." },
+        { "term": "High Line",       "meaning": "A defensive strategy where the back line positions themselves far up the pitch to compress space." },
+        { "term": "Stepping Up",     "meaning": "The synchronised movement of the defensive line forward to catch an opponent offside." },
+        { "term": "Playing the Trap","meaning": "Deliberately luring an opponent into an offside position by holding a high line and timing the step forward." }
+      ]
+    },
+    "quiz": [
+      {
+        "id": 1,
+        "question": "As the last defender, what is your primary visual cue to initiate the offside trap?",
+        "options": [
+          { "text": "When the striker starts his run.",                           "correct": false, "feedback": "Too early. The key moment is when the ball is *played*, not when the run begins." },
+          { "text": "The moment the passer's foot makes contact with the ball.", "correct": true,  "feedback": "Perfect. Offside is judged at the exact moment the ball is played — step forward at that precise instant." },
+          { "text": "When you hear your goalkeeper shout 'NOW!'.",               "correct": false, "feedback": "The shout should coincide with the visual cue, not replace it. React to what you see, confirmed by what you hear." }
+        ]
+      },
+      {
+        "id": 2,
+        "question": "The right-back is slightly deeper than the rest of the back four when a through ball is played. Has the offside trap worked?",
+        "options": [
+          { "text": "Yes, as long as the striker is ahead of the ball.",                  "correct": false, "feedback": "Offside is judged against the second-last defender. A staggered line makes this impossible to judge correctly." },
+          { "text": "No. The right-back is deeper, so they are playing the attacker onside.", "correct": true,  "feedback": "Correct. The back line must move as one flat unit. The deepest defender sets the line — everyone must be level." },
+          { "text": "Yes, because three defenders are still ahead of the striker.",        "correct": false, "feedback": "Just one defender being deeper is enough to play the attacker onside. The line is broken." }
+        ]
+      },
+      {
+        "id": 3,
+        "question": "What is the major risk if the offside trap is mistimed?",
+        "options": [
+          { "text": "Conceding a corner kick.",                             "correct": false, "feedback": "Not the primary risk — a failed trap leads to a far more dangerous situation." },
+          { "text": "Giving away a penalty.",                              "correct": false, "feedback": "Unlikely as a direct consequence of a mistimed step forward." },
+          { "text": "Leaving the attacker one-on-one with the goalkeeper.", "correct": true,  "feedback": "Correct. The defensive line has moved up, leaving a huge gap behind for the attacker to run into." }
+        ]
+      },
+      {
+        "id": 4,
+        "question": "A winger is level with the last defender when the through ball is played, then uses pace to collect it. Is he offside?",
+        "options": [
+          { "text": "Yes, he ended up in front of the defender.",          "correct": false, "feedback": "Offside is judged at the moment the ball is played, not where players end up afterwards." },
+          { "text": "No, he was level at the moment the pass was made.",  "correct": true,  "feedback": "Correct. Being level is not offside. The trap failed because the line didn't step up quickly enough." },
+          { "text": "Yes, because he gained an advantage from his position.", "correct": false, "feedback": "He didn't gain an advantage from an offside position — he was onside when the ball was played." }
+        ]
+      },
+      {
+        "id": 5,
+        "question": "A player cannot be offside from which type of restart?",
+        "options": [
+          { "text": "A corner kick.",  "correct": false, "feedback": "You can be offside directly from a corner kick — Law 11 applies." },
+          { "text": "A throw-in.",     "correct": true,  "feedback": "Correct. Law 11 explicitly states there is no offside from a throw-in — the trap should not be attempted in this scenario." },
+          { "text": "A goal kick.",    "correct": false, "feedback": "Offside does not apply from a goal kick until the ball has left the penalty area, but the throw-in is the clearest exception." }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gen_1768864380",
+    "title": "The Professional Foul: A Tactical Tool",
+    "difficulty": "Pro",
+    "difficulty_elo": 1500,
+    "video_id": null,
+    "content": {
+      "intro_hook": "Sometimes, a foul isn't a mistake — it's a calculated decision to stop a dangerous attack.",
+      "core_concept": "A tactical foul is a deliberate infringement committed to stop an opponent's promising attack, usually by a defender who is out of position. While it results in a free-kick and often a yellow card, it is considered a worthwhile trade-off to prevent a more dangerous scoring opportunity.",
+      "analogy": "It's like a defender in basketball intentionally fouling a player on a fast break to prevent an easy layup — accepting the free throws to reset the defence is the calculated, professional decision.",
+      "vocabulary": [
+        { "term": "Professional Foul",       "meaning": "A deliberate foul, usually a trip or pull, committed to stop a promising attack." },
+        { "term": "Taking One for the Team", "meaning": "A phrase describing a player who commits a tactical foul and accepts the resulting booking." },
+        { "term": "Last Man",               "meaning": "The final defender between the attacker and the goalkeeper; a foul by this player typically results in a red card." },
+        { "term": "DOGSO",                  "meaning": "Denying an Obvious Goal-Scoring Opportunity — a red-card offence when committed by the last defender." }
+      ]
+    },
+    "quiz": [
+      {
+        "id": 1,
+        "question": "Your team loses the ball in midfield. An opponent turns and sprints towards goal with only one defender ahead. What should the nearest midfielder do?",
+        "options": [
+          { "text": "Sprint back to goal to help defend.",                                     "correct": false, "feedback": "You won't get there in time. The immediate threat is the player with the ball right now." },
+          { "text": "Commit a tactical foul to stop the counter-attack immediately.",          "correct": true,  "feedback": "Correct. A strategic foul here stops the dangerous break, allows your team to regroup, and concedes only a distant free-kick." },
+          { "text": "Shout at your defender to step up and play offside.",                    "correct": false, "feedback": "Too risky and difficult to coordinate in a fast break. The attacker is already in control of the situation." }
+        ]
+      },
+      {
+        "id": 2,
+        "question": "You are the last defender. A striker plays the ball past you and is about to run through on goal. You trip him. What is the most likely outcome?",
+        "options": [
+          { "text": "Yellow card and a free-kick.",         "correct": false, "feedback": "Denying an obvious goal-scoring opportunity (DOGSO) as the last defender is usually a red card, not a yellow." },
+          { "text": "Red card and a penalty (if in box).", "correct": true,  "feedback": "Correct. As the last man, you have illegally denied a clear goal-scoring opportunity — straight red and a penalty if inside the area." },
+          { "text": "A warning from the referee.",         "correct": false, "feedback": "A serious foul in the most critical area of the pitch. A simple warning is extremely unlikely." }
+        ]
+      },
+      {
+        "id": 3,
+        "question": "You're winning 1-0 in the 89th minute and already have a yellow card. An opponent receives the ball near halfway with space. What do you do?",
+        "options": [
+          { "text": "Make a tactical foul immediately.",                                          "correct": false, "feedback": "A second yellow means red and suspension. This is a catastrophic risk so late in a winning game." },
+          { "text": "Jockey and shepherd the player away from goal, buying time until help arrives.", "correct": true,  "feedback": "Correct. The priority is staying on the pitch. Use your body to slow them and force them wide without fouling." },
+          { "text": "Shout for a teammate without a yellow card to make the foul.",              "correct": false, "feedback": "Not a reliable plan — you are responsible for your own positioning and immediate decisions." }
+        ]
+      },
+      {
+        "id": 4,
+        "question": "Where on the pitch is committing a tactical foul generally considered MOST effective and LEAST risky?",
+        "options": [
+          { "text": "Inside your own penalty area.",                          "correct": false, "feedback": "A foul here gives away a penalty — the highest-value chance for the opponent. Never the right choice." },
+          { "text": "In the central area just inside the opponent's half.",  "correct": true,  "feedback": "Correct. Stops the break, but the free-kick is from long distance with many defenders between ball and goal." },
+          { "text": "On the wing, level with the opponent's penalty area.", "correct": false, "feedback": "Dangerous for crossing free-kicks. Better to defend from open play than gift a set-piece in this area." }
+        ]
+      },
+      {
+        "id": 5,
+        "question": "After committing the foul, how should you behave towards the referee to minimise risk of a harsher punishment?",
+        "options": [
+          { "text": "Immediately protest that it wasn't a foul.",                                                         "correct": false, "feedback": "This annoys the referee and may lead to a quicker booking or dissent charge on top of the foul." },
+          { "text": "Accept the decision, put your hands up in a slight apology, and walk back to your position calmly.", "correct": true,  "feedback": "Correct. Showing respect to the official's decision reduces the risk of the foul being judged as more cynical." },
+          { "text": "Walk away quickly, avoiding all eye contact.",                                                        "correct": false, "feedback": "This can look dismissive and disrespectful. The referee will call you back, which only creates more friction." }
+        ]
+      }
+    ]
+  }
+]
