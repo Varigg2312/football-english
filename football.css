@@ -269,6 +269,70 @@ body {
     .coach-window { width: 90%; right: 5%; left: 5%; bottom: 80px; }
     .premium-card { flex-direction: column; text-align: center; gap: 15px; }
 }
-.legal-disclaimer { margin-top: 20px; font-size: 0.8rem; color: #94a3b8; } /* Ajuste de color para cristal */
+.legal-disclaimer { margin-top: 20px; font-size: 0.8rem; color: #94a3b8; }
 .mic-hint { font-size: 0.8rem; color: #64748b; margin-top: 5px; text-align: center; }
 .premium-hint { font-size: 0.7rem; color: #999; margin-top: 5px; text-align: center; }
+
+/* =========================================
+   OFFLINE BANNER
+   ========================================= */
+.offline-banner {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: #1e293b;
+    color: #fbbf24;
+    text-align: center;
+    padding: 10px 16px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-bottom: 2px solid #f59e0b;
+}
+
+/* =========================================
+   DARK MODE (prefers-color-scheme: dark)
+   ========================================= */
+@media (prefers-color-scheme: dark) {
+    body { background-color: #0f172a; color: #e2e8f0; }
+
+    .player-hud { background: #1e293b; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+    .hud-value { color: #f1f5f9; }
+    .hud-label { color: #94a3b8; }
+    .hud-progress { background: #334155; }
+    .auth-btn { background: #334155; }
+
+    .gradient-title { background: linear-gradient(135deg, #f1f5f9 0%, #94a3b8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .brand-badge { background: #1e3a5f; color: #60a5fa; }
+
+    .search-bar { background: #1e293b; border-color: #334155; box-shadow: none; }
+    #magic-search { background: transparent; color: #f1f5f9; }
+    .search-btn { background: #3b82f6; }
+    .results-dropdown { background: #1e293b; box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
+    .result-item { border-color: #334155; color: #f1f5f9; }
+    .result-item:hover { background: #334155; }
+
+    .card { background: #1e293b; border-color: #334155; box-shadow: none; }
+    .card-header { color: #94a3b8; }
+    .vocab-grid li { background: #334155; border-color: #475569; color: #f1f5f9; }
+    .option-btn { background: #1e293b; border-color: #334155; color: #f1f5f9; }
+    .option-btn:hover { background: #334155; }
+    .highlight-card { border-color: #3b82f6; background: #1e293b; }
+
+    .feedback-success { background: #14532d; color: #86efac; }
+    .feedback-error { background: #7f1d1d; color: #fca5a5; }
+
+    .coach-window { background: #1e293b; border-color: #334155; }
+    .chat-body { background: #0f172a; }
+    .bot-msg { background: #1e293b; border-color: #334155; color: #f1f5f9; }
+    .chat-input-area { background: #1e293b; border-color: #334155; }
+    .key-input, .input-row input { background: #0f172a; border-color: #334155; color: #f1f5f9; }
+
+    .auth-input { background: #0f172a; border-color: #334155; color: #f1f5f9; }
+    .auth-subtitle { color: #94a3b8; }
+    .mic-hint { color: #94a3b8; }
+    .premium-hint { color: #475569; }
+}

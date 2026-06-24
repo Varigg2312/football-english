@@ -191,16 +191,30 @@
         </div>
     </div>
 
+    <div id="offline-banner" class="offline-banner hidden" role="alert" aria-live="assertive">
+        <i class="fa-solid fa-wifi-slash"></i>
+        <span>You're offline. Check your connection to keep training.</span>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="app.js"></script>
     <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(reg => console.log('Vigilante de fondo activado.', reg))
-        .catch(err => console.error('Fallo en el vigilante.', err));
-    });
-  }
-</script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Vigilante de fondo activado.', reg))
+                    .catch(err => console.error('Fallo en el vigilante.', err));
+            });
+        }
+
+        (function () {
+            const banner = document.getElementById('offline-banner');
+            function showBanner() { banner.classList.remove('hidden'); }
+            function hideBanner() { banner.classList.add('hidden'); }
+            window.addEventListener('offline', showBanner);
+            window.addEventListener('online', hideBanner);
+            if (!navigator.onLine) showBanner();
+        })();
+    </script>
 </body>
 </html>
