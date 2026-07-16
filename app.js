@@ -1,6 +1,8 @@
 const DB_FOLDER = './';
 const VIP_PASSWORD = "PRO-LEAGUE";
 const FREE_LIMIT = 10;
+const ANSWER_XP = 20;
+const LESSON_COMPLETE_XP = 50;
 
 const RANKS = [
     { name: "ROOKIE",      limit: 0    },
@@ -11,10 +13,10 @@ const RANKS = [
 ];
 
 const sfx = {
-    whistle: new Audio('https://cdn.pixabay.com/audio/2021/08/04/audio_0625c1539c.mp3'),
-    correct: new Audio('https://cdn.pixabay.com/audio/2021/08/09/audio_9ec164287d.mp3'),
-    wrong:   new Audio('https://cdn.pixabay.com/audio/2022/03/10/audio_c8c8a73467.mp3'),
-    win:     new Audio('https://cdn.pixabay.com/audio/2021/08/04/audio_12b0c7443c.mp3')
+    whistle: new Audio('audio/whistle.mp3'),
+    correct: new Audio('audio/correct.mp3'),
+    wrong:   new Audio('audio/wrong.mp3'),
+    win:     new Audio('audio/win.mp3')
 };
 
 function playSound(name) {
@@ -48,7 +50,7 @@ function markLessonComplete(id) {
     completedLessons.add(id);
     saveCompletedLessons();
     // Award completion XP bonus the first time only
-    addXP(50);
+    addXP(LESSON_COMPLETE_XP);
 }
 
 // ── DOM REFS ───────────────────────────────────────────────
@@ -64,6 +66,7 @@ const ui = {
     vocabList:      document.getElementById('vocabulary-list'),
     videoSection:   document.getElementById('video-section'),
     videoContainer: document.getElementById('video-container'),
+    voiceWrapper:   document.getElementById('voice-control-wrapper'),
     voiceBtn:       document.getElementById('voice-btn'),
     quizHeaderText: document.getElementById('quiz-header-text'),
     quizQuestion:   document.getElementById('quiz-question'),
@@ -80,6 +83,7 @@ const ui = {
     chatHistory:    document.getElementById('chat-history'),
     chatInput:      document.getElementById('user-msg'),
     chatSend:       document.getElementById('send-msg'),
+    searchBtn:      document.querySelector('.search-btn'),
     passwordInput:  document.getElementById('api-key-input'),
     authBtn:        document.getElementById('auth-btn'),
     authModal:      document.getElementById('auth-modal'),
@@ -255,8 +259,10 @@ function setupAuth() {
 // ── VOICE ──────────────────────────────────────────────────
 function setupVoiceControl() {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-        if (ui.voiceBtn) ui.voiceBtn.style.display = 'none'; return;
+        if (ui.voiceWrapper) ui.voiceWrapper.classList.add('hidden');
+        return;
     }
+    if (ui.voiceWrapper) ui.voiceWrapper.classList.remove('hidden');
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
     recognition.lang = 'en-US'; recognition.interimResults = false; recognition.maxAlternatives = 1;
@@ -283,21 +289,26 @@ function setupVoiceControl() {
 }
 
 // ── SEARCH ─────────────────────────────────────────────────
+function performSearch() {
+    const query = ui.search.value.toLowerCase();
+    ui.results.innerHTML = '';
+    if (query.length < 1) { ui.results.classList.add('hidden'); return; }
+    const matches = allLessons.filter(l => l.title.toLowerCase().includes(query));
+    if (matches.length > 0) {
+        ui.results.classList.remove('hidden');
+        matches.forEach(lesson => renderSearchResult(lesson));
+    } else {
+        ui.results.innerHTML = `<div class="result-item" style="color:#999">${t('errors.no_matches')}</div>`;
+        ui.results.classList.remove('hidden');
+    }
+}
+
 function setupSearch() {
     if (!ui.search) return;
-    ui.search.addEventListener('keyup', (e) => {
-        const query = e.target.value.toLowerCase();
-        ui.results.innerHTML = '';
-        if (query.length < 1) { ui.results.classList.add('hidden'); return; }
-        const matches = allLessons.filter(l => l.title.toLowerCase().includes(query));
-        if (matches.length > 0) {
-            ui.results.classList.remove('hidden');
-            matches.forEach(lesson => renderSearchResult(lesson));
-        } else {
-            ui.results.innerHTML = `<div class="result-item" style="color:#999">${t('errors.no_matches')}</div>`;
-            ui.results.classList.remove('hidden');
-        }
-    });
+    ui.search.addEventListener('keyup', performSearch);
+    if (ui.searchBtn) {
+        ui.searchBtn.addEventListener('click', () => { ui.search.focus(); performSearch(); });
+    }
     document.addEventListener('click', (e) => { if (!ui.search.contains(e.target)) ui.results.classList.add('hidden'); });
 }
 
@@ -401,7 +412,7 @@ function handleAnswer(option, btnClicked) {
     ui.quizOptions.querySelectorAll('button').forEach(b => b.disabled = true);
 
     if (isCorrect) {
-        playSound('correct'); addXP(20);
+        playSound('correct'); addXP(ANSWER_XP);
         btnClicked.style.borderColor     = '#4ade80';
         btnClicked.style.backgroundColor = '#f0fdf4';
         ui.feedback.innerHTML += ` <strong>${t('quiz.xp_gain')}</strong>`;
@@ -440,7 +451,7 @@ function finishLesson() {
     // Show progress badge
     const badge = document.createElement('div');
     badge.className = 'lesson-complete-banner';
-    badge.innerHTML = `<span class="lesson-done-big">✓</span> ${t('quiz.completed')} <strong>+50 XP</strong>`;
+    badge.innerHTML = `<span class="lesson-done-big">✓</span> ${t('quiz.completed')} <strong>${t('quiz.completion_bonus').replace('{xp}', LESSON_COMPLETE_XP)}</strong>`;
     ui.quizOptions.appendChild(badge);
 }
 
