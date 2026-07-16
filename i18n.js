@@ -75,6 +75,7 @@
                 results_header: "Match Results",
                 completed: "Session Completed!",
                 xp_gain: "+20 XP 🎯",
+                completion_bonus: "+{xp} XP",
                 thinking: "The Gaffer is thinking...",
                 pro_unlocked: "🏆 PRO UNLOCKED!"
             }
@@ -149,6 +150,7 @@
                 results_header: "Resultados del Partido",
                 completed: "¡Sesión Completada!",
                 xp_gain: "+20 XP 🎯",
+                completion_bonus: "+{xp} XP",
                 thinking: "El Míster está pensando...",
                 pro_unlocked: "🏆 ¡PRO DESBLOQUEADO!"
             }

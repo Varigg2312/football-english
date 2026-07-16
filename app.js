@@ -199,6 +199,15 @@ function calculateStreak(userData) {
 
 function saveUsersDB() { localStorage.setItem('football_users_db', JSON.stringify(usersDB)); }
 
+// Local-only credential hashing (SHA-256). Note: this protects against casually
+// reading a password back out of localStorage/devtools; it is not server-side
+// authentication, since there is no backend involved in this login flow.
+async function hashPassword(pass) {
+    const bytes  = new TextEncoder().encode(pass);
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 function saveUserData() {
     if (currentUser) {
         usersDB[currentUser].xp   = playerXP;
@@ -238,18 +247,26 @@ function setupAuth() {
         ui.authMsg.innerText    = '';
     };
 
-    ui.submitAuth.onclick = () => {
+    ui.submitAuth.onclick = async () => {
         const user = ui.authUser.value.trim();
         const pass = ui.authPass.value.trim();
         if (!user || !pass) { ui.authMsg.innerText = t('errors.fill_fields'); return; }
+        const passHash = await hashPassword(pass);
         if (isRegisterMode) {
             if (usersDB[user]) { ui.authMsg.innerText = t('errors.user_exists'); }
             else {
-                usersDB[user] = { pass, xp: 0, msgs: 0, streak: 1, lastVisit: new Date().toDateString() };
+                usersDB[user] = { passHash, xp: 0, msgs: 0, streak: 1, lastVisit: new Date().toDateString() };
                 saveUsersDB(); loginUser(user); ui.authModal.classList.add('hidden');
             }
         } else {
-            if (usersDB[user] && usersDB[user].pass === pass) {
+            const record = usersDB[user];
+            // Transparent migration for accounts created before password hashing was added.
+            if (record && record.pass !== undefined && record.pass === pass) {
+                delete record.pass;
+                record.passHash = passHash;
+                saveUsersDB();
+            }
+            if (record && record.passHash === passHash) {
                 loginUser(user); ui.authModal.classList.add('hidden');
             } else { ui.authMsg.innerText = t('errors.invalid_credentials'); }
         }
