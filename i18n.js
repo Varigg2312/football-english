@@ -76,8 +76,7 @@
                 completed: "Session Completed!",
                 xp_gain: "+20 XP 🎯",
                 completion_bonus: "+{xp} XP",
-                thinking: "The Gaffer is thinking...",
-                pro_unlocked: "🏆 PRO UNLOCKED!"
+                thinking: "The Gaffer is thinking..."
             }
         },
         es: {
@@ -151,8 +150,7 @@
                 completed: "¡Sesión Completada!",
                 xp_gain: "+20 XP 🎯",
                 completion_bonus: "+{xp} XP",
-                thinking: "El Míster está pensando...",
-                pro_unlocked: "🏆 ¡PRO DESBLOQUEADO!"
+                thinking: "El Míster está pensando..."
             }
         }
     };

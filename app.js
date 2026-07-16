@@ -138,15 +138,14 @@ async function initLeague() {
     setupChat(); setupAuth(); setupVoiceControl();
     if (window.speechSynthesis) window.speechSynthesis.getVoices();
 
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('status') === 'vip_unlocked') {
+    // PRO unlock now happens via pro-unlocked.html after a verified Stripe
+    // payment (see /redeem on the Worker) — it stores the code, we just
+    // confirm it's still valid with the server here.
+    if (vipCode) {
         const passInput = document.getElementById('api-key-input');
-        if (passInput) { passInput.value = VIP_PASSWORD; localStorage.setItem('user_is_vip', 'true'); }
-        alert(t('quiz.pro_unlocked'));
-    }
-    if (localStorage.getItem('user_is_vip') === 'true') {
-        const passInput = document.getElementById('api-key-input');
-        if (passInput) passInput.value = VIP_PASSWORD;
+        if (passInput) passInput.value = vipCode;
+        isVipVerified = await verifyVip(vipCode);
+        updateChatStatus();
     }
 
     const startBtn = document.getElementById('start-btn');
@@ -510,36 +509,49 @@ function setupChat() {
             ? 'fa-solid fa-compress' : 'fa-solid fa-expand';
     };
     updateChatStatus();
-    ui.passwordInput.addEventListener('input', updateChatStatus);
+    ui.passwordInput.addEventListener('change', async () => {
+        const code = ui.passwordInput.value.trim();
+        isVipVerified = await verifyVip(code);
+        if (isVipVerified) {
+            vipCode = code;
+            localStorage.setItem('user_is_vip_code', vipCode);
+        }
+        updateChatStatus();
+    });
     ui.chatSend.onclick = sendMessage;
     ui.chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
 }
 
 function updateChatStatus() {
-    const isVip    = (ui.passwordInput.value === VIP_PASSWORD);
     const msgsLeft = FREE_LIMIT - usedMessages;
-    if (isVip) { ui.passwordInput.style.borderColor = '#00ff88'; ui.chatInput.disabled = false; ui.chatSend.disabled = false; return; }
+    if (isVipVerified) { ui.passwordInput.style.borderColor = '#00ff88'; ui.chatInput.disabled = false; ui.chatSend.disabled = false; return; }
     if (msgsLeft > 0) { ui.passwordInput.style.borderColor = '#e5e7eb'; ui.chatInput.disabled = false; ui.chatSend.disabled = false; }
     else { ui.passwordInput.style.borderColor = '#fee2e2'; ui.chatInput.disabled = true; ui.chatSend.disabled = true; }
 }
 
 async function sendMessage() {
-    const text  = ui.chatInput.value;
-    const isVip = (ui.passwordInput.value === VIP_PASSWORD);
+    const text = ui.chatInput.value;
     if (!text) return;
-    if (!isVip && usedMessages >= FREE_LIMIT) { alert(t('errors.chat_expired')); return; }
+    // Local counter is only a UX shortcut to avoid pointless requests —
+    // the Worker enforces the real limit server-side regardless.
+    if (!isVipVerified && usedMessages >= FREE_LIMIT) { alert(t('errors.chat_expired')); return; }
 
     addMessage(text, 'user-msg');
     ui.chatInput.value = '';
-    if (!isVip) { usedMessages++; saveUserData(); updateChatStatus(); }
+    if (!isVipVerified) { usedMessages++; saveUserData(); updateChatStatus(); }
 
     const loadingDiv = addMessage(t('quiz.thinking'), 'bot-msg');
     try {
-        const res = await fetch('https://football-gaffer-api.alvaroggcasarabonela.workers.dev/', {
+        const res = await fetch(`${WORKER_URL}/`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Client-Id': clientId,
+                'X-Vip-Code': isVipVerified ? vipCode : ''
+            },
             body: JSON.stringify({ message: text })
         });
+        if (res.status === 403) { loadingDiv.innerText = t('errors.chat_expired'); return; }
         if (!res.ok) throw new Error('API unavailable');
         const data = await res.json();
         loadingDiv.innerText = data.reply;
