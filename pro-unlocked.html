@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRO Unlocked — Football English Academy</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            text-align: center;
+        }
+        .icon { font-size: 4rem; margin-bottom: 24px; }
+        h1 { font-size: 1.6rem; font-weight: 900; margin-bottom: 12px; color: #f1f5f9; }
+        p { font-size: 1rem; color: #94a3b8; max-width: 380px; line-height: 1.6; margin-bottom: 16px; }
+        .code {
+            font-family: monospace;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 14px 24px;
+            margin: 16px 0 24px;
+            color: #4ade80;
+        }
+        .cta-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 14px 36px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .hidden { display: none !important; }
+        .spinner {
+            width: 32px; height: 32px;
+            border: 3px solid #334155;
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 24px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div id="pending-state">
+        <div class="spinner"></div>
+        <h1>Confirming your payment...</h1>
+        <p>This usually takes a couple of seconds.</p>
+    </div>
+
+    <div id="success-state" class="hidden">
+        <div class="icon">🏆</div>
+        <h1>PRO Unlocked!</h1>
+        <p>Your access code (save it if you want to use it on another device):</p>
+        <div class="code" id="code-display"></div>
+        <a href="/" class="cta-btn" id="continue-btn">Continue to the Academy</a>
+    </div>
+
+    <div id="error-state" class="hidden">
+        <div class="icon">⚠️</div>
+        <h1>Still processing...</h1>
+        <p>Your payment went through, but confirmation is taking longer than usual. Reload this page in a minute — if it still doesn't work, contact support with your payment email.</p>
+        <a href="/" class="cta-btn">Back to the Academy</a>
+    </div>
+
+    <script>
+        const WORKER_URL = 'https://football-gaffer-api.alvaroggcasarabonela.workers.dev';
+        const params = new URLSearchParams(window.location.search);
+        const sessionId = params.get('session_id');
+
+        async function tryRedeem() {
+            const res = await fetch(`${WORKER_URL}/redeem`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ session_id: sessionId })
+            });
+            if (res.status === 202) return null; // webhook not landed yet
+            if (!res.ok) throw new Error('redeem failed');
+            const data = await res.json();
+            return data.code || null;
+        }
+
+        async function poll() {
+            if (!sessionId) {
+                document.getElementById('pending-state').classList.add('hidden');
+                document.getElementById('error-state').classList.remove('hidden');
+                return;
+            }
+            const maxAttempts = 8;
+            for (let i = 0; i < maxAttempts; i++) {
+                try {
+                    const code = await tryRedeem();
+                    if (code) {
+                        localStorage.setItem('user_is_vip_code', code);
+                        document.getElementById('code-display').textContent = code;
+                        document.getElementById('pending-state').classList.add('hidden');
+                        document.getElementById('success-state').classList.remove('hidden');
+                        return;
+                    }
+                } catch (e) { /* keep retrying */ }
+                await new Promise(r => setTimeout(r, 1500));
+            }
+            document.getElementById('pending-state').classList.add('hidden');
+            document.getElementById('error-state').classList.remove('hidden');
+        }
+
+        poll();
+    </script>
+</body>
+</html>

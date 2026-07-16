@@ -1,8 +1,34 @@
 const DB_FOLDER = './';
-const VIP_PASSWORD = "PRO-LEAGUE";
+const WORKER_URL = 'https://football-gaffer-api.alvaroggcasarabonela.workers.dev';
 const FREE_LIMIT = 10;
 const ANSWER_XP = 20;
 const LESSON_COMPLETE_XP = 50;
+
+// Persistent anonymous id used by the Worker for the free-tier message
+// counter (kept server-side, not just in localStorage — see sendMessage()).
+let clientId = localStorage.getItem('client_id');
+if (!clientId) {
+    clientId = crypto.randomUUID();
+    localStorage.setItem('client_id', clientId);
+}
+
+let vipCode = localStorage.getItem('user_is_vip_code') || '';
+let isVipVerified = false;
+
+async function verifyVip(code) {
+    if (!code) return false;
+    try {
+        const res = await fetch(`${WORKER_URL}/verify-vip`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code, clientId })
+        });
+        const data = await res.json();
+        return data.valid === true;
+    } catch {
+        return false;
+    }
+}
 
 const RANKS = [
     { name: "ROOKIE",      limit: 0    },
