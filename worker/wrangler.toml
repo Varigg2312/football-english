@@ -1,0 +1,8 @@
+name = "football-gaffer-api"
+main = "src/index.js"
+compatibility_date = "2026-07-16"
+workers_dev = true
+
+[[kv_namespaces]]
+binding = "KV"
+id = "8aed1f8f7a27444bafd2c3634ba4cf85"
