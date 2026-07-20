@@ -500,9 +500,15 @@ function finishLesson() {
 // ── CHAT ───────────────────────────────────────────────────
 function setupChat() {
     if (!ui.chatTrigger) return;
-    ui.chatTrigger.onclick = () => ui.chatModal.classList.remove('hidden');
-    ui.chatClose.onclick   = () => ui.chatModal.classList.add('hidden');
     const mb = document.getElementById('maximize-chat');
+    ui.chatTrigger.onclick = () => ui.chatModal.classList.remove('hidden');
+    ui.chatClose.onclick   = () => {
+        ui.chatModal.classList.add('hidden');
+        // Always leave fullscreen behind on close, so it never reopens stuck
+        // in a state where its own controls could be unreachable again.
+        ui.chatModal.classList.remove('fullscreen');
+        if (mb) mb.querySelector('i').className = 'fa-solid fa-expand';
+    };
     if (mb) mb.onclick = () => {
         ui.chatModal.classList.toggle('fullscreen');
         mb.querySelector('i').className = ui.chatModal.classList.contains('fullscreen')
@@ -554,10 +560,23 @@ async function sendMessage() {
         if (res.status === 403) { loadingDiv.innerText = t('errors.chat_expired'); return; }
         if (!res.ok) throw new Error('API unavailable');
         const data = await res.json();
-        loadingDiv.innerText = data.reply;
+        loadingDiv.innerText = stripMarkdown(data.reply);
     } catch {
         loadingDiv.innerText = t('errors.chat_unavailable');
     }
+}
+
+// The chat renders replies as plain text (innerText, never innerHTML — an
+// LLM reply is untrusted input), so raw Markdown from DeepSeek shows up as
+// literal asterisks/hashes instead of being styled. Strip the common markers.
+function stripMarkdown(text) {
+    if (!text) return text;
+    return text
+        .replace(/\*\*(.+?)\*\*/g, '$1')
+        .replace(/__(.+?)__/g, '$1')
+        .replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '$1')
+        .replace(/^#{1,6}\s+/gm, '')
+        .replace(/^[-*]\s+/gm, '• ');
 }
 
 function addMessage(text, cls) {

@@ -311,8 +311,15 @@ body {
 /* CLASE VITAL PARA MAXIMIZAR */
 .coach-window.fullscreen { width: 100% !important; height: 100% !important; top: 0; left: 0; bottom: 0; right: 0; border-radius: 0; }
 
+/* En pantalla completa (Android edge-to-edge, sobre todo apps con targetSdk 35+),
+   la cabecera y el pie pueden quedar debajo de la barra de estado/gestos del
+   sistema sin este margen — dejando los botones de cerrar/minimizar sin poder
+   pulsarse aunque sigan presentes en el DOM. */
+.coach-window.fullscreen .coach-header { padding-top: calc(15px + env(safe-area-inset-top, 0px)); }
+.coach-window.fullscreen .chat-input-area { padding-bottom: calc(15px + env(safe-area-inset-bottom, 0px)); }
+
 .coach-header { background: #0f172a; color: white; padding: 15px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
-.window-controls button { background: none; border: none; color: white; cursor: pointer; margin-left: 10px; font-size: 1rem; }
+.window-controls button { background: none; border: none; color: white; cursor: pointer; margin-left: 10px; font-size: 1rem; min-width: 32px; min-height: 32px; }
 .chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #f8fafc; }
 .message { margin-bottom: 10px; padding: 10px 15px; border-radius: 12px; font-size: 0.9rem; max-width: 80%; }
 .bot-msg { background: white; border: 1px solid #e2e8f0; align-self: flex-start; }
