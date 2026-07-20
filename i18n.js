@@ -155,13 +155,13 @@
         }
     };
 
-    // Default to Spanish (primary audience) unless the user picked a
-    // language explicitly. Not browser-auto-detected on purpose: the TWA
-    // (Android app) and the web site use separate storage partitions, so
-    // relying on navigator.language let the two disagree with each other
-    // depending on how each context reports the device locale.
-    let currentLang = localStorage.getItem('app_lang') || 'es';
-    if (!TRANSLATIONS[currentLang]) currentLang = 'es';
+    // Default to English unless the user picked a language explicitly.
+    // Not browser-auto-detected on purpose: the TWA (Android app) and the
+    // web site use separate storage partitions, so relying on
+    // navigator.language let the two disagree with each other depending
+    // on how each context reports the device locale.
+    let currentLang = localStorage.getItem('app_lang') || 'en';
+    if (!TRANSLATIONS[currentLang]) currentLang = 'en';
 
     function t(key) {
         const parts = key.split('.');
