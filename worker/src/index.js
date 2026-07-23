@@ -180,24 +180,26 @@ async function handleChat(request, env) {
   const today = new Date().toISOString().slice(0, 10);
 
   const vip = await isVipRequest(env, vipCode, clientId);
+  let used = 0;
+  let ipUsed = 0;
+  const ipKey = `ip:${ip}:${today}`;
+
   if (!vip) {
     if (!clientId) return json({ reply: 'Missing client id.' }, 400);
 
+    // Read-only checks here — counters are only written after a reply is
+    // actually sent, so a rejected/failed request never burns a free message.
     const usedRaw = await env.KV.get(`client:${clientId}`);
-    const used = usedRaw ? parseInt(usedRaw, 10) : 0;
+    used = usedRaw ? parseInt(usedRaw, 10) : 0;
     if (used >= FREE_LIMIT) {
       return json({ reply: 'Trial ended. Unlock PRO to keep chatting.' }, 403);
     }
 
-    const ipKey = `ip:${ip}:${today}`;
     const ipUsedRaw = await env.KV.get(ipKey);
-    const ipUsed = ipUsedRaw ? parseInt(ipUsedRaw, 10) : 0;
+    ipUsed = ipUsedRaw ? parseInt(ipUsedRaw, 10) : 0;
     if (ipUsed >= IP_DAILY_LIMIT) {
       return json({ reply: 'Too many requests from this network today.' }, 429);
     }
-
-    await env.KV.put(`client:${clientId}`, String(used + 1));
-    await env.KV.put(ipKey, String(ipUsed + 1), { expirationTtl: 172800 });
   }
 
   let body;
@@ -215,6 +217,14 @@ async function handleChat(request, env) {
 
   try {
     const replyText = await callDeepSeek(env, message);
+    if (!vip) {
+      // Note: read-then-write, not atomic — KV has no compare-and-swap, so a
+      // burst of concurrent requests could squeeze a couple of messages past
+      // the limit. Acceptable given the generous limits; a Durable Object
+      // would be needed for a hard guarantee.
+      await env.KV.put(`client:${clientId}`, String(used + 1));
+      await env.KV.put(ipKey, String(ipUsed + 1), { expirationTtl: 172800 });
+    }
     return json({ reply: replyText });
   } catch (error) {
     console.error('Chat handler error:', error);
