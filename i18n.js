@@ -1,7 +1,8 @@
 /* =========================================
    i18n.js — Internationalisation module
-   Source of truth: /locales/en.json & es.json
-   Translations are inlined here for offline-first reliability.
+   TRANSLATIONS below is the single source of truth — inlined (not fetched
+   from separate JSON files) so translations are available offline and
+   before the first paint.
    ========================================= */
 (function () {
     const TRANSLATIONS = {
