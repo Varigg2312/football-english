@@ -9,7 +9,7 @@ export async function onRequestPost({ request, env }) {
 
   const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
   const password = typeof body.password === 'string' ? body.password : '';
-  if (!email || !email.includes('@')) return json({ error: 'invalid_email' }, 400);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json({ error: 'invalid_email' }, 400);
   if (password.length < 8) return json({ error: 'weak_password' }, 400);
 
   const existing = await findUserByEmail(env.DB, email);

@@ -56,6 +56,7 @@ export function toPublicUser(row, completedLessons = []) {
     xp: row.xp,
     msgs: row.msgs,
     streak: row.streak,
+    lastVisit: row.last_visit,
     completedLessons,
   };
 }

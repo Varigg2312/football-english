@@ -54,8 +54,7 @@ function playSound(name) {
 }
 
 // ── STATE ──────────────────────────────────────────────────
-let currentUser = null;
-let usersDB = JSON.parse(localStorage.getItem('football_users_db') || '{}');
+let currentUser = null; // null = guest, otherwise the server user object from /api/auth/*
 let usedMessages = 0;
 let playerXP = 0;
 let playerStreak = 0;
@@ -115,7 +114,8 @@ const ui = {
     authBtn:        document.getElementById('auth-btn'),
     authModal:      document.getElementById('auth-modal'),
     closeAuth:      document.getElementById('close-auth'),
-    authUser:       document.getElementById('auth-user'),
+    googleAuthBtn:  document.getElementById('google-auth-btn'),
+    authEmail:      document.getElementById('auth-email'),
     authPass:       document.getElementById('auth-pass'),
     submitAuth:     document.getElementById('submit-auth'),
     toggleAuth:     document.getElementById('toggle-auth-mode'),
@@ -128,11 +128,23 @@ let allLessons = [];  // full lesson objects from lessons.json
 // ── i18n BRIDGE ────────────────────────────────────────────
 window.onLangChange = function () {
     if (currentUser) {
-        ui.authBtn.innerHTML = `<i class="fa-solid fa-user-check"></i> ${currentUser} (${t('hud.logout_suffix')})`;
+        setAuthBtnLabel('fa-solid fa-user-check', `${currentUser.displayName} (${t('hud.logout_suffix')})`);
     } else {
-        ui.authBtn.innerHTML = `<i class="fa-solid fa-user"></i> ${t('hud.login_btn')}`;
+        setAuthBtnLabel('fa-solid fa-user', t('hud.login_btn'));
     }
 };
+
+// Built via DOM nodes rather than innerHTML — displayName can come from a
+// user-chosen email or a Google profile name, neither of which should be
+// interpolated into HTML.
+function setAuthBtnLabel(iconClass, text) {
+    ui.authBtn.innerHTML = '';
+    const icon = document.createElement('i');
+    icon.className = iconClass;
+    icon.setAttribute('aria-hidden', 'true');
+    ui.authBtn.appendChild(icon);
+    ui.authBtn.appendChild(document.createTextNode(' ' + text));
+}
 
 // ── INIT ───────────────────────────────────────────────────
 async function initLeague() {
@@ -160,12 +172,29 @@ async function initLeague() {
         };
     }
 
-    const savedUser = localStorage.getItem('current_session_user');
-    if (savedUser && usersDB[savedUser]) {
-        loginUser(savedUser);
-        if (landing)  landing.classList.add('hidden');
-        if (appIface) { appIface.classList.remove('hidden'); appIface.style.display = 'flex'; }
-    } else {
+    // A redirect back from Google carries this marker (see google/callback.js)
+    // so we know to try a one-time legacy-progress import right after.
+    const params = new URLSearchParams(window.location.search);
+    const justLoggedInViaGoogle = params.get('login') === 'success';
+    if (justLoggedInViaGoogle) window.history.replaceState({}, '', window.location.pathname);
+
+    try {
+        const res  = await fetch('/api/auth/me', { credentials: 'include' });
+        const data = await res.json();
+        if (data.loggedIn) {
+            let user = data.user;
+            if (justLoggedInViaGoogle) {
+                const imported = await importLegacyProgressIfAny();
+                if (imported) user = { ...user, ...imported };
+            }
+            applyServerUser(user);
+            if (landing)  landing.classList.add('hidden');
+            if (appIface) { appIface.classList.remove('hidden'); appIface.style.display = 'flex'; }
+        } else {
+            loadGuestData();
+        }
+    } catch (err) {
+        console.error('Session check failed:', err);
         loadGuestData();
     }
 
@@ -192,23 +221,26 @@ function loadGuestData() {
     updateHUD(); updateChatStatus();
 }
 
-function loginUser(username) {
-    currentUser = username;
-    localStorage.setItem('current_session_user', username);
-    playerXP     = usersDB[username].xp;
-    usedMessages = usersDB[username].msgs || 0;
-    calculateStreak(usersDB[username]);
-    saveUsersDB();
-    ui.authBtn.innerHTML = `<i class="fa-solid fa-user-check"></i> ${username} (${t('hud.logout_suffix')})`;
+// Applies a user object returned by /api/auth/register, /api/auth/login,
+// /api/auth/me or the Google callback redirect.
+function applyServerUser(user) {
+    currentUser  = user;
+    playerXP     = user.xp;
+    usedMessages = user.msgs;
+    completedLessons = new Set(user.completedLessons || []);
+    saveCompletedLessons();
+    calculateStreak({ streak: user.streak, lastVisit: parseSqlDateToDateString(user.lastVisit) });
+    setAuthBtnLabel('fa-solid fa-user-check', `${user.displayName} (${t('hud.logout_suffix')})`);
     ui.authBtn.classList.add('logged-in');
     updateHUD(); updateChatStatus();
+    syncProgressNow(); // persist the just-recalculated streak / stamp last_visit
 }
 
-function logoutUser() {
+async function logoutUser() {
+    try { await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }); } catch {}
     currentUser = null;
-    localStorage.removeItem('current_session_user');
     loadGuestData();
-    ui.authBtn.innerHTML = `<i class="fa-solid fa-user"></i> ${t('hud.login_btn')}`;
+    setAuthBtnLabel('fa-solid fa-user', t('hud.login_btn'));
     ui.authBtn.classList.remove('logged-in');
 }
 
@@ -223,25 +255,108 @@ function calculateStreak(userData) {
     playerStreak = userData.streak || 0;
 }
 
-function saveUsersDB() { localStorage.setItem('football_users_db', JSON.stringify(usersDB)); }
-
-// Local-only credential hashing (SHA-256). Note: this protects against casually
-// reading a password back out of localStorage/devtools; it is not server-side
-// authentication, since there is no backend involved in this login flow.
-async function hashPassword(pass) {
-    const bytes  = new TextEncoder().encode(pass);
-    const digest = await crypto.subtle.digest('SHA-256', bytes);
-    return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+// D1 stores last_visit as a SQL "YYYY-MM-DD HH:MM:SS" (UTC, no zone marker);
+// normalize to the same toDateString() shape calculateStreak compares
+// against, or a raw string vs. UTC-parsed Date would never match.
+function parseSqlDateToDateString(sqlDateTime) {
+    if (!sqlDateTime) return null;
+    return new Date(sqlDateTime.replace(' ', 'T') + 'Z').toDateString();
 }
 
 function saveUserData() {
     if (currentUser) {
-        usersDB[currentUser].xp   = playerXP;
-        usersDB[currentUser].msgs = usedMessages;
-        saveUsersDB();
+        scheduleProgressSync();
     } else {
         localStorage.setItem('guest_xp',   playerXP);
         localStorage.setItem('guest_msgs', usedMessages);
+    }
+}
+
+// ── SERVER PROGRESS SYNC ───────────────────────────────────
+let progressSyncTimer = null;
+
+function scheduleProgressSync() {
+    clearTimeout(progressSyncTimer);
+    progressSyncTimer = setTimeout(syncProgressNow, 4000);
+}
+
+function currentProgressPayload() {
+    return {
+        xp: playerXP,
+        msgs: usedMessages,
+        streak: playerStreak,
+        completedLessons: [...completedLessons],
+    };
+}
+
+async function syncProgressNow() {
+    if (!currentUser) return;
+    try {
+        await fetch('/api/auth/progress', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(currentProgressPayload()),
+        });
+    } catch (err) { console.error('Progress sync failed:', err); }
+}
+
+// Fires on tab close/hide — sendBeacon fires-and-forgets even as the page is
+// unloading, unlike a regular fetch which the browser may abort mid-flight.
+function flushProgressBeacon() {
+    if (!currentUser) return;
+    const blob = new Blob([JSON.stringify(currentProgressPayload())], { type: 'application/json' });
+    navigator.sendBeacon('/api/auth/progress', blob);
+}
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') flushProgressBeacon();
+});
+window.addEventListener('pagehide', flushProgressBeacon);
+
+// Old localStorage-only progress lived in one of two places depending on
+// whether the browser ever used the pre-account local login: guest_* keys
+// for guests, or football_users_db[username] for the old local accounts.
+// Imported once (server-enforced, see progress/import.js) right after the
+// first login/registration under the new system.
+function collectLegacyProgress() {
+    const guestXp     = parseInt(localStorage.getItem('guest_xp') || '0');
+    const guestMsgs   = parseInt(localStorage.getItem('guest_msgs') || '0');
+    const guestStreak = parseInt(localStorage.getItem('guest_streak') || '0');
+
+    let legacyXp = 0, legacyMsgs = 0, legacyStreak = 0;
+    try {
+        const oldUsername = localStorage.getItem('current_session_user');
+        const oldDb = JSON.parse(localStorage.getItem('football_users_db') || '{}');
+        if (oldUsername && oldDb[oldUsername]) {
+            legacyXp     = oldDb[oldUsername].xp || 0;
+            legacyMsgs   = oldDb[oldUsername].msgs || 0;
+            legacyStreak = oldDb[oldUsername].streak || 0;
+        }
+    } catch {}
+
+    return {
+        xp: Math.max(guestXp, legacyXp),
+        msgs: Math.max(guestMsgs, legacyMsgs),
+        streak: Math.max(guestStreak, legacyStreak),
+        completedLessons: [...completedLessons],
+    };
+}
+
+async function importLegacyProgressIfAny() {
+    const payload = collectLegacyProgress();
+    const hasAnything = payload.xp || payload.msgs || payload.streak || payload.completedLessons.length;
+    if (!hasAnything) return null;
+    try {
+        const res = await fetch('/api/auth/progress/import', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+        if (!res.ok) return null;
+        return await res.json();
+    } catch {
+        return null;
     }
 }
 
@@ -273,30 +388,51 @@ function setupAuth() {
         ui.authMsg.innerText    = '';
     };
 
+    if (ui.googleAuthBtn) {
+        ui.googleAuthBtn.onclick = () => { window.location.href = '/api/auth/google/start'; };
+    }
+
     ui.submitAuth.onclick = async () => {
-        const user = ui.authUser.value.trim();
-        const pass = ui.authPass.value.trim();
-        if (!user || !pass) { ui.authMsg.innerText = t('errors.fill_fields'); return; }
-        const passHash = await hashPassword(pass);
-        if (isRegisterMode) {
-            if (usersDB[user]) { ui.authMsg.innerText = t('errors.user_exists'); }
-            else {
-                usersDB[user] = { passHash, xp: 0, msgs: 0, streak: 1, lastVisit: new Date().toDateString() };
-                saveUsersDB(); loginUser(user); ui.authModal.classList.add('hidden');
-            }
-        } else {
-            const record = usersDB[user];
-            // Transparent migration for accounts created before password hashing was added.
-            if (record && record.pass !== undefined && record.pass === pass) {
-                delete record.pass;
-                record.passHash = passHash;
-                saveUsersDB();
-            }
-            if (record && record.passHash === passHash) {
-                loginUser(user); ui.authModal.classList.add('hidden');
-            } else { ui.authMsg.innerText = t('errors.invalid_credentials'); }
+        const email = ui.authEmail.value.trim();
+        const pass  = ui.authPass.value;
+        if (!email || !pass) { ui.authMsg.innerText = t('errors.fill_fields'); return; }
+
+        ui.submitAuth.disabled = true;
+        ui.authMsg.innerText = '';
+        try {
+            const endpoint = isRegisterMode ? '/api/auth/register' : '/api/auth/login';
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password: pass }),
+            });
+            const data = await res.json();
+            if (!res.ok) { ui.authMsg.innerText = authErrorMessage(data.error); return; }
+
+            let user = data.user;
+            const imported = await importLegacyProgressIfAny();
+            if (imported) user = { ...user, ...imported };
+
+            applyServerUser(user);
+            ui.authModal.classList.add('hidden');
+            ui.authEmail.value = ''; ui.authPass.value = '';
+        } catch {
+            ui.authMsg.innerText = t('errors.auth_generic');
+        } finally {
+            ui.submitAuth.disabled = false;
         }
     };
+}
+
+function authErrorMessage(code) {
+    switch (code) {
+        case 'email_exists':        return t('errors.user_exists');
+        case 'invalid_email':       return t('errors.invalid_email');
+        case 'weak_password':       return t('errors.weak_password');
+        case 'invalid_credentials': return t('errors.invalid_credentials');
+        default:                    return t('errors.auth_generic');
+    }
 }
 
 // ── VOICE ──────────────────────────────────────────────────
