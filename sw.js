@@ -6,7 +6,7 @@ const OFFLINE_URL = '/offline.html';
 const PRECACHE_URLS = [
     '/', '/index.html', '/offline.html',
     '/football.css', '/app.js', '/i18n.js', '/manifest.json', '/lessons.json',
-    '/favicon-96.png', '/apple-touch-icon.png', '/icon-192.png', '/icon-512.png',
+    '/favicon-96.png', '/apple-touch-icon.png', '/icon-192.png', '/icon-512.png', '/icon-512-maskable.png',
     '/audio/whistle.mp3', '/audio/correct.mp3', '/audio/wrong.mp3', '/audio/win.mp3'
 ];
 
