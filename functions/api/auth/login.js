@@ -1,0 +1,22 @@
+import { verifyPassword } from '../../_lib/crypto.js';
+import { findUserByEmail, toPublicUser, getCompletedLessons } from '../../_lib/db.js';
+import { createSession, sessionCookieHeader } from '../../_lib/session.js';
+import { json, parseJsonBody } from '../../_lib/http.js';
+
+export async function onRequestPost({ request, env }) {
+  const body = await parseJsonBody(request);
+  if (!body) return json({ error: 'invalid_body' }, 400);
+
+  const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
+  const password = typeof body.password === 'string' ? body.password : '';
+
+  const user = email ? await findUserByEmail(env.DB, email) : null;
+  // Generic error either way — don't leak whether the email exists.
+  if (!user || !user.password_hash || !(await verifyPassword(password, user.password_hash))) {
+    return json({ error: 'invalid_credentials' }, 401);
+  }
+
+  const { token } = await createSession(env.DB, user.id);
+  const completedLessons = await getCompletedLessons(env.DB, user.id);
+  return json({ user: toPublicUser(user, completedLessons) }, 200, { 'Set-Cookie': sessionCookieHeader(token) });
+}

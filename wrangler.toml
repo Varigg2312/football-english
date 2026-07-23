@@ -1,0 +1,8 @@
+name = "football-english"
+pages_build_output_dir = "."
+compatibility_date = "2026-07-16"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "football-english-db"
+database_id = "2d0a7a80-ac16-4198-aef3-be38e6c1b30d"

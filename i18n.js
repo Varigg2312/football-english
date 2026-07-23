@@ -52,7 +52,9 @@
                 auth_title_signin: "Sign In",
                 auth_title_register: "Create Account",
                 auth_subtitle: "Access your career stats.",
-                auth_user_placeholder: "Username",
+                auth_google_btn: "Continue with Google",
+                auth_or: "or",
+                auth_email_placeholder: "Email",
                 auth_pass_placeholder: "Password",
                 auth_submit_signin: "Sign In",
                 auth_submit_register: "Register",
@@ -62,12 +64,15 @@
             },
             errors: {
                 fill_fields: "Fill all fields.",
-                user_exists: "Username already taken!",
-                invalid_credentials: "Invalid credentials.",
+                user_exists: "An account with that email already exists!",
+                invalid_email: "Enter a valid email address.",
+                weak_password: "Password must be at least 8 characters.",
+                invalid_credentials: "Invalid email or password.",
                 no_matches: "No matches found...",
                 load_error: "Error loading the tactical document.",
                 chat_expired: "🚨 Trial ended! Your free access has expired.",
-                chat_unavailable: "❌ Instructor unavailable. Connection failed."
+                chat_unavailable: "❌ Instructor unavailable. Connection failed.",
+                auth_generic: "Something went wrong. Please try again."
             },
             quiz: {
                 scenario_label: "Match Scenario",
@@ -126,7 +131,9 @@
                 auth_title_signin: "Iniciar Sesión",
                 auth_title_register: "Crear Cuenta",
                 auth_subtitle: "Accede a tus estadísticas de carrera.",
-                auth_user_placeholder: "Usuario",
+                auth_google_btn: "Continuar con Google",
+                auth_or: "o",
+                auth_email_placeholder: "Email",
                 auth_pass_placeholder: "Contraseña",
                 auth_submit_signin: "Entrar",
                 auth_submit_register: "Registrarme",
@@ -136,12 +143,15 @@
             },
             errors: {
                 fill_fields: "Rellena todos los campos.",
-                user_exists: "¡Ese usuario ya existe!",
-                invalid_credentials: "Credenciales incorrectas.",
+                user_exists: "¡Ya existe una cuenta con ese email!",
+                invalid_email: "Introduce un email válido.",
+                weak_password: "La contraseña debe tener al menos 8 caracteres.",
+                invalid_credentials: "Email o contraseña incorrectos.",
                 no_matches: "Sin resultados...",
                 load_error: "Error al cargar el documento táctico.",
                 chat_expired: "🚨 ¡Prueba agotada! Tu acceso gratuito ha expirado.",
-                chat_unavailable: "❌ Míster no disponible. Fallo de conexión."
+                chat_unavailable: "❌ Míster no disponible. Fallo de conexión.",
+                auth_generic: "Algo ha fallado. Inténtalo de nuevo."
             },
             quiz: {
                 scenario_label: "Escenario",
