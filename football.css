@@ -354,7 +354,7 @@ body {
 }
 .legal-disclaimer { margin-top: 20px; font-size: 0.8rem; color: #94a3b8; }
 .mic-hint { font-size: 0.8rem; color: #64748b; margin-top: 5px; text-align: center; }
-.premium-hint { font-size: 0.7rem; color: #999; margin-top: 5px; text-align: center; }
+.premium-hint { font-size: 0.7rem; color: #6b7280; margin-top: 5px; text-align: center; }
 
 /* =========================================
    OFFLINE BANNER
@@ -420,5 +420,5 @@ body {
     .auth-input { background: #0f172a; border-color: #334155; color: #f1f5f9; }
     .auth-subtitle { color: #94a3b8; }
     .mic-hint { color: #94a3b8; }
-    .premium-hint { color: #475569; }
+    .premium-hint { color: #94a3b8; }
 }

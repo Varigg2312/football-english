@@ -59,12 +59,18 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Everything else same-origin (css/js/images/audio): cache-first,
-    // filling the cache in the background for anything not precached yet.
+    // Everything else same-origin (css/js/images/audio): stale-while-revalidate.
+    // Serves the cached copy immediately (or waits for the network if nothing's
+    // cached yet), but always refetches in the background and updates the
+    // cache for next time — so a deploy that changes app.js/football.css/i18n.js
+    // reaches returning users within one extra load, with no need to remember
+    // to bump CACHE_NAME (this already broke prod once without it).
     event.respondWith(
         caches.match(req).then(cached => {
-            if (cached) return cached;
-            return fetch(req).then(res => { cachePut(req, res.clone()); return res; });
+            const network = fetch(req)
+                .then(res => { cachePut(req, res.clone()); return res; })
+                .catch(() => cached);
+            return cached || network;
         })
     );
 });

@@ -1,4 +1,5 @@
 const DB_FOLDER = './';
+// Also hardcoded in pro-unlocked.html — keep both in sync if this ever changes.
 const WORKER_URL = 'https://football-gaffer-api.alvaroggcasarabonela.workers.dev';
 const FREE_LIMIT = 10;
 const ANSWER_XP = 20;
@@ -340,7 +341,7 @@ function performSearch() {
         ui.results.classList.remove('hidden');
         matches.forEach(lesson => renderSearchResult(lesson));
     } else {
-        ui.results.innerHTML = `<div class="result-item" style="color:#999">${t('errors.no_matches')}</div>`;
+        ui.results.innerHTML = `<div class="result-item" style="color:#6b7280">${t('errors.no_matches')}</div>`;
         ui.results.classList.remove('hidden');
     }
 }
@@ -358,16 +359,22 @@ function renderSearchResult(lesson) {
     const done = completedLessons.has(lesson.id);
     const div  = document.createElement('div');
     div.className = 'result-item';
+    div.setAttribute('role', 'button');
+    div.setAttribute('tabindex', '0');
     div.innerHTML = `
         <span>
             ${done ? '<span class="lesson-done" title="Completed">✓</span>' : ''}
             ${lesson.title}
         </span>
-        <strong>GO <i class="fa-solid fa-arrow-right"></i></strong>`;
-    div.onclick = () => {
+        <strong>GO <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></strong>`;
+    const select = () => {
         loadLesson(lesson.id);
         ui.search.value = lesson.title;
         ui.results.classList.add('hidden');
+    };
+    div.onclick = select;
+    div.onkeydown = (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(); }
     };
     ui.results.appendChild(div);
 }
@@ -396,15 +403,32 @@ function renderLesson(lesson) {
         }
     } else { ui.videoSection.classList.add('hidden'); ui.videoContainer.innerHTML = ''; }
 
-    // Header info
+    // Header info. The placeholder text in index.html carries data-i18n
+    // attributes for the "no lesson loaded yet" state — drop them once real
+    // lesson content lands here, otherwise a later language switch would
+    // stomp this over with the placeholder string again.
+    ui.title.removeAttribute('data-i18n');
     ui.title.innerText = lesson.title;
     if (ui.level) ui.level.innerText = `${lesson.difficulty_elo} ELO`;
+    ui.intro.removeAttribute('data-i18n');
     ui.intro.innerText = lesson.content.intro_hook;
 
-    // Core concept + analogy
-    ui.concept.innerHTML = `
-        <p>${lesson.content.core_concept}</p>
-        ${lesson.content.analogy ? `<p class="concept-analogy"><em>💡 ${lesson.content.analogy}</em></p>` : ''}`;
+    // Core concept + analogy. Content is first-party (authored in
+    // lessons.json), but built with textContent rather than innerHTML anyway
+    // so this doesn't become the one exception to the "never interpolate
+    // untrusted-shaped strings into HTML" rule the chat code follows.
+    ui.concept.innerHTML = '';
+    const conceptP = document.createElement('p');
+    conceptP.textContent = lesson.content.core_concept;
+    ui.concept.appendChild(conceptP);
+    if (lesson.content.analogy) {
+        const analogyP = document.createElement('p');
+        analogyP.className = 'concept-analogy';
+        const em = document.createElement('em');
+        em.textContent = `💡 ${lesson.content.analogy}`;
+        analogyP.appendChild(em);
+        ui.concept.appendChild(analogyP);
+    }
 
     // Vocabulary
     ui.vocabList.innerHTML = '';
@@ -412,10 +436,20 @@ function renderLesson(lesson) {
         const li = document.createElement('li');
         const btn = document.createElement('button');
         btn.className = 'audio-btn';
-        btn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+        btn.innerHTML = '<i class="fa-solid fa-volume-high" aria-hidden="true"></i>';
+        btn.setAttribute('aria-label', `Pronounce "${word.term}"`);
         btn.onclick = () => speak(word.term);
         li.appendChild(btn);
-        li.innerHTML += ` <strong>${word.term}</strong>: ${word.meaning}`;
+        // Appended as a sibling node instead of `li.innerHTML +=`, which would
+        // re-parse (and thus discard) the button's onclick handler above.
+        // textContent throughout, not innerHTML — see core-concept comment above.
+        const label = document.createElement('span');
+        const strong = document.createElement('strong');
+        strong.textContent = word.term;
+        label.appendChild(document.createTextNode(' '));
+        label.appendChild(strong);
+        label.appendChild(document.createTextNode(`: ${word.meaning}`));
+        li.appendChild(label);
         ui.vocabList.appendChild(li);
     });
 
@@ -430,6 +464,7 @@ function showQuestion() {
     const q = currentQuiz[currentQuestionIndex];
     if (!q) return;
     if (ui.quizHeaderText) {
+        ui.quizHeaderText.removeAttribute('data-i18n');
         ui.quizHeaderText.textContent = `${t('quiz.scenario_label')} ${currentQuestionIndex + 1}/${currentQuiz.length}`;
     }
     ui.quizQuestion.innerText = q.question;
@@ -507,12 +542,12 @@ function setupChat() {
         // Always leave fullscreen behind on close, so it never reopens stuck
         // in a state where its own controls could be unreachable again.
         ui.chatModal.classList.remove('fullscreen');
-        if (mb) mb.querySelector('i').className = 'fa-solid fa-expand';
+        if (mb) { mb.querySelector('i').className = 'fa-solid fa-expand'; mb.setAttribute('aria-label', 'Maximize'); }
     };
     if (mb) mb.onclick = () => {
-        ui.chatModal.classList.toggle('fullscreen');
-        mb.querySelector('i').className = ui.chatModal.classList.contains('fullscreen')
-            ? 'fa-solid fa-compress' : 'fa-solid fa-expand';
+        const isFullscreen = ui.chatModal.classList.toggle('fullscreen');
+        mb.querySelector('i').className = isFullscreen ? 'fa-solid fa-compress' : 'fa-solid fa-expand';
+        mb.setAttribute('aria-label', isFullscreen ? 'Restore' : 'Maximize');
     };
     updateChatStatus();
     ui.passwordInput.addEventListener('change', async () => {
@@ -544,7 +579,6 @@ async function sendMessage() {
 
     addMessage(text, 'user-msg');
     ui.chatInput.value = '';
-    if (!isVipVerified) { usedMessages++; saveUserData(); updateChatStatus(); }
 
     const loadingDiv = addMessage(t('quiz.thinking'), 'bot-msg');
     try {
@@ -561,6 +595,10 @@ async function sendMessage() {
         if (!res.ok) throw new Error('API unavailable');
         const data = await res.json();
         loadingDiv.innerText = stripMarkdown(data.reply);
+        // Only counted on a successful reply — the Worker mirrors this same
+        // rule server-side, so a timeout/502/invalid request never costs the
+        // user one of their free messages on either side.
+        if (!isVipVerified) { usedMessages++; saveUserData(); updateChatStatus(); }
     } catch {
         loadingDiv.innerText = t('errors.chat_unavailable');
     }
