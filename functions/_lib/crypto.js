@@ -1,8 +1,8 @@
-// OWASP 2023 recommendation for PBKDF2-HMAC-SHA256. Cheap on Workers Paid's
-// 30s CPU budget (native BoringSSL, not JS) — would be too slow for the
-// Free plan's 10ms-per-invocation ceiling, which is why this project is on
-// Paid.
-const PBKDF2_ITERATIONS = 600000;
+// 100,000 is the maximum the Workers/Pages runtime allows at all — it hard-
+// rejects PBKDF2 above that ("iteration counts above 100000 are not
+// supported"), independent of the account's CPU-time plan. Still a
+// reasonable, secure value for PBKDF2-HMAC-SHA256 with a 16-byte salt.
+const PBKDF2_ITERATIONS = 100000;
 const SALT_BYTES = 16;
 const KEY_LENGTH_BITS = 256;
 
