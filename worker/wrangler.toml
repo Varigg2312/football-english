@@ -6,3 +6,15 @@ workers_dev = true
 [[kv_namespaces]]
 binding = "KV"
 id = "8aed1f8f7a27444bafd2c3634ba4cf85"
+
+# Atomic counters for the free-message / rate-limit checks — KV has no
+# compare-and-swap, so those counters used to have a read-then-write race
+# under concurrent requests. Requests to the same Durable Object instance
+# are processed one at a time, which makes increment-if-under-limit atomic.
+[[durable_objects.bindings]]
+name = "RATE_LIMITER"
+class_name = "Counter"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Counter"]

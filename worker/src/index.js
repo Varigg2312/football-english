@@ -5,6 +5,65 @@
 //   SYSTEM_KEY            — DeepSeek API key
 //   STRIPE_WEBHOOK_SECRET — Stripe webhook signing secret
 
+// Durable Object backing the atomic rate-limit counters (see the Counter
+// class below and reserveSlot/releaseSlot). Must be exported from the
+// Worker's main module for the binding in wrangler.toml to find it.
+export class Counter {
+  constructor(state) {
+    this.state = state;
+  }
+
+  async fetch(request) {
+    const url = new URL(request.url);
+    const action = url.searchParams.get('action');
+    const limit = parseInt(url.searchParams.get('limit') || '0', 10);
+    const ttlSeconds = parseInt(url.searchParams.get('ttl') || '0', 10);
+    const now = Date.now();
+
+    let data = await this.state.storage.get('data');
+    if (!data || (data.expiresAt && data.expiresAt <= now)) {
+      data = { count: 0, expiresAt: ttlSeconds ? now + ttlSeconds * 1000 : null };
+    }
+
+    // Requests to a single Durable Object instance are handled one at a time,
+    // so this read-modify-write (unlike the old KV version) can't race.
+    if (action === 'reserve') {
+      if (data.count >= limit) {
+        return Response.json({ allowed: false, count: data.count });
+      }
+      data.count += 1;
+      await this.state.storage.put('data', data);
+      return Response.json({ allowed: true, count: data.count });
+    }
+
+    if (action === 'release') {
+      data.count = Math.max(0, data.count - 1);
+      await this.state.storage.put('data', data);
+      return Response.json({ count: data.count });
+    }
+
+    return new Response('Unknown action', { status: 400 });
+  }
+}
+
+// Atomically checks a named counter against `limit` and increments it if
+// still under. Returns { allowed, count }. `ttlSeconds` resets the counter
+// after that window (0 = never expires, e.g. the lifetime free-message cap).
+async function reserveSlot(env, key, limit, ttlSeconds) {
+  const id = env.RATE_LIMITER.idFromName(key);
+  const stub = env.RATE_LIMITER.get(id);
+  const res = await stub.fetch(`https://counter/?action=reserve&limit=${limit}&ttl=${ttlSeconds}`);
+  return res.json();
+}
+
+// Gives back a slot reserved above — used when a reserved request ends up
+// failing/being rejected downstream, so it doesn't cost the user anything.
+async function releaseSlot(env, key) {
+  const id = env.RATE_LIMITER.idFromName(key);
+  const stub = env.RATE_LIMITER.get(id);
+  await stub.fetch(`https://counter/?action=release`);
+}
+
 const FREE_LIMIT = 10;
 const IP_DAILY_LIMIT = 30;
 const MAX_ACTIVATIONS_PER_CODE = 3;
@@ -87,19 +146,12 @@ async function handleRedeem(request, env) {
   return json({ code });
 }
 
-// Shared per-IP rate limiter — used to stop brute-forcing VIP codes via /verify-vip.
-async function checkIpRateLimit(env, ip, bucket, limit, ttlSeconds) {
-  const key = `rl:${bucket}:${ip}`;
-  const raw = await env.KV.get(key);
-  const used = raw ? parseInt(raw, 10) : 0;
-  if (used >= limit) return false;
-  await env.KV.put(key, String(used + 1), { expirationTtl: ttlSeconds });
-  return true;
-}
-
 async function handleVerifyVip(request, env) {
   const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
-  const allowed = await checkIpRateLimit(env, ip, 'verifyvip', VIP_CHECK_LIMIT_PER_HOUR, 3600);
+  // Rate-limits brute-forcing VIP codes via this endpoint. Failed attempts are
+  // meant to count against the limit (unlike the chat quota), so there's no
+  // release/refund here.
+  const { allowed } = await reserveSlot(env, `rl:verifyvip:${ip}`, VIP_CHECK_LIMIT_PER_HOUR, 3600);
   if (!allowed) return json({ valid: false, reason: 'rate_limited' }, 429);
 
   const { code, clientId } = await request.json();
@@ -180,54 +232,63 @@ async function handleChat(request, env) {
   const today = new Date().toISOString().slice(0, 10);
 
   const vip = await isVipRequest(env, vipCode, clientId);
-  let used = 0;
-  let ipUsed = 0;
+  const clientKey = `client:${clientId}`;
   const ipKey = `ip:${ip}:${today}`;
+  let reservedClient = false;
+  let reservedIp = false;
+
+  // Release any slot(s) already reserved below — called on every rejected/
+  // failed path past this point so a free message is only ever spent on a
+  // reply that actually made it back to the user.
+  async function releaseReserved() {
+    if (reservedClient) await releaseSlot(env, clientKey);
+    if (reservedIp) await releaseSlot(env, ipKey);
+  }
 
   if (!vip) {
     if (!clientId) return json({ reply: 'Missing client id.' }, 400);
 
-    // Read-only checks here — counters are only written after a reply is
-    // actually sent, so a rejected/failed request never burns a free message.
-    const usedRaw = await env.KV.get(`client:${clientId}`);
-    used = usedRaw ? parseInt(usedRaw, 10) : 0;
-    if (used >= FREE_LIMIT) {
+    // Reserving (atomic check-and-increment via the Counter Durable Object)
+    // rather than a plain read-then-write closes the race a burst of
+    // concurrent requests could previously exploit to exceed the limit.
+    const clientRes = await reserveSlot(env, clientKey, FREE_LIMIT, 0);
+    if (!clientRes.allowed) {
       return json({ reply: 'Trial ended. Unlock PRO to keep chatting.' }, 403);
     }
+    reservedClient = true;
 
-    const ipUsedRaw = await env.KV.get(ipKey);
-    ipUsed = ipUsedRaw ? parseInt(ipUsedRaw, 10) : 0;
-    if (ipUsed >= IP_DAILY_LIMIT) {
+    const ipRes = await reserveSlot(env, ipKey, IP_DAILY_LIMIT, 172800);
+    if (!ipRes.allowed) {
+      await releaseReserved();
       return json({ reply: 'Too many requests from this network today.' }, 429);
     }
+    reservedIp = true;
   }
 
   let body;
   try {
     body = await request.json();
   } catch {
+    await releaseReserved();
     return json({ reply: 'Invalid request body.' }, 400);
   }
 
   const message = typeof body.message === 'string' ? body.message.trim() : '';
-  if (!message) return json({ reply: 'Empty message.' }, 400);
+  if (!message) {
+    await releaseReserved();
+    return json({ reply: 'Empty message.' }, 400);
+  }
   if (message.length > MAX_MESSAGE_LENGTH) {
+    await releaseReserved();
     return json({ reply: `Message too long (max ${MAX_MESSAGE_LENGTH} characters).` }, 400);
   }
 
   try {
     const replyText = await callDeepSeek(env, message);
-    if (!vip) {
-      // Note: read-then-write, not atomic — KV has no compare-and-swap, so a
-      // burst of concurrent requests could squeeze a couple of messages past
-      // the limit. Acceptable given the generous limits; a Durable Object
-      // would be needed for a hard guarantee.
-      await env.KV.put(`client:${clientId}`, String(used + 1));
-      await env.KV.put(ipKey, String(ipUsed + 1), { expirationTtl: 172800 });
-    }
     return json({ reply: replyText });
   } catch (error) {
     console.error('Chat handler error:', error);
+    await releaseReserved();
     return json({ reply: '❌ Instructor unavailable, please try again in a moment.' }, 502);
   }
 }
