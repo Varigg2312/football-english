@@ -115,10 +115,14 @@ const ui = {
     authModal:      document.getElementById('auth-modal'),
     closeAuth:      document.getElementById('close-auth'),
     googleAuthBtn:  document.getElementById('google-auth-btn'),
+    authDivider:    document.getElementById('auth-divider'),
     authEmail:      document.getElementById('auth-email'),
     authPass:       document.getElementById('auth-pass'),
     submitAuth:     document.getElementById('submit-auth'),
     toggleAuth:     document.getElementById('toggle-auth-mode'),
+    toggleAuthWrap: document.getElementById('toggle-auth-wrap'),
+    forgotLink:     document.getElementById('forgot-password-link'),
+    backToSigninLink: document.getElementById('back-to-signin-link'),
     authMsg:        document.getElementById('auth-msg'),
     authTitle:      document.getElementById('auth-title')
 };
@@ -376,17 +380,46 @@ function updateHUD() {
 
 function setupAuth() {
     if (!ui.authBtn) return;
-    ui.authBtn.onclick  = () => { if (currentUser) logoutUser(); else ui.authModal.classList.remove('hidden'); };
+
+    let mode = 'signin'; // 'signin' | 'register' | 'forgot'
+
+    function renderAuthMode() {
+        const isForgot = mode === 'forgot';
+        ui.authPass.classList.toggle('hidden', isForgot);
+        if (ui.googleAuthBtn) ui.googleAuthBtn.classList.toggle('hidden', isForgot);
+        if (ui.authDivider) ui.authDivider.classList.toggle('hidden', isForgot);
+        ui.toggleAuthWrap.classList.toggle('hidden', isForgot);
+        ui.forgotLink.classList.toggle('hidden', mode !== 'signin');
+        ui.backToSigninLink.classList.toggle('hidden', !isForgot);
+
+        if (mode === 'register') {
+            ui.authTitle.innerText  = t('app.auth_title_register');
+            ui.submitAuth.innerText = t('app.auth_submit_register');
+            ui.toggleAuth.innerHTML = t('app.auth_toggle_signin');
+        } else if (isForgot) {
+            ui.authTitle.innerText  = t('app.auth_title_forgot');
+            ui.submitAuth.innerText = t('app.auth_submit_forgot');
+        } else {
+            ui.authTitle.innerText  = t('app.auth_title_signin');
+            ui.submitAuth.innerText = t('app.auth_submit_signin');
+            ui.toggleAuth.innerHTML = t('app.auth_toggle_register');
+        }
+        ui.authMsg.className = 'error-msg';
+        ui.authMsg.innerText = '';
+    }
+
+    function openAuthModal() {
+        mode = 'signin';
+        renderAuthMode();
+        ui.authModal.classList.remove('hidden');
+    }
+
+    ui.authBtn.onclick  = () => { if (currentUser) logoutUser(); else openAuthModal(); };
     ui.closeAuth.onclick = () => ui.authModal.classList.add('hidden');
 
-    let isRegisterMode = false;
-    ui.toggleAuth.onclick = () => {
-        isRegisterMode = !isRegisterMode;
-        ui.authTitle.innerText  = t(isRegisterMode ? 'app.auth_title_register' : 'app.auth_title_signin');
-        ui.submitAuth.innerText = t(isRegisterMode ? 'app.auth_submit_register' : 'app.auth_submit_signin');
-        ui.toggleAuth.innerHTML = t(isRegisterMode ? 'app.auth_toggle_signin' : 'app.auth_toggle_register');
-        ui.authMsg.innerText    = '';
-    };
+    ui.toggleAuth.onclick = () => { mode = mode === 'register' ? 'signin' : 'register'; renderAuthMode(); };
+    ui.forgotLink.onclick = (e) => { e.preventDefault(); mode = 'forgot'; renderAuthMode(); };
+    ui.backToSigninLink.onclick = (e) => { e.preventDefault(); mode = 'signin'; renderAuthMode(); };
 
     if (ui.googleAuthBtn) {
         ui.googleAuthBtn.onclick = () => { window.location.href = '/api/auth/google/start'; };
@@ -394,13 +427,36 @@ function setupAuth() {
 
     ui.submitAuth.onclick = async () => {
         const email = ui.authEmail.value.trim();
-        const pass  = ui.authPass.value;
-        if (!email || !pass) { ui.authMsg.innerText = t('errors.fill_fields'); return; }
+
+        if (mode === 'forgot') {
+            if (!email) { ui.authMsg.className = 'error-msg'; ui.authMsg.innerText = t('errors.fill_fields'); return; }
+            ui.submitAuth.disabled = true;
+            try {
+                const res = await fetch('/api/auth/forgot-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email }),
+                });
+                if (!res.ok) throw new Error('failed');
+                ui.authMsg.className = 'success-msg';
+                ui.authMsg.innerText = t('app.auth_forgot_sent');
+            } catch {
+                ui.authMsg.className = 'error-msg';
+                ui.authMsg.innerText = t('errors.auth_generic');
+            } finally {
+                ui.submitAuth.disabled = false;
+            }
+            return;
+        }
+
+        const pass = ui.authPass.value;
+        if (!email || !pass) { ui.authMsg.className = 'error-msg'; ui.authMsg.innerText = t('errors.fill_fields'); return; }
 
         ui.submitAuth.disabled = true;
+        ui.authMsg.className = 'error-msg';
         ui.authMsg.innerText = '';
         try {
-            const endpoint = isRegisterMode ? '/api/auth/register' : '/api/auth/login';
+            const endpoint = mode === 'register' ? '/api/auth/register' : '/api/auth/login';
             const res = await fetch(endpoint, {
                 method: 'POST',
                 credentials: 'include',

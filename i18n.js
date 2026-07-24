@@ -62,6 +62,11 @@
                 auth_submit_register: "Register",
                 auth_toggle_register: "Need an account? <strong>Register</strong>",
                 auth_toggle_signin: "Have an account? <strong>Sign In</strong>",
+                auth_forgot_link: "Forgot your password?",
+                auth_back_to_signin: "Back to Sign In",
+                auth_title_forgot: "Reset Password",
+                auth_submit_forgot: "Send Reset Link",
+                auth_forgot_sent: "If that email is registered, check your inbox for a reset link.",
                 offline_msg: "You're offline. Check your connection to keep training."
             },
             errors: {
@@ -70,11 +75,24 @@
                 invalid_email: "Enter a valid email address.",
                 weak_password: "Password must be at least 8 characters.",
                 invalid_credentials: "Invalid email or password.",
+                password_mismatch: "Passwords don't match.",
                 no_matches: "No matches found...",
                 load_error: "Error loading the tactical document.",
                 chat_expired: "🚨 Trial ended! Your free access has expired.",
                 chat_unavailable: "❌ Instructor unavailable. Connection failed.",
                 auth_generic: "Something went wrong. Please try again."
+            },
+            resetpw: {
+                title: "Reset Your Password",
+                subtitle: "Choose a new password for your account.",
+                new_password_placeholder: "New password",
+                confirm_password_placeholder: "Confirm new password",
+                submit: "Reset Password",
+                success_title: "Password Updated!",
+                success_msg: "You can now sign in with your new password.",
+                invalid_title: "Link Expired or Invalid",
+                invalid_msg: "This password reset link is no longer valid. Request a new one from the sign-in screen.",
+                back_home: "Back to the Academy"
             },
             quiz: {
                 scenario_label: "Match Scenario",
@@ -143,6 +161,11 @@
                 auth_submit_register: "Registrarme",
                 auth_toggle_register: "¿Sin cuenta? <strong>Regístrate</strong>",
                 auth_toggle_signin: "¿Ya tienes cuenta? <strong>Entra</strong>",
+                auth_forgot_link: "¿Olvidaste tu contraseña?",
+                auth_back_to_signin: "Volver a Iniciar Sesión",
+                auth_title_forgot: "Restablecer Contraseña",
+                auth_submit_forgot: "Enviar Enlace",
+                auth_forgot_sent: "Si ese email está registrado, revisa tu bandeja de entrada para el enlace de restablecimiento.",
                 offline_msg: "Sin conexión. Revisa tu red para seguir entrenando."
             },
             errors: {
@@ -151,11 +174,24 @@
                 invalid_email: "Introduce un email válido.",
                 weak_password: "La contraseña debe tener al menos 8 caracteres.",
                 invalid_credentials: "Email o contraseña incorrectos.",
+                password_mismatch: "Las contraseñas no coinciden.",
                 no_matches: "Sin resultados...",
                 load_error: "Error al cargar el documento táctico.",
                 chat_expired: "🚨 ¡Prueba agotada! Tu acceso gratuito ha expirado.",
                 chat_unavailable: "❌ Míster no disponible. Fallo de conexión.",
                 auth_generic: "Algo ha fallado. Inténtalo de nuevo."
+            },
+            resetpw: {
+                title: "Restablecer tu Contraseña",
+                subtitle: "Elige una nueva contraseña para tu cuenta.",
+                new_password_placeholder: "Nueva contraseña",
+                confirm_password_placeholder: "Confirma la nueva contraseña",
+                submit: "Restablecer Contraseña",
+                success_title: "¡Contraseña Actualizada!",
+                success_msg: "Ya puedes iniciar sesión con tu nueva contraseña.",
+                invalid_title: "Enlace Caducado o Inválido",
+                invalid_msg: "Este enlace de restablecimiento ya no es válido. Solicita uno nuevo desde la pantalla de inicio de sesión.",
+                back_home: "Volver a la Academia"
             },
             quiz: {
                 scenario_label: "Escenario",
