@@ -86,6 +86,13 @@ const MAX_MESSAGE_LENGTH = 1000;
 const DEEPSEEK_TIMEOUT_MS = 20000;
 const DEEPSEEK_MAX_RETRIES = 2;
 const VIP_CHECK_LIMIT_PER_HOUR = 30;
+// Single source of truth for both the real chat call and the /health check —
+// deepseek-chat's retirement on 2026-07-24 broke prod silently because
+// /health only pinged /v1/models, never an actual completion with this model
+// name. Keeping both call sites reading the same constant means a future
+// model-name change can't desync between them the same way.
+const DEEPSEEK_MODEL = 'deepseek-v4-flash';
+const DEEPSEEK_THINKING = { type: 'disabled' };
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
@@ -216,12 +223,8 @@ async function callDeepSeek(env, message) {
           Authorization: `Bearer ${env.SYSTEM_KEY}`,
         },
         body: JSON.stringify({
-          // deepseek-chat was retired 2026-07-24; it used to alias the
-          // non-thinking mode of deepseek-v4-flash, so we pin that
-          // explicitly — v4-flash defaults to thinking mode (slower, adds a
-          // reasoning_content field we don't use) if `thinking` is omitted.
-          model: 'deepseek-v4-flash',
-          thinking: { type: 'disabled' },
+          model: DEEPSEEK_MODEL,
+          thinking: DEEPSEEK_THINKING,
           messages: [
             { role: 'system', content: GAFFER_SYSTEM_PROMPT },
             { role: 'user', content: message },
