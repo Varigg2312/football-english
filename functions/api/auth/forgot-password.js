@@ -16,6 +16,11 @@ export async function onRequestPost({ request, env }) {
   // registered, and swallow send failures too — the response must not be an
   // oracle for account existence. Google-only accounts (no password_hash)
   // have nothing to reset, so they're silently skipped as well.
+  // Opportunistic sweep of anyone's expired, never-used tokens — keeps the
+  // "expires in 1 hour" retention claim in the privacy policy literally true
+  // instead of just logically unusable-but-still-stored.
+  await env.DB.prepare(`DELETE FROM password_resets WHERE expires_at <= datetime('now')`).run();
+
   const user = await findUserByEmail(env.DB, email);
   if (user && user.password_hash) {
     const token = generateToken();
