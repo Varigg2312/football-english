@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gaffer-pro-v7';
+const CACHE_NAME = 'gaffer-pro-v8';
 const OFFLINE_URL = '/offline.html';
 
 // Core shell + content precached at install so lessons already seen
@@ -47,6 +47,12 @@ self.addEventListener('fetch', (event) => {
 
     const url = new URL(req.url);
     if (url.origin !== self.location.origin) return; // let cross-origin CDN requests pass through untouched
+
+    // Auth/session endpoints must never be cached: a stale cached /api/auth/me
+    // would instantly hand back a logged-in-as-someone-else (or logged-out)
+    // response before the real network answer arrives, flashing the wrong
+    // account state on every load. Bypass the SW entirely for these.
+    if (url.pathname.startsWith('/api/')) return;
 
     // lessons.json: network-first so new/edited lessons show up when online,
     // but still readable offline from the last successful fetch.

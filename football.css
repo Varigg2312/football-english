@@ -214,6 +214,12 @@ body {
 .card { background: white; border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9; }
 .card-header { font-size: 0.9rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
 
+/* Base CTA button — quiz's "Next Play"/"Finish Match" buttons (app.js) use
+   just this class with no other styling hook, so without a base rule here
+   they fell back to the browser's unstyled native button look. */
+.cta-button { background: #3b82f6; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s; }
+.cta-button:hover { transform: scale(1.02); }
+
 /* PREMIUM BANNER (BOTÓN ROSA) */
 .premium-card { background: #1e1b4b; color: white; display: flex; justify-content: space-between; align-items: center; }
 .premium-text h2 { font-size: 1.2rem; margin-bottom: 5px; color: #818cf8; }
@@ -368,7 +374,11 @@ body {
    OFFLINE BANNER
    ========================================= */
 .offline-banner {
-    position: fixed;
+    /* sticky (not fixed) + being the first element in <body> means it takes
+       real space in normal flow when shown, pushing the HUD below it down —
+       fixed positioning here used to render it directly on top of the HUD,
+       hiding the login button and language selector while offline. */
+    position: sticky;
     top: 0; left: 0; right: 0;
     background: #1e293b;
     color: #fbbf24;

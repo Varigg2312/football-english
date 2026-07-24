@@ -436,11 +436,14 @@ function authErrorMessage(code) {
 }
 
 // ── VOICE ──────────────────────────────────────────────────
+let speechSupported = false;
+
 function setupVoiceControl() {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
         if (ui.voiceWrapper) ui.voiceWrapper.classList.add('hidden');
         return;
     }
+    speechSupported = true;
     if (ui.voiceWrapper) ui.voiceWrapper.classList.remove('hidden');
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
@@ -502,7 +505,7 @@ function renderSearchResult(lesson) {
             ${done ? '<span class="lesson-done" title="Completed">✓</span>' : ''}
             ${lesson.title}
         </span>
-        <strong>GO <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></strong>`;
+        <strong>${t('app.search_go')} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></strong>`;
     const select = () => {
         loadLesson(lesson.id);
         ui.search.value = lesson.title;
@@ -599,6 +602,9 @@ function renderLesson(lesson) {
 function showQuestion() {
     const q = currentQuiz[currentQuestionIndex];
     if (!q) return;
+    // Restore the mic control (hidden by finishLesson on a previous lesson)
+    // now that there's a question again to answer.
+    if (ui.voiceWrapper && speechSupported) ui.voiceWrapper.classList.remove('hidden');
     if (ui.quizHeaderText) {
         ui.quizHeaderText.removeAttribute('data-i18n');
         ui.quizHeaderText.textContent = `${t('quiz.scenario_label')} ${currentQuestionIndex + 1}/${currentQuiz.length}`;
@@ -628,6 +634,10 @@ function handleAnswer(option, btnClicked) {
         playSound('correct'); addXP(ANSWER_XP);
         btnClicked.style.borderColor     = '#4ade80';
         btnClicked.style.backgroundColor = '#f0fdf4';
+        // Explicit dark text: in dark mode .option-btn's own rule sets a
+        // light color, which against this always-light green background
+        // was nearly unreadable (light-on-light).
+        btnClicked.style.color           = '#166534';
         ui.feedback.innerHTML += ` <strong>${t('quiz.xp_gain')}</strong>`;
     } else {
         playSound('wrong');
@@ -657,6 +667,9 @@ function finishLesson() {
     ui.quizQuestion.innerText = t('quiz.completed');
     ui.quizOptions.innerHTML  = '';
     ui.feedback.classList.add('hidden');
+    // No more question to answer, so the "tap & speak" mic control has
+    // nothing left to do — leaving it visible here reads as broken/dead UI.
+    if (ui.voiceWrapper) ui.voiceWrapper.classList.add('hidden');
 
     // Mark lesson as completed
     if (currentLessonId) markLessonComplete(currentLessonId);
