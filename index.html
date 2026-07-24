@@ -26,6 +26,11 @@
 </head>
 <body>
 
+    <div id="offline-banner" class="offline-banner hidden" role="alert" aria-live="assertive">
+        <i class="fa-solid fa-wifi-slash" aria-hidden="true"></i>
+        <span data-i18n="app.offline_msg">You're offline. Check your connection to keep training.</span>
+    </div>
+
     <main id="landing-page" class="landing-page">
         <div class="forma-liquida"></div>
 
@@ -257,11 +262,6 @@
                 <p id="auth-msg" class="error-msg"></p>
             </div>
         </div>
-    </div>
-
-    <div id="offline-banner" class="offline-banner hidden" role="alert" aria-live="assertive">
-        <i class="fa-solid fa-wifi-slash" aria-hidden="true"></i>
-        <span data-i18n="app.offline_msg">You're offline. Check your connection to keep training.</span>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"
