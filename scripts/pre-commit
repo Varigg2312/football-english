@@ -1,0 +1,14 @@
+#!/bin/sh
+# Auto-bumps sw.js's CACHE_NAME (via bump-sw-cache.js) before every commit,
+# so nobody — human or GitAutoPush — has to remember to do it by hand.
+# Never blocks the commit: if node isn't on PATH for whatever ran this, it
+# just skips the auto-bump and lets the commit through as before.
+repo_root="$(git rev-parse --show-toplevel)"
+
+if command -v node >/dev/null 2>&1; then
+  node "$repo_root/scripts/bump-sw-cache.js" && git add "$repo_root/sw.js"
+else
+  echo "pre-commit: node not found on PATH, skipping sw.js CACHE_NAME auto-bump" >&2
+fi
+
+exit 0
