@@ -3,88 +3,514 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy — Football English Academy</title>
+    <title>Privacy Policy / Política de Privacidad — Football English Academy</title>
+    <meta name="robots" content="index, follow">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Inter', system-ui, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background-color: #f8fafc;
             color: #1e293b;
-            padding: 40px 24px;
-            max-width: 720px;
+            padding: 40px 24px 80px;
+            max-width: 800px;
             margin: 0 auto;
             line-height: 1.7;
         }
         @media (prefers-color-scheme: dark) {
             body { background-color: #0f172a; color: #e2e8f0; }
-            h1, h2 { color: #f1f5f9; }
+            h1, h2, h3 { color: #f1f5f9; }
             a { color: #60a5fa; }
+            .summary-box { background: #1e293b !important; border-color: #334155 !important; }
+            table { border-color: #334155 !important; }
+            th { background: #1e293b !important; color: #f1f5f9 !important; }
+            td { border-color: #334155 !important; }
+            .form-box { background: #1e293b !important; border-color: #334155 !important; }
+            input, select, textarea { background: #0f172a !important; border-color: #334155 !important; color: #f1f5f9 !important; }
+            .danger-box { background: #451a1a !important; border-color: #7f1d1d !important; }
         }
-        header { margin-bottom: 40px; border-bottom: 2px solid #3b82f6; padding-bottom: 20px; }
+        header { margin-bottom: 30px; border-bottom: 2px solid #3b82f6; padding-bottom: 20px; }
         .badge { background: #3b82f6; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-block; margin-bottom: 12px; }
-        h1 { font-size: 2rem; font-weight: 900; margin-bottom: 8px; }
+        h1 { font-size: 1.9rem; font-weight: 900; margin-bottom: 8px; }
         .updated { font-size: 0.85rem; color: #64748b; }
-        h2 { font-size: 1.1rem; font-weight: 700; margin: 28px 0 10px; color: #0f172a; }
+        h2 { font-size: 1.15rem; font-weight: 800; margin: 32px 0 10px; color: #0f172a; }
+        h3 { font-size: 0.98rem; font-weight: 700; margin: 18px 0 8px; }
         p { margin-bottom: 12px; }
-        ul { margin: 8px 0 12px 20px; }
-        ul li { margin-bottom: 6px; }
+        ul, ol { margin: 8px 0 12px 22px; }
+        ul li, ol li { margin-bottom: 6px; }
         a { color: #3b82f6; }
+        strong { font-weight: 700; }
+        code { background: rgba(148,163,184,0.2); padding: 1px 6px; border-radius: 4px; font-size: 0.85em; }
         footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid #e2e8f0; font-size: 0.85rem; color: #64748b; }
+
+        .lang-switch { display: flex; gap: 8px; margin-bottom: 18px; }
+        .lang-switch button {
+            background: #f1f5f9; border: 1px solid #e2e8f0; color: #334155;
+            padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; cursor: pointer;
+        }
+        .lang-switch button.active { background: #3b82f6; color: white; border-color: #3b82f6; }
+        @media (prefers-color-scheme: dark) {
+            .lang-switch button { background: #1e293b; border-color: #334155; color: #cbd5e1; }
+        }
+
+        .summary-box {
+            background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 12px;
+            padding: 18px 20px; margin: 18px 0 28px;
+        }
+        .summary-box h3 { margin-top: 0; }
+        .summary-box ul { margin-bottom: 0; }
+
+        table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 0.88rem; border: 1px solid #e2e8f0; }
+        th, td { border: 1px solid #e2e8f0; padding: 8px 10px; text-align: left; vertical-align: top; }
+        th { background: #f1f5f9; font-weight: 700; }
+
+        .form-box {
+            background: white; border: 1px solid #e2e8f0; border-radius: 12px;
+            padding: 20px; margin: 16px 0 24px;
+        }
+        label { display: block; font-size: 0.82rem; font-weight: 700; margin-bottom: 4px; margin-top: 12px; }
+        label:first-child { margin-top: 0; }
+        input, select, textarea {
+            width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px;
+            font-family: inherit; font-size: 0.92rem; background: #f8fafc; color: inherit;
+        }
+        textarea { min-height: 90px; resize: vertical; }
+        .submit-btn {
+            margin-top: 16px; background: #3b82f6; color: white; border: none;
+            padding: 11px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.92rem;
+        }
+        .submit-btn:hover { background: #2563eb; }
+        .form-note { font-size: 0.78rem; color: #64748b; margin-top: 10px; }
+
+        .danger-box {
+            background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px;
+            padding: 18px 20px; margin: 16px 0 24px;
+        }
+        .danger-btn {
+            background: #dc2626; color: white; border: none; padding: 10px 20px;
+            border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.88rem; margin-top: 10px;
+        }
+        .danger-btn:hover { background: #b91c1c; }
+        .danger-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        #delete-status { margin-top: 10px; font-size: 0.85rem; font-weight: 600; }
+
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
+
+<!-- ============================= ENGLISH ============================= -->
+<div id="content-en">
     <header>
         <span class="badge">LEGAL</span>
+        <div class="lang-switch">
+            <button id="btn-en" class="active" type="button">English</button>
+            <button id="btn-es" type="button">Español</button>
+        </div>
         <h1>Privacy Policy</h1>
-        <p class="updated">Last updated: 24 June 2026</p>
+        <p class="updated">Effective date: 24 July 2026 · Applies to <code>football-english.pages.dev</code> and the "Gaffer PRO" Android app (TWA)</p>
     </header>
 
-    <p>Football English Academy ("we", "our", or "the app") is a language-learning application focused on football vocabulary and tactics. This policy explains how we handle your data.</p>
+    <div class="summary-box">
+        <h3>📋 Plain-language summary (not a substitute for the full text below)</h3>
+        <ul>
+            <li>If you create an account, we store your email, a securely hashed password (never the password itself), your display name and your learning progress (XP, streak, completed lessons) in a database in the EU/Cloudflare's network.</li>
+            <li>If you sign in with Google, we only receive your email, name and profile photo — never your Google password.</li>
+            <li>Messages you send to "The Gaffer" AI tutor are forwarded to DeepSeek, an AI provider based outside the EU, to generate a reply. We do not store the content of those conversations ourselves. <strong>Please don't share personal or sensitive information in the chat.</strong></li>
+            <li>Payments are handled entirely by Stripe — we never see or store your card details.</li>
+            <li>We use only strictly necessary cookies (to keep you logged in) — no advertising or tracking cookies.</li>
+            <li>You can request access, correction or deletion of your data at any time — see <a href="#rights-en">Section 8</a> below, including a form and a one-click account deletion option.</li>
+        </ul>
+    </div>
 
-    <h2>1. Data We Collect</h2>
-    <p>We collect only the minimum data necessary to provide the service:</p>
+    <h2>1. Who is responsible for your data (Data Controller)</h2>
+    <p><strong>Álvaro Gómez Gómez</strong>, an individual based in Casarabonela (Málaga), Spain, is the data controller (<em>responsable del tratamiento</em>) for the personal data processed through this website and application, operated as a personal, small-scale project (not a registered company).</p>
+    <p><strong>Contact for any privacy matter:</strong> <a href="mailto:alvaroggcasarabonela@gmail.com">alvaroggcasarabonela@gmail.com</a></p>
+    <p>Given the limited scale and nature of the processing carried out, the appointment of a Data Protection Officer (DPO) is not mandatory under Article 37 of Regulation (EU) 2016/679 (GDPR).</p>
+
+    <h2>2. What personal data we collect</h2>
+    <h3>2.1 If you create an account with email and password</h3>
     <ul>
-        <li><strong>Game progress</strong> (XP, rank, daily streak) — stored exclusively in your device's <code>localStorage</code>. Never transmitted to our servers.</li>
-        <li><strong>Username and password</strong> (if you register) — stored in <code>localStorage</code> for local session management. No server-side account database exists at this time.</li>
-        <li><strong>Lesson interactions</strong> (quiz answers, search queries) — processed locally in your browser. Not stored or transmitted.</li>
+        <li><strong>Email address</strong> (used as your unique identifier and, if you request account recovery, as a contact point).</li>
+        <li><strong>Password</strong> — never stored in plain text. We store a PBKDF2-HMAC-SHA256 hash (100,000 iterations, unique random salt per user); the original password is not recoverable by us or anyone else.</li>
+        <li><strong>Display name</strong> (defaults to the part of your email before the "@" unless you signed up via Google, in which case it's your Google profile name).</li>
+    </ul>
+    <h3>2.2 If you sign in with Google</h3>
+    <ul>
+        <li>Your Google account identifier ("sub"), email address, full name and profile picture URL, obtained via Google's OAuth 2.0 identity service with your explicit consent at Google's own sign-in screen.</li>
+        <li>We never receive or see your Google password.</li>
+    </ul>
+    <h3>2.3 Gameplay and progress data</h3>
+    <ul>
+        <li>XP points, rank, daily streak, number of chat messages used, and the list of completed lessons — stored against your account so it's available across devices.</li>
+        <li>If you use the app without an account ("guest mode"), this same data is kept only in your browser's local storage and is never sent to our servers.</li>
+    </ul>
+    <h3>2.4 Session and security data</h3>
+    <ul>
+        <li>A random session token, stored in an <code>HttpOnly</code>, <code>Secure</code> cookie so it cannot be read by JavaScript or intercepted in transit. We store only a one-way hash of this token, not the token itself.</li>
+        <li>A short-lived (10-minute) random value in a cookie used solely to prevent forgery during the Google sign-in process (CSRF protection), deleted automatically once login completes.</li>
+        <li>A random, non-identifying device identifier stored in your browser (not a cookie) used to enforce the free-tier chat message limit and to link a PRO access code to up to 3 devices.</li>
+        <li>Your IP address is processed transiently by our anti-abuse system to apply a daily rate limit on chat requests per network (deleted automatically after 48 hours) and is also visible to Cloudflare, our hosting provider, as part of standard web server operation.</li>
+    </ul>
+    <h3>2.5 "The Gaffer" AI chat</h3>
+    <p>If you use the AI tutor chat feature (PRO), the text of your message is sent to our backend and forwarded, in real time, to DeepSeek (a third-party AI provider) purely to generate a reply. <strong>We do not store the content of your chat messages on our own servers.</strong> DeepSeek's own retention practices apply to the message once it reaches their systems — see Section 4 below regarding this international transfer.</p>
+    <h3>2.6 Payment data</h3>
+    <p>PRO access is purchased through a Stripe Payment Link. Card numbers, billing details and payment credentials are entered directly on Stripe's own secure page and are <strong>never received, seen, or stored by us</strong>. We only receive a payment confirmation and a one-time session identifier, used exclusively to generate your PRO access code.</p>
+
+    <h2>3. Purposes and legal basis for processing</h2>
+    <table>
+        <tr><th>Purpose</th><th>Legal basis (Art. 6 GDPR)</th></tr>
+        <tr><td>Creating and managing your account, keeping you logged in, syncing your progress</td><td>Performance of a contract (Art. 6.1.b) — necessary to provide the service you requested</td></tr>
+        <tr><td>Google Sign-In authentication</td><td>Performance of a contract (Art. 6.1.b), initiated by your own action</td></tr>
+        <tr><td>Providing the AI tutor chat to PRO users</td><td>Performance of a contract (Art. 6.1.b) — a feature you actively choose to use</td></tr>
+        <tr><td>Processing PRO payments (via Stripe)</td><td>Performance of a contract (Art. 6.1.b)</td></tr>
+        <tr><td>Rate-limiting by IP/device, fraud prevention on PRO codes, session security</td><td>Legitimate interest (Art. 6.1.f) — keeping the service available and free from abuse</td></tr>
+    </table>
+
+    <h2>4. Who we share data with — international transfers</h2>
+    <ul>
+        <li><strong>Cloudflare, Inc.</strong> — hosting, database (D1), and infrastructure provider. Acts as our data processor. Cloudflare may process data in facilities located outside the European Economic Area (EEA); this is safeguarded through Cloudflare's Data Processing Addendum and Standard Contractual Clauses, and/or its participation in the EU-U.S. Data Privacy Framework.</li>
+        <li><strong>Google LLC</strong> — only if you choose to sign in with Google. Google participates in the EU-U.S. Data Privacy Framework.</li>
+        <li><strong>Stripe, Inc.</strong> — payment processing, acting as an independent controller for your payment data under its own privacy policy. Stripe also participates in the EU-U.S. Data Privacy Framework and/or uses Standard Contractual Clauses.</li>
+        <li><strong>DeepSeek</strong> — an AI provider based outside the European Economic Area, used solely to generate replies in the "Gaffer" chat feature. <strong>There is currently no European Commission adequacy decision covering this transfer.</strong> We only send the text of the specific message you choose to submit to the chat, and we do not send any other account data. For this reason, we strongly recommend you do not enter personal, financial, health, or other sensitive information into the chat box.</li>
+        <li>Font Awesome (cdnjs), Google Fonts and jsdelivr — deliver icons, fonts and a small confetti animation library from their own content delivery networks; your browser connects to them directly, which may expose your IP address to those providers per their own policies.</li>
+    </ul>
+    <p>We do <strong>not</strong> sell your data, and we do not use advertising or analytics networks of any kind.</p>
+
+    <h2>5. How long we keep your data</h2>
+    <ul>
+        <li><strong>Account data</strong> (email, password hash, profile, progress): kept while your account remains active, until you request deletion (see Section 8) or delete it yourself.</li>
+        <li><strong>Session tokens</strong>: expire automatically after 30 days, or immediately upon logout or account deletion.</li>
+        <li><strong>Google sign-in CSRF cookie</strong>: expires automatically after 10 minutes.</li>
+        <li><strong>Chat message content</strong>: not retained by us at all — only forwarded to generate a reply.</li>
+        <li><strong>IP-based rate-limit counters</strong>: deleted automatically after 48 hours.</li>
+        <li><strong>Device identifier / free-message counters, PRO code-to-device links</strong>: kept for as long as needed to enforce the relevant limit, and can be reset on request.</li>
     </ul>
 
-    <h2>2. Data We Do NOT Collect</h2>
+    <h2>6. Cookies</h2>
+    <p>This site uses only <strong>strictly necessary / technical cookies</strong>, exempt from prior consent under Article 22.2 of the Spanish LSSI-CE (E-Commerce Act) and Recital 66 of Directive 2002/58/EC (ePrivacy):</p>
+    <table>
+        <tr><th>Cookie</th><th>Purpose</th><th>Duration</th></tr>
+        <tr><td><code>session</code></td><td>Keeps you signed in (HttpOnly, Secure)</td><td>30 days</td></tr>
+        <tr><td><code>oauth_state</code></td><td>Prevents forgery during Google Sign-In (HttpOnly, Secure)</td><td>10 minutes</td></tr>
+    </table>
+    <p>We do not use advertising, analytics, or third-party tracking cookies, so no cookie-consent banner is required. Your device identifier and offline progress are stored in <code>localStorage</code>, not in cookies, and never leave your browser unless you create an account.</p>
+
+    <h2>7. Children's privacy</h2>
+    <p>Under Article 7 of Spanish Organic Law 3/2018 (LOPDGDD), a minor may only consent to data processing from the age of <strong>14</strong> onward; below that age, parental or guardian consent is required. This service is not knowingly directed at, or intended for, children under 14, and we do not knowingly collect personal data from them without such consent. If you believe a child under 14 has created an account or provided us data without appropriate consent, please contact us using the details in Section 1 or the form in Section 8, and we will delete it.</p>
+
+    <h2 id="rights-en">8. Your rights, and how to exercise them ("protest" / objection channel)</h2>
+    <p>Under Articles 15 to 22 of the GDPR and the LOPDGDD, you have the right to:</p>
     <ul>
-        <li>We do not use cookies for tracking.</li>
-        <li>We do not collect device identifiers, IP addresses, or location data.</li>
-        <li>We do not run analytics or advertising SDKs.</li>
-        <li>We do not share any data with third parties.</li>
+        <li><strong>Access</strong> the personal data we hold about you.</li>
+        <li><strong>Rectification</strong> of inaccurate or incomplete data.</li>
+        <li><strong>Erasure</strong> ("right to be forgotten") of your data.</li>
+        <li><strong>Restriction</strong> of how we process your data in certain circumstances.</li>
+        <li><strong>Portability</strong> — receive your data in a structured, machine-readable format.</li>
+        <li><strong>Object</strong> to processing based on our legitimate interest, at any time and for any reason relating to your particular situation.</li>
+        <li><strong>Withdraw consent</strong> at any time, where processing is based on consent, without affecting the lawfulness of prior processing.</li>
+        <li><strong>Lodge a complaint</strong> with the Spanish Data Protection Agency (<a href="https://www.aepd.es" target="_blank" rel="noopener">AEPD</a>) or your own country's supervisory authority, if you believe your rights have not been respected.</li>
+    </ul>
+    <p>This service does not carry out automated decision-making or profiling producing legal or similarly significant effects on you (Art. 22 GDPR) — your XP/rank is simple, non-automated gamification with no consequences outside the app.</p>
+
+    <h3>Delete your account right now</h3>
+    <div class="danger-box">
+        <p>If you're currently signed in on this device, you can permanently delete your account and all associated data (progress, completed lessons, sessions) immediately, with no need to wait for a manual request.</p>
+        <button id="delete-account-btn" class="danger-btn" type="button">Delete my account now</button>
+        <p id="delete-status"></p>
+    </div>
+
+    <h3>Submit a request or objection</h3>
+    <p>Fill in the form below to exercise any of the above rights, or to raise an objection or complaint directly with us. It will open your email client with a pre-filled message addressed to us — review it and hit send. We will respond within <strong>one month</strong> (extendable by two further months for complex requests, as permitted by Art. 12.3 GDPR), free of charge for the first request in any given period.</p>
+    <div class="form-box">
+        <label for="req-name-en">Full name</label>
+        <input id="req-name-en" type="text" required>
+        <label for="req-email-en">Your contact email</label>
+        <input id="req-email-en" type="email" required>
+        <label for="req-type-en">Right you want to exercise</label>
+        <select id="req-type-en">
+            <option value="Access">Access to my data</option>
+            <option value="Rectification">Rectification of my data</option>
+            <option value="Erasure">Erasure of my data</option>
+            <option value="Restriction">Restriction of processing</option>
+            <option value="Portability">Data portability</option>
+            <option value="Objection">Objection to processing</option>
+            <option value="Withdraw consent">Withdraw consent</option>
+            <option value="Complaint">General complaint / disagreement</option>
+        </select>
+        <label for="req-msg-en">Details of your request</label>
+        <textarea id="req-msg-en" required placeholder="Describe your request..."></textarea>
+        <button class="submit-btn" type="button" id="submit-req-en">Prepare email to send</button>
+        <p class="form-note">This form does not send data anywhere by itself — it only prepares an email in your own mail app. If you prefer, you can also write directly to <a href="mailto:alvaroggcasarabonela@gmail.com">alvaroggcasarabonela@gmail.com</a>, or lodge a complaint with the <a href="https://www.aepd.es" target="_blank" rel="noopener">AEPD</a> at any time.</p>
+    </div>
+
+    <h2>9. Security measures</h2>
+    <ul>
+        <li>Passwords are hashed with PBKDF2-HMAC-SHA256 (100,000 iterations, random per-user salt) — never stored or logged in plain text.</li>
+        <li>All traffic is encrypted in transit via HTTPS/TLS.</li>
+        <li>Session cookies are <code>HttpOnly</code> and <code>Secure</code>, and only a cryptographic hash of the session token is stored server-side.</li>
+        <li>Third-party API keys and payment webhook secrets are stored as encrypted secrets in our hosting provider, never in the source code.</li>
     </ul>
 
-    <h2>3. AI Features (The Gaffer)</h2>
-    <p>PRO users can interact with "The Gaffer", an AI tutor powered by a third-party large language model API. Messages you send to The Gaffer are transmitted to that API provider for processing. We recommend not sharing personal or sensitive information in chat. The API provider's privacy policy applies to those transmissions.</p>
+    <h2>10. Changes to this policy</h2>
+    <p>We may update this policy as the app evolves. The "Effective date" at the top will reflect the date of the latest revision. If changes are significant, we will make reasonable efforts to highlight them on the site.</p>
 
-    <h2>4. Third-Party Services</h2>
-    <ul>
-        <li><strong>Cloudflare Pages</strong> — hosts this web application. Cloudflare may log anonymous access metadata per their own privacy policy.</li>
-        <li><strong>Stripe</strong> — processes PRO subscription payments. Stripe's privacy policy governs payment data.</li>
-        <li><strong>Font Awesome / Google Fonts</strong> — loaded from CDN. These providers may log your IP address per their policies.</li>
-    </ul>
-
-    <h2>5. Children's Privacy</h2>
-    <p>This app is not directed at children under 13. We do not knowingly collect personal data from children under 13. If you believe a child has provided us with information, please contact us immediately.</p>
-
-    <h2>6. Data Retention and Deletion</h2>
-    <p>All game data is stored locally on your device. You can delete it at any time by clearing your browser's site data in Settings. Uninstalling the app or clearing the TWA data removes all stored information permanently.</p>
-
-    <h2>7. Your Rights</h2>
-    <p>Since all data remains on your device and we hold no personal data on our servers, we currently have no user data to provide, modify, or delete upon request. If this changes in future versions, this policy will be updated accordingly.</p>
-
-    <h2>8. Changes to This Policy</h2>
-    <p>We may update this policy as the app evolves. The "Last updated" date at the top will reflect any changes. Continued use of the app after changes constitutes acceptance of the new policy.</p>
-
-    <h2>9. Contact</h2>
-    <p>For privacy-related questions, contact us at: <a href="mailto:alvaroggcasarabonela@gmail.com">alvaroggcasarabonela@gmail.com</a></p>
+    <h2>11. Contact</h2>
+    <p>For any question about this policy or your data: <a href="mailto:alvaroggcasarabonela@gmail.com">alvaroggcasarabonela@gmail.com</a></p>
 
     <footer>
-        <p>© 2026 Football English Academy. All rights reserved.</p>
-        <p><a href="/">← Back to Academy</a></p>
+        <p>© 2026 Football English Academy. This document is provided in good faith to inform you clearly about our data practices; it does not constitute legal advice.</p>
+        <p style="margin-top:8px"><a href="/">← Back to the Academy</a></p>
     </footer>
+</div>
+
+<!-- ============================= ESPAÑOL ============================= -->
+<div id="content-es" class="hidden">
+    <header>
+        <span class="badge">LEGAL</span>
+        <div class="lang-switch">
+            <button id="btn-en-2" type="button">English</button>
+            <button id="btn-es-2" class="active" type="button">Español</button>
+        </div>
+        <h1>Política de Privacidad</h1>
+        <p class="updated">Fecha de entrada en vigor: 24 de julio de 2026 · Aplica a <code>football-english.pages.dev</code> y a la app Android "Gaffer PRO" (TWA)</p>
+    </header>
+
+    <div class="summary-box">
+        <h3>📋 Resumen en lenguaje sencillo (no sustituye al texto completo)</h3>
+        <ul>
+            <li>Si creas una cuenta, guardamos tu email, tu contraseña cifrada de forma segura (nunca la contraseña en sí), tu nombre visible y tu progreso (XP, racha, lecciones completadas) en una base de datos dentro de la red de Cloudflare.</li>
+            <li>Si inicias sesión con Google, solo recibimos tu email, nombre y foto de perfil — nunca tu contraseña de Google.</li>
+            <li>Los mensajes que envías a "El Míster" (tutor de IA) se reenvían a DeepSeek, un proveedor de IA con sede fuera de la UE, únicamente para generar la respuesta. No almacenamos el contenido de esas conversaciones en nuestros servidores. <strong>Por favor, no compartas datos personales o sensibles en el chat.</strong></li>
+            <li>Los pagos los gestiona íntegramente Stripe — nunca vemos ni almacenamos los datos de tu tarjeta.</li>
+            <li>Solo usamos cookies estrictamente necesarias (para mantener tu sesión iniciada) — ninguna cookie de publicidad o rastreo.</li>
+            <li>Puedes solicitar el acceso, rectificación o eliminación de tus datos en cualquier momento — ver la <a href="#rights-es">Sección 8</a>, que incluye un formulario y una opción de eliminación de cuenta con un solo clic.</li>
+        </ul>
+    </div>
+
+    <h2>1. Quién es responsable de tus datos (Responsable del tratamiento)</h2>
+    <p><strong>Álvaro Gómez Gómez</strong>, persona física con domicilio en Casarabonela (Málaga), España, es el responsable del tratamiento de los datos personales procesados a través de este sitio web y aplicación, operados como un proyecto personal de pequeña escala (no una sociedad mercantil registrada).</p>
+    <p><strong>Contacto para cualquier cuestión de privacidad:</strong> <a href="mailto:alvaroggcasarabonela@gmail.com">alvaroggcasarabonela@gmail.com</a></p>
+    <p>Dada la escala y naturaleza limitada del tratamiento realizado, no resulta obligatorio el nombramiento de un Delegado de Protección de Datos (DPD) conforme al artículo 37 del Reglamento (UE) 2016/679 (RGPD).</p>
+
+    <h2>2. Qué datos personales recopilamos</h2>
+    <h3>2.1 Si creas una cuenta con email y contraseña</h3>
+    <ul>
+        <li><strong>Correo electrónico</strong> (usado como identificador único y, en su caso, como vía de contacto para recuperación de cuenta).</li>
+        <li><strong>Contraseña</strong> — nunca se almacena en texto plano. Guardamos un hash PBKDF2-HMAC-SHA256 (100.000 iteraciones, con una sal aleatoria única por usuario); la contraseña original no es recuperable por nosotros ni por nadie.</li>
+        <li><strong>Nombre visible</strong> (por defecto, la parte de tu email antes de la "@", salvo que te registres con Google, en cuyo caso es tu nombre de perfil de Google).</li>
+    </ul>
+    <h3>2.2 Si inicias sesión con Google</h3>
+    <ul>
+        <li>Tu identificador de cuenta de Google ("sub"), correo electrónico, nombre completo y URL de tu foto de perfil, obtenidos mediante el servicio de identidad OAuth 2.0 de Google con tu consentimiento explícito en la propia pantalla de inicio de sesión de Google.</li>
+        <li>Nunca recibimos ni vemos tu contraseña de Google.</li>
+    </ul>
+    <h3>2.3 Datos de juego y progreso</h3>
+    <ul>
+        <li>Puntos de XP, rango, racha diaria, número de mensajes de chat usados y la lista de lecciones completadas — almacenados junto a tu cuenta para que estén disponibles en cualquier dispositivo.</li>
+        <li>Si usas la app sin cuenta ("modo invitado"), estos mismos datos se guardan solo en el almacenamiento local de tu navegador y nunca se envían a nuestros servidores.</li>
+    </ul>
+    <h3>2.4 Datos de sesión y seguridad</h3>
+    <ul>
+        <li>Un token de sesión aleatorio, almacenado en una cookie <code>HttpOnly</code> y <code>Secure</code>, de forma que no puede leerse mediante JavaScript ni interceptarse en tránsito. Solo almacenamos un hash unidireccional de este token, no el token en sí.</li>
+        <li>Un valor aleatorio de corta duración (10 minutos) en una cookie, usado únicamente para evitar falsificaciones durante el proceso de inicio de sesión con Google (protección CSRF), eliminado automáticamente al completarse el login.</li>
+        <li>Un identificador de dispositivo aleatorio y no identificativo, guardado en tu navegador (no en una cookie), usado para aplicar el límite de mensajes gratuitos del chat y para vincular un código de acceso PRO a un máximo de 3 dispositivos.</li>
+        <li>Tu dirección IP se procesa de forma transitoria por nuestro sistema antiabuso para aplicar un límite diario de peticiones de chat por red (se elimina automáticamente a las 48 horas), y también es visible para Cloudflare, nuestro proveedor de alojamiento, como parte del funcionamiento estándar de cualquier servidor web.</li>
+    </ul>
+    <h3>2.5 Chat de IA "El Míster"</h3>
+    <p>Si usas la función de chat con el tutor de IA (PRO), el texto de tu mensaje se envía a nuestro backend y se reenvía, en tiempo real, a DeepSeek (un proveedor de IA externo) únicamente para generar una respuesta. <strong>No almacenamos el contenido de tus mensajes de chat en nuestros propios servidores.</strong> Las propias políticas de conservación de DeepSeek se aplican al mensaje una vez llega a sus sistemas — ver la Sección 4 sobre esta transferencia internacional.</p>
+    <h3>2.6 Datos de pago</h3>
+    <p>El acceso PRO se compra a través de un enlace de pago de Stripe. Los números de tarjeta, datos de facturación y credenciales de pago se introducen directamente en la página segura de Stripe y <strong>nunca los recibimos, vemos ni almacenamos</strong>. Solo recibimos una confirmación de pago y un identificador de sesión de un solo uso, empleado exclusivamente para generar tu código de acceso PRO.</p>
+
+    <h2>3. Finalidades y base legal del tratamiento</h2>
+    <table>
+        <tr><th>Finalidad</th><th>Base legal (art. 6 RGPD)</th></tr>
+        <tr><td>Crear y gestionar tu cuenta, mantener tu sesión iniciada, sincronizar tu progreso</td><td>Ejecución de un contrato (art. 6.1.b) — necesario para prestar el servicio solicitado</td></tr>
+        <tr><td>Autenticación mediante Google Sign-In</td><td>Ejecución de un contrato (art. 6.1.b), iniciado por tu propia acción</td></tr>
+        <tr><td>Ofrecer el chat con el tutor de IA a usuarios PRO</td><td>Ejecución de un contrato (art. 6.1.b) — una función que decides usar activamente</td></tr>
+        <tr><td>Procesar pagos PRO (a través de Stripe)</td><td>Ejecución de un contrato (art. 6.1.b)</td></tr>
+        <tr><td>Limitación de peticiones por IP/dispositivo, prevención de fraude en códigos PRO, seguridad de sesión</td><td>Interés legítimo (art. 6.1.f) — mantener el servicio disponible y libre de abusos</td></tr>
+    </table>
+
+    <h2>4. Con quién compartimos datos — transferencias internacionales</h2>
+    <ul>
+        <li><strong>Cloudflare, Inc.</strong> — proveedor de alojamiento, base de datos (D1) e infraestructura. Actúa como encargado del tratamiento. Cloudflare puede procesar datos en instalaciones ubicadas fuera del Espacio Económico Europeo (EEE); esto se garantiza mediante el Acuerdo de Tratamiento de Datos de Cloudflare y Cláusulas Contractuales Tipo, y/o su participación en el Marco de Protección de Datos UE-EE.UU. (Data Privacy Framework).</li>
+        <li><strong>Google LLC</strong> — solo si eliges iniciar sesión con Google. Google participa en el Marco de Protección de Datos UE-EE.UU.</li>
+        <li><strong>Stripe, Inc.</strong> — procesamiento de pagos, actuando como responsable independiente de tus datos de pago conforme a su propia política de privacidad. Stripe también participa en el Marco de Protección de Datos UE-EE.UU. y/o utiliza Cláusulas Contractuales Tipo.</li>
+        <li><strong>DeepSeek</strong> — un proveedor de IA con sede fuera del Espacio Económico Europeo, usado únicamente para generar respuestas en la función de chat "El Míster". <strong>Actualmente no existe una decisión de adecuación de la Comisión Europea que cubra esta transferencia.</strong> Solo enviamos el texto del mensaje concreto que decides enviar al chat, sin ningún otro dato de tu cuenta. Por ello, recomendamos encarecidamente no introducir datos personales, financieros, de salud u otra información sensible en el cuadro de chat.</li>
+        <li>Font Awesome (cdnjs), Google Fonts y jsdelivr — sirven iconos, tipografías y una pequeña librería de animación desde sus propias redes de distribución de contenido; tu navegador se conecta directamente a ellas, lo que puede exponer tu IP a dichos proveedores conforme a sus propias políticas.</li>
+    </ul>
+    <p><strong>No</strong> vendemos tus datos, ni utilizamos redes de publicidad o analítica de ningún tipo.</p>
+
+    <h2>5. Cuánto tiempo conservamos tus datos</h2>
+    <ul>
+        <li><strong>Datos de cuenta</strong> (email, hash de contraseña, perfil, progreso): se conservan mientras tu cuenta permanezca activa, hasta que solicites su eliminación (ver Sección 8) o la elimines tú mismo.</li>
+        <li><strong>Tokens de sesión</strong>: expiran automáticamente a los 30 días, o inmediatamente al cerrar sesión o eliminar la cuenta.</li>
+        <li><strong>Cookie CSRF de inicio de sesión con Google</strong>: expira automáticamente a los 10 minutos.</li>
+        <li><strong>Contenido de los mensajes de chat</strong>: no se conserva en absoluto por nuestra parte — solo se reenvía para generar una respuesta.</li>
+        <li><strong>Contadores de límite por IP</strong>: se eliminan automáticamente a las 48 horas.</li>
+        <li><strong>Identificador de dispositivo / contadores de mensajes gratuitos, vinculación de códigos PRO a dispositivos</strong>: se conservan mientras sea necesario para aplicar el límite correspondiente, y pueden restablecerse a petición.</li>
+    </ul>
+
+    <h2>6. Cookies</h2>
+    <p>Este sitio utiliza únicamente <strong>cookies técnicas o estrictamente necesarias</strong>, exentas del deber de consentimiento previo conforme al artículo 22.2 de la LSSI-CE y al considerando 66 de la Directiva 2002/58/CE (ePrivacy):</p>
+    <table>
+        <tr><th>Cookie</th><th>Finalidad</th><th>Duración</th></tr>
+        <tr><td><code>session</code></td><td>Mantiene tu sesión iniciada (HttpOnly, Secure)</td><td>30 días</td></tr>
+        <tr><td><code>oauth_state</code></td><td>Evita falsificaciones durante el inicio de sesión con Google (HttpOnly, Secure)</td><td>10 minutos</td></tr>
+    </table>
+    <p>No utilizamos cookies de publicidad, analítica ni de rastreo de terceros, por lo que no es necesario un banner de consentimiento de cookies. Tu identificador de dispositivo y tu progreso en modo invitado se guardan en <code>localStorage</code>, no en cookies, y nunca salen de tu navegador salvo que crees una cuenta.</p>
+
+    <h2>7. Privacidad de menores</h2>
+    <p>Conforme al artículo 7 de la Ley Orgánica 3/2018 (LOPDGDD), un menor solo puede prestar su consentimiento para el tratamiento de datos a partir de los <strong>14 años</strong>; por debajo de esa edad, se requiere el consentimiento de padres o tutores. Este servicio no está dirigido, de forma consciente, a menores de 14 años, y no recopilamos conscientemente datos personales de menores de esa edad sin dicho consentimiento. Si crees que un menor de 14 años ha creado una cuenta o nos ha facilitado datos sin el consentimiento adecuado, contáctanos a través de los datos de la Sección 1 o el formulario de la Sección 8, y procederemos a eliminarlos.</p>
+
+    <h2 id="rights-es">8. Tus derechos y cómo ejercerlos (canal para "protestar" / oponerte)</h2>
+    <p>Conforme a los artículos 15 a 22 del RGPD y la LOPDGDD, tienes derecho a:</p>
+    <ul>
+        <li><strong>Acceso</strong> a los datos personales que tratamos sobre ti.</li>
+        <li><strong>Rectificación</strong> de datos inexactos o incompletos.</li>
+        <li><strong>Supresión</strong> ("derecho al olvido") de tus datos.</li>
+        <li><strong>Limitación</strong> del tratamiento en determinadas circunstancias.</li>
+        <li><strong>Portabilidad</strong> — recibir tus datos en un formato estructurado y de uso común.</li>
+        <li><strong>Oposición</strong> al tratamiento basado en nuestro interés legítimo, en cualquier momento y por motivos relacionados con tu situación particular.</li>
+        <li><strong>Retirar tu consentimiento</strong> en cualquier momento, cuando el tratamiento se base en el consentimiento, sin que ello afecte a la licitud del tratamiento previo.</li>
+        <li><strong>Presentar una reclamación</strong> ante la Agencia Española de Protección de Datos (<a href="https://www.aepd.es" target="_blank" rel="noopener">AEPD</a>) o la autoridad de control de tu país, si consideras que no se han respetado tus derechos.</li>
+    </ul>
+    <p>Este servicio no realiza decisiones automatizadas ni elaboración de perfiles que produzcan efectos jurídicos o te afecten significativamente de forma similar (art. 22 RGPD) — tu XP/rango es una simple gamificación no automatizada, sin consecuencias fuera de la propia app.</p>
+
+    <h3>Elimina tu cuenta ahora mismo</h3>
+    <div class="danger-box">
+        <p>Si actualmente tienes la sesión iniciada en este dispositivo, puedes eliminar tu cuenta y todos los datos asociados (progreso, lecciones completadas, sesiones) de forma permanente e inmediata, sin necesidad de esperar a una solicitud manual.</p>
+        <button id="delete-account-btn-es" class="danger-btn" type="button">Eliminar mi cuenta ahora</button>
+        <p id="delete-status-es"></p>
+    </div>
+
+    <h3>Envía una solicitud u oposición</h3>
+    <p>Rellena el siguiente formulario para ejercer cualquiera de los derechos anteriores, o para plantearnos directamente una queja u oposición. Se abrirá tu cliente de correo con un mensaje ya redactado dirigido a nosotros — revísalo y pulsa enviar. Responderemos en el plazo de <strong>un mes</strong> (ampliable a dos meses más en solicitudes complejas, conforme permite el art. 12.3 RGPD), de forma gratuita para la primera solicitud en cada periodo.</p>
+    <div class="form-box">
+        <label for="req-name-es">Nombre completo</label>
+        <input id="req-name-es" type="text" required>
+        <label for="req-email-es">Tu email de contacto</label>
+        <input id="req-email-es" type="email" required>
+        <label for="req-type-es">Derecho que deseas ejercer</label>
+        <select id="req-type-es">
+            <option value="Acceso">Acceso a mis datos</option>
+            <option value="Rectificación">Rectificación de mis datos</option>
+            <option value="Supresión">Supresión de mis datos</option>
+            <option value="Limitación">Limitación del tratamiento</option>
+            <option value="Portabilidad">Portabilidad de datos</option>
+            <option value="Oposición">Oposición al tratamiento</option>
+            <option value="Retirar consentimiento">Retirar mi consentimiento</option>
+            <option value="Queja">Queja general / desacuerdo</option>
+        </select>
+        <label for="req-msg-es">Detalle de tu solicitud</label>
+        <textarea id="req-msg-es" required placeholder="Describe tu solicitud..."></textarea>
+        <button class="submit-btn" type="button" id="submit-req-es">Preparar email para enviar</button>
+        <p class="form-note">Este formulario no envía datos a ningún sitio por sí mismo — solo prepara un correo en tu propia app de email. Si lo prefieres, también puedes escribir directamente a <a href="mailto:alvaroggcasarabonela@gmail.com">alvaroggcasarabonela@gmail.com</a>, o presentar una reclamación ante la <a href="https://www.aepd.es" target="_blank" rel="noopener">AEPD</a> en cualquier momento.</p>
+    </div>
+
+    <h2>9. Medidas de seguridad</h2>
+    <ul>
+        <li>Las contraseñas se cifran con PBKDF2-HMAC-SHA256 (100.000 iteraciones, sal aleatoria por usuario) — nunca se almacenan ni registran en texto plano.</li>
+        <li>Todo el tráfico se cifra en tránsito mediante HTTPS/TLS.</li>
+        <li>Las cookies de sesión son <code>HttpOnly</code> y <code>Secure</code>, y solo se almacena en el servidor un hash criptográfico del token de sesión, nunca el token en sí.</li>
+        <li>Las claves de API de terceros y los secretos de webhooks de pago se almacenan como secretos cifrados en nuestro proveedor de alojamiento, nunca en el código fuente.</li>
+    </ul>
+
+    <h2>10. Cambios en esta política</h2>
+    <p>Podemos actualizar esta política a medida que la app evolucione. La "Fecha de entrada en vigor" en la parte superior reflejará la fecha de la última revisión. Si los cambios son significativos, haremos un esfuerzo razonable por destacarlos en el sitio.</p>
+
+    <h2>11. Contacto</h2>
+    <p>Para cualquier duda sobre esta política o tus datos: <a href="mailto:alvaroggcasarabonela@gmail.com">alvaroggcasarabonela@gmail.com</a></p>
+
+    <footer>
+        <p>© 2026 Football English Academy. Este documento se proporciona de buena fe para informarte con claridad de nuestras prácticas de datos; no constituye asesoramiento legal.</p>
+        <p style="margin-top:8px"><a href="/">← Volver a la Academia</a></p>
+    </footer>
+</div>
+
+<script>
+    // ── Language toggle ──────────────────────────────────────
+    const enBlock = document.getElementById('content-en');
+    const esBlock = document.getElementById('content-es');
+    function showLang(lang) {
+        if (lang === 'es') { enBlock.classList.add('hidden'); esBlock.classList.remove('hidden'); document.documentElement.lang = 'es'; }
+        else { esBlock.classList.add('hidden'); enBlock.classList.remove('hidden'); document.documentElement.lang = 'en'; }
+        [document.getElementById('btn-en'), document.getElementById('btn-en-2')].forEach(b => b && b.classList.toggle('active', lang === 'en'));
+        [document.getElementById('btn-es'), document.getElementById('btn-es-2')].forEach(b => b && b.classList.toggle('active', lang === 'es'));
+    }
+    document.getElementById('btn-en').onclick = () => showLang('en');
+    document.getElementById('btn-en-2').onclick = () => showLang('en');
+    document.getElementById('btn-es').onclick = () => showLang('es');
+    document.getElementById('btn-es-2').onclick = () => showLang('es');
+    // Default to whichever language the main app was last set to, if known.
+    try {
+        const saved = localStorage.getItem('app_lang');
+        if (saved === 'es') showLang('es');
+    } catch (e) {}
+
+    // ── Rights-request form → pre-filled mailto ──────────────
+    function wireRequestForm(suffix) {
+        const btn = document.getElementById('submit-req' + suffix);
+        if (!btn) return;
+        btn.addEventListener('click', () => {
+            const name = document.getElementById('req-name' + suffix).value.trim();
+            const email = document.getElementById('req-email' + suffix).value.trim();
+            const type = document.getElementById('req-type' + suffix).value;
+            const msg = document.getElementById('req-msg' + suffix).value.trim();
+            if (!name || !email || !msg) {
+                alert(suffix === '-es' ? 'Por favor, rellena todos los campos.' : 'Please fill in all fields.');
+                return;
+            }
+            const subject = `[GDPR/RGPD - ${type}] ${name}`;
+            const body = suffix === '-es'
+                ? `Nombre: ${name}\nEmail de contacto: ${email}\nDerecho solicitado: ${type}\n\nMensaje:\n${msg}`
+                : `Name: ${name}\nContact email: ${email}\nRight requested: ${type}\n\nMessage:\n${msg}`;
+            window.location.href = `mailto:alvaroggcasarabonela@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        });
+    }
+    wireRequestForm('-en');
+    wireRequestForm('-es');
+
+    // ── One-click account deletion ───────────────────────────
+    function wireDeleteButton(btnId, statusId, lang) {
+        const btn = document.getElementById(btnId);
+        const status = document.getElementById(statusId);
+        if (!btn) return;
+        btn.addEventListener('click', async () => {
+            const confirmMsg = lang === 'es'
+                ? 'Esto eliminará tu cuenta y todos tus datos de forma permanente e irreversible. ¿Estás seguro?'
+                : 'This will permanently and irreversibly delete your account and all your data. Are you sure?';
+            if (!confirm(confirmMsg)) return;
+            btn.disabled = true;
+            status.style.color = '';
+            status.textContent = lang === 'es' ? 'Eliminando cuenta...' : 'Deleting your account...';
+            try {
+                const res = await fetch('/api/auth/delete', { method: 'POST', credentials: 'include' });
+                if (res.status === 401) {
+                    status.style.color = '#dc2626';
+                    status.textContent = lang === 'es'
+                        ? 'No has iniciado sesión en este dispositivo, así que no hay nada que eliminar aquí. Escríbenos si necesitas ayuda.'
+                        : "You're not signed in on this device, so there's nothing to delete here. Email us if you need help.";
+                    btn.disabled = false;
+                    return;
+                }
+                if (!res.ok) throw new Error('failed');
+                status.style.color = '#16a34a';
+                status.textContent = lang === 'es'
+                    ? '✓ Tu cuenta y tus datos se han eliminado. Redirigiendo...'
+                    : '✓ Your account and data have been deleted. Redirecting...';
+                setTimeout(() => { window.location.href = '/'; }, 2500);
+            } catch (e) {
+                status.style.color = '#dc2626';
+                status.textContent = lang === 'es'
+                    ? 'Algo ha fallado. Por favor, inténtalo de nuevo o escríbenos directamente.'
+                    : 'Something went wrong. Please try again or email us directly.';
+                btn.disabled = false;
+            }
+        });
+    }
+    wireDeleteButton('delete-account-btn', 'delete-status', 'en');
+    wireDeleteButton('delete-account-btn-es', 'delete-status-es', 'es');
+</script>
 </body>
 </html>

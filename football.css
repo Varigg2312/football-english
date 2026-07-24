@@ -367,6 +367,11 @@ body {
     .auth-btn { padding: 7px 12px; font-size: 0.78rem; }
 }
 .legal-disclaimer { margin-top: 20px; font-size: 0.8rem; color: #94a3b8; }
+.legal-disclaimer a { color: #93c5fd; }
+
+footer { text-align: center; padding: 20px 0; color: #94a3b8; font-size: 0.85rem; }
+footer p + p { margin-top: 6px; font-size: 0.78rem; }
+footer a { color: #64748b; text-decoration: underline; }
 .mic-hint { font-size: 0.8rem; color: #64748b; margin-top: 5px; text-align: center; }
 .premium-hint { font-size: 0.7rem; color: #6b7280; margin-top: 5px; text-align: center; }
 
@@ -440,4 +445,5 @@ body {
     .auth-divider::before, .auth-divider::after { border-color: #334155; }
     .mic-hint { color: #94a3b8; }
     .premium-hint { color: #94a3b8; }
+    footer a { color: #93c5fd; }
 }

@@ -1,46 +1,64 @@
 # Privacy Policy — Football English Academy
 
-**Last updated:** 24 June 2026
+**This file is a technical summary for developers.** The authoritative, user-facing
+policy (bilingual EN/ES, with a rights-request form and a working "delete my
+account" button) is served live at `/privacy.html` — always edit that file as
+the source of truth and keep this summary in sync with it.
 
-## 1. Data We Collect
+**Effective date:** 24 July 2026
 
-We collect only the minimum data necessary to provide the service:
+## Legal basis
 
-- **Game progress** (XP, rank, daily streak) — stored exclusively in the device's `localStorage`. Never transmitted to our servers.
-- **Username and password** (if registered) — stored in `localStorage` for local session management. No server-side account database exists at this time.
-- **Lesson interactions** (quiz answers, search queries) — processed locally in the browser. Not stored or transmitted.
+Drafted against Regulation (EU) 2016/679 (GDPR), Spanish Organic Law 3/2018
+(LOPDGDD), and the Spanish e-commerce act (LSSI-CE) for the cookies section.
+Data controller: Álvaro Gómez Gómez (individual, Casarabonela, Málaga, Spain).
 
-## 2. Data We Do NOT Collect
+## What's actually collected (verified against the current codebase)
 
-- No cookies for tracking.
-- No device identifiers, IP addresses, or location data.
-- No analytics or advertising SDKs.
-- No data shared with third parties.
-
-## 3. AI Features (The Gaffer)
-
-PRO users can interact with "The Gaffer", an AI tutor powered by a third-party large language model API. Messages sent to The Gaffer are transmitted to that API provider for processing. Users should not share personal or sensitive information in chat.
-
-## 4. Third-Party Services
-
-| Service | Purpose | Policy |
+| Data | Where it lives | Notes |
 |---|---|---|
-| Cloudflare Pages | Hosting | Cloudflare Privacy Policy |
-| Stripe | PRO payments | Stripe Privacy Policy |
-| Font Awesome / Google Fonts | UI icons & fonts (CDN) | Respective providers |
+| Email, password hash, display name, avatar URL | D1 `users` table | Password: PBKDF2-HMAC-SHA256, 100k iterations, per-user salt |
+| Google account id / email / name / picture | D1 `users` table | Only if signing in via Google OAuth |
+| XP, msgs, streak, completed lessons | D1 `users` / `completed_lessons` | Guests: same shape, `localStorage` only, never sent to us |
+| Session token (hashed) | D1 `sessions` | Cookie is `HttpOnly; Secure; SameSite=Lax`, 30-day TTL |
+| OAuth CSRF state | Cookie only, not persisted | 10-minute TTL |
+| Device id (`client_id`) | Browser `localStorage` | Random UUID, not a cookie, used for chat free-limit + VIP device binding |
+| Chat message text | Never stored by us | Forwarded live to DeepSeek to generate a reply, not persisted server-side |
+| IP address | Transient, Cloudflare Worker rate-limit keys | 48h TTL for the per-IP daily counter |
+| Payment details | Never received | Handled entirely by Stripe Payment Links |
 
-## 5. Children's Privacy
+## Third-party processors / recipients
 
-This app is not directed at children under 13. We do not knowingly collect personal data from children under 13.
+- **Cloudflare** (Pages, Workers, D1, KV) — hosting/infrastructure processor.
+- **Google** — only for Google Sign-In.
+- **Stripe** — payment processing, independent controller for payment data.
+- **DeepSeek** — AI chat replies. Based outside the EEA, **no EU adequacy
+  decision** — flagged explicitly in the live policy, with a recommendation
+  not to share personal/sensitive data in chat.
+- Font Awesome (cdnjs), Google Fonts, jsdelivr — static asset CDNs.
 
-## 6. Data Deletion
+## User rights mechanism ("protest" channel, per user request)
 
-All game data is stored locally. Clear your browser's site data or uninstall the app to remove all stored information.
+`/privacy.html` §8 provides:
+1. A bilingual rights-request form (access/rectification/erasure/restriction/
+   portability/objection/withdraw consent/general complaint) that builds a
+   pre-filled `mailto:` to `alvaroggcasarabonela@gmail.com` — no backend
+   dependency, always works as long as the user has any mail client.
+2. A **working self-service "Delete my account" button**, calling the real
+   `POST /api/auth/delete` endpoint (`functions/api/auth/delete.js`), which
+   deletes the user's rows from `completed_lessons`, `sessions`, and `users`
+   in one batch, then clears the session cookie. Requires an active session.
+3. A direct link to the AEPD (Spanish DPA) complaint channel.
 
-## 7. Contact
+## Maintenance notes
 
-For privacy-related questions: **alvaroggcasarabonela@gmail.com**
-
----
-
-*Web version served at: `https://football-english.pages.dev/privacy.html`*
+- If a new third-party processor is added (new CDN, new payment provider,
+  new AI backend, analytics, etc.), it **must** be added to `/privacy.html`
+  Section 4 before shipping.
+- If `SESSION_TTL_SECONDS`, `PBKDF2_ITERATIONS`, or any KV/D1 retention
+  constant changes in the code, mirror the new numbers into Section 5/6/9 of
+  `/privacy.html`.
+- The children's-privacy age threshold (14) is specific to Spain (LOPDGDD
+  Art. 7) — don't revert it to the US COPPA-style "13" figure used in the
+  old version of this policy, that was a legal inaccuracy for this
+  jurisdiction.
