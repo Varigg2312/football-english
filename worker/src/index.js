@@ -216,7 +216,12 @@ async function callDeepSeek(env, message) {
           Authorization: `Bearer ${env.SYSTEM_KEY}`,
         },
         body: JSON.stringify({
-          model: 'deepseek-chat',
+          // deepseek-chat was retired 2026-07-24; it used to alias the
+          // non-thinking mode of deepseek-v4-flash, so we pin that
+          // explicitly — v4-flash defaults to thinking mode (slower, adds a
+          // reasoning_content field we don't use) if `thinking` is omitted.
+          model: 'deepseek-v4-flash',
+          thinking: { type: 'disabled' },
           messages: [
             { role: 'system', content: GAFFER_SYSTEM_PROMPT },
             { role: 'user', content: message },
