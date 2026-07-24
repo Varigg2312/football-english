@@ -124,7 +124,8 @@ const ui = {
     forgotLink:     document.getElementById('forgot-password-link'),
     backToSigninLink: document.getElementById('back-to-signin-link'),
     authMsg:        document.getElementById('auth-msg'),
-    authTitle:      document.getElementById('auth-title')
+    authTitle:      document.getElementById('auth-title'),
+    authSubtitle:   document.getElementById('auth-subtitle')
 };
 
 let allLessons = [];  // full lesson objects from lessons.json
@@ -393,16 +394,19 @@ function setupAuth() {
         ui.backToSigninLink.classList.toggle('hidden', !isForgot);
 
         if (mode === 'register') {
-            ui.authTitle.innerText  = t('app.auth_title_register');
-            ui.submitAuth.innerText = t('app.auth_submit_register');
-            ui.toggleAuth.innerHTML = t('app.auth_toggle_signin');
+            ui.authTitle.innerText    = t('app.auth_title_register');
+            ui.authSubtitle.innerText = t('app.auth_subtitle');
+            ui.submitAuth.innerText   = t('app.auth_submit_register');
+            ui.toggleAuth.innerHTML   = t('app.auth_toggle_signin');
         } else if (isForgot) {
-            ui.authTitle.innerText  = t('app.auth_title_forgot');
-            ui.submitAuth.innerText = t('app.auth_submit_forgot');
+            ui.authTitle.innerText    = t('app.auth_title_forgot');
+            ui.authSubtitle.innerText = t('app.auth_subtitle_forgot');
+            ui.submitAuth.innerText   = t('app.auth_submit_forgot');
         } else {
-            ui.authTitle.innerText  = t('app.auth_title_signin');
-            ui.submitAuth.innerText = t('app.auth_submit_signin');
-            ui.toggleAuth.innerHTML = t('app.auth_toggle_register');
+            ui.authTitle.innerText    = t('app.auth_title_signin');
+            ui.authSubtitle.innerText = t('app.auth_subtitle');
+            ui.submitAuth.innerText   = t('app.auth_submit_signin');
+            ui.toggleAuth.innerHTML   = t('app.auth_toggle_register');
         }
         ui.authMsg.className = 'error-msg';
         ui.authMsg.innerText = '';

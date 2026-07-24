@@ -65,6 +65,7 @@
                 auth_forgot_link: "Forgot your password?",
                 auth_back_to_signin: "Back to Sign In",
                 auth_title_forgot: "Reset Password",
+                auth_subtitle_forgot: "We'll email you a link to choose a new password.",
                 auth_submit_forgot: "Send Reset Link",
                 auth_forgot_sent: "If that email is registered, check your inbox for a reset link.",
                 offline_msg: "You're offline. Check your connection to keep training."
@@ -164,6 +165,7 @@
                 auth_forgot_link: "¿Olvidaste tu contraseña?",
                 auth_back_to_signin: "Volver a Iniciar Sesión",
                 auth_title_forgot: "Restablecer Contraseña",
+                auth_subtitle_forgot: "Te enviaremos un enlace para elegir una nueva contraseña.",
                 auth_submit_forgot: "Enviar Enlace",
                 auth_forgot_sent: "Si ese email está registrado, revisa tu bandeja de entrada para el enlace de restablecimiento.",
                 offline_msg: "Sin conexión. Revisa tu red para seguir entrenando."
