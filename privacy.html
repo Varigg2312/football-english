@@ -148,6 +148,7 @@
     <ul>
         <li>A random session token, stored in an <code>HttpOnly</code>, <code>Secure</code> cookie so it cannot be read by JavaScript or intercepted in transit. We store only a one-way hash of this token, not the token itself.</li>
         <li>A short-lived (10-minute) random value in a cookie used solely to prevent forgery during the Google sign-in process (CSRF protection), deleted automatically once login completes.</li>
+        <li>If you request a password reset, a one-time password-reset token is generated and emailed to you. We store only a one-way hash of this token, not the token itself, and it expires after 1 hour or immediately once used.</li>
         <li>A random, non-identifying device identifier stored in your browser (not a cookie) used to enforce the free-tier chat message limit and to link a PRO access code to up to 3 devices.</li>
         <li>Your IP address is processed transiently by our anti-abuse system to apply a daily rate limit on chat requests per network (deleted automatically after 48 hours) and is also visible to Cloudflare, our hosting provider, as part of standard web server operation.</li>
     </ul>
@@ -163,6 +164,7 @@
         <tr><td>Google Sign-In authentication</td><td>Performance of a contract (Art. 6.1.b), initiated by your own action</td></tr>
         <tr><td>Providing the AI tutor chat to PRO users</td><td>Performance of a contract (Art. 6.1.b) — a feature you actively choose to use</td></tr>
         <tr><td>Processing PRO payments (via Stripe)</td><td>Performance of a contract (Art. 6.1.b)</td></tr>
+        <tr><td>Sending password-reset emails (via Resend)</td><td>Performance of a contract (Art. 6.1.b) — a feature you actively trigger to regain access to your own account</td></tr>
         <tr><td>Rate-limiting by IP/device, fraud prevention on PRO codes, session security</td><td>Legitimate interest (Art. 6.1.f) — keeping the service available and free from abuse</td></tr>
     </table>
 
@@ -172,8 +174,11 @@
         <li><strong>Google LLC</strong> — only if you choose to sign in with Google. Google participates in the EU-U.S. Data Privacy Framework.</li>
         <li><strong>Stripe, Inc.</strong> — payment processing, acting as an independent controller for your payment data under its own privacy policy. Stripe also participates in the EU-U.S. Data Privacy Framework and/or uses Standard Contractual Clauses.</li>
         <li><strong>DeepSeek</strong> — an AI provider based outside the European Economic Area, used solely to generate replies in the "Gaffer" chat feature. <strong>There is currently no European Commission adequacy decision covering this transfer.</strong> We only send the text of the specific message you choose to submit to the chat, and we do not send any other account data. For this reason, we strongly recommend you do not enter personal, financial, health, or other sensitive information into the chat box.</li>
+        <li><strong>Resend</strong> — our transactional email provider, used solely to deliver password-reset emails. We only send it your email address and the reset link; no other account data is shared. Resend is a US-based company; this transfer is safeguarded through Resend's Data Processing Agreement and Standard Contractual Clauses.</li>
+        <li><strong>Pexels</strong> — some lesson videos are streamed directly from Pexels' content delivery network; your browser connects to it directly to play them, which may expose your IP address to Pexels per its own privacy policy. We do not share any account data with Pexels.</li>
         <li>Font Awesome (cdnjs), Google Fonts and jsdelivr — deliver icons, fonts and a small confetti animation library from their own content delivery networks; your browser connects to them directly, which may expose your IP address to those providers per their own policies.</li>
     </ul>
+    <p>Some lessons' code supports embedding a YouTube video instead of a direct video file, though no lesson currently published uses this. If this is enabled in the future, YouTube (operated by Google LLC) would set its own cookies directly in your browser under its own policies, independently of this site, and we will update this policy before turning it on.</p>
     <p>We do <strong>not</strong> sell your data, and we do not use advertising or analytics networks of any kind.</p>
 
     <h2>5. How long we keep your data</h2>
@@ -181,8 +186,9 @@
         <li><strong>Account data</strong> (email, password hash, profile, progress): kept while your account remains active, until you request deletion (see Section 8) or delete it yourself.</li>
         <li><strong>Session tokens</strong>: expire automatically after 30 days, or immediately upon logout or account deletion.</li>
         <li><strong>Google sign-in CSRF cookie</strong>: expires automatically after 10 minutes.</li>
+        <li><strong>Password-reset tokens</strong>: expire automatically after 1 hour, and are deleted immediately once used or when a new reset is requested; any expired, never-used tokens are swept the next time anyone requests a reset.</li>
         <li><strong>Chat message content</strong>: not retained by us at all — only forwarded to generate a reply.</li>
-        <li><strong>IP-based rate-limit counters</strong>: deleted automatically after 48 hours.</li>
+        <li><strong>IP-based rate-limit counters</strong>: no longer enforced after 48 hours, at which point the counter for that IP/day resets; as with the device identifiers below, the underlying data can be cleared sooner on request.</li>
         <li><strong>Device identifier / free-message counters, PRO code-to-device links</strong>: kept for as long as needed to enforce the relevant limit, and can be reset on request.</li>
     </ul>
 
@@ -313,6 +319,7 @@
     <ul>
         <li>Un token de sesión aleatorio, almacenado en una cookie <code>HttpOnly</code> y <code>Secure</code>, de forma que no puede leerse mediante JavaScript ni interceptarse en tránsito. Solo almacenamos un hash unidireccional de este token, no el token en sí.</li>
         <li>Un valor aleatorio de corta duración (10 minutos) en una cookie, usado únicamente para evitar falsificaciones durante el proceso de inicio de sesión con Google (protección CSRF), eliminado automáticamente al completarse el login.</li>
+        <li>Si solicitas restablecer tu contraseña, se genera un token de un solo uso que se te envía por email. Solo almacenamos un hash unidireccional de este token, no el token en sí, y caduca a la hora o inmediatamente al usarse.</li>
         <li>Un identificador de dispositivo aleatorio y no identificativo, guardado en tu navegador (no en una cookie), usado para aplicar el límite de mensajes gratuitos del chat y para vincular un código de acceso PRO a un máximo de 3 dispositivos.</li>
         <li>Tu dirección IP se procesa de forma transitoria por nuestro sistema antiabuso para aplicar un límite diario de peticiones de chat por red (se elimina automáticamente a las 48 horas), y también es visible para Cloudflare, nuestro proveedor de alojamiento, como parte del funcionamiento estándar de cualquier servidor web.</li>
     </ul>
@@ -328,6 +335,7 @@
         <tr><td>Autenticación mediante Google Sign-In</td><td>Ejecución de un contrato (art. 6.1.b), iniciado por tu propia acción</td></tr>
         <tr><td>Ofrecer el chat con el tutor de IA a usuarios PRO</td><td>Ejecución de un contrato (art. 6.1.b) — una función que decides usar activamente</td></tr>
         <tr><td>Procesar pagos PRO (a través de Stripe)</td><td>Ejecución de un contrato (art. 6.1.b)</td></tr>
+        <tr><td>Envío de emails de restablecimiento de contraseña (a través de Resend)</td><td>Ejecución de un contrato (art. 6.1.b) — una función que activas tú mismo para recuperar el acceso a tu propia cuenta</td></tr>
         <tr><td>Limitación de peticiones por IP/dispositivo, prevención de fraude en códigos PRO, seguridad de sesión</td><td>Interés legítimo (art. 6.1.f) — mantener el servicio disponible y libre de abusos</td></tr>
     </table>
 
@@ -337,8 +345,11 @@
         <li><strong>Google LLC</strong> — solo si eliges iniciar sesión con Google. Google participa en el Marco de Protección de Datos UE-EE.UU.</li>
         <li><strong>Stripe, Inc.</strong> — procesamiento de pagos, actuando como responsable independiente de tus datos de pago conforme a su propia política de privacidad. Stripe también participa en el Marco de Protección de Datos UE-EE.UU. y/o utiliza Cláusulas Contractuales Tipo.</li>
         <li><strong>DeepSeek</strong> — un proveedor de IA con sede fuera del Espacio Económico Europeo, usado únicamente para generar respuestas en la función de chat "El Míster". <strong>Actualmente no existe una decisión de adecuación de la Comisión Europea que cubra esta transferencia.</strong> Solo enviamos el texto del mensaje concreto que decides enviar al chat, sin ningún otro dato de tu cuenta. Por ello, recomendamos encarecidamente no introducir datos personales, financieros, de salud u otra información sensible en el cuadro de chat.</li>
+        <li><strong>Resend</strong> — nuestro proveedor de email transaccional, usado únicamente para enviar los emails de restablecimiento de contraseña. Solo le enviamos tu dirección de email y el enlace de restablecimiento; ningún otro dato de tu cuenta. Resend es una empresa con sede en EE.UU.; esta transferencia se garantiza mediante el Acuerdo de Tratamiento de Datos de Resend y Cláusulas Contractuales Tipo.</li>
+        <li><strong>Pexels</strong> — algunos vídeos de las lecciones se transmiten directamente desde la red de distribución de contenido de Pexels; tu navegador se conecta directamente a ella para reproducirlos, lo que puede exponer tu IP a Pexels conforme a su propia política de privacidad. No compartimos ningún dato de tu cuenta con Pexels.</li>
         <li>Font Awesome (cdnjs), Google Fonts y jsdelivr — sirven iconos, tipografías y una pequeña librería de animación desde sus propias redes de distribución de contenido; tu navegador se conecta directamente a ellas, lo que puede exponer tu IP a dichos proveedores conforme a sus propias políticas.</li>
     </ul>
+    <p>El código de algunas lecciones admite incrustar un vídeo de YouTube en lugar de un archivo de vídeo directo, aunque ninguna lección publicada actualmente usa esta opción. Si se activa en el futuro, YouTube (operado por Google LLC) establecería sus propias cookies directamente en tu navegador conforme a sus propias políticas, de forma independiente a este sitio, y actualizaremos esta política antes de activarlo.</p>
     <p><strong>No</strong> vendemos tus datos, ni utilizamos redes de publicidad o analítica de ningún tipo.</p>
 
     <h2>5. Cuánto tiempo conservamos tus datos</h2>
@@ -346,8 +357,9 @@
         <li><strong>Datos de cuenta</strong> (email, hash de contraseña, perfil, progreso): se conservan mientras tu cuenta permanezca activa, hasta que solicites su eliminación (ver Sección 8) o la elimines tú mismo.</li>
         <li><strong>Tokens de sesión</strong>: expiran automáticamente a los 30 días, o inmediatamente al cerrar sesión o eliminar la cuenta.</li>
         <li><strong>Cookie CSRF de inicio de sesión con Google</strong>: expira automáticamente a los 10 minutos.</li>
+        <li><strong>Tokens de restablecimiento de contraseña</strong>: caducan automáticamente a la hora, y se eliminan inmediatamente al usarse o al solicitarse un nuevo restablecimiento; los tokens caducados y nunca usados se eliminan la próxima vez que alguien solicita un restablecimiento.</li>
         <li><strong>Contenido de los mensajes de chat</strong>: no se conserva en absoluto por nuestra parte — solo se reenvía para generar una respuesta.</li>
-        <li><strong>Contadores de límite por IP</strong>: se eliminan automáticamente a las 48 horas.</li>
+        <li><strong>Contadores de límite por IP</strong>: dejan de aplicarse a las 48 horas, momento en el que el contador de esa IP/día se reinicia; al igual que con los identificadores de dispositivo, el dato subyacente puede eliminarse antes a petición.</li>
         <li><strong>Identificador de dispositivo / contadores de mensajes gratuitos, vinculación de códigos PRO a dispositivos</strong>: se conservan mientras sea necesario para aplicar el límite correspondiente, y pueden restablecerse a petición.</li>
     </ul>
 

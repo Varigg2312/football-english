@@ -5,7 +5,7 @@ policy (bilingual EN/ES, with a rights-request form and a working "delete my
 account" button) is served live at `/privacy.html` — always edit that file as
 the source of truth and keep this summary in sync with it.
 
-**Effective date:** 24 July 2026
+**Effective date:** 24 July 2026 (Resend/Pexels disclosures added same day)
 
 ## Legal basis
 
@@ -22,9 +22,10 @@ Data controller: Álvaro Gómez Gómez (individual, Casarabonela, Málaga, Spain
 | XP, msgs, streak, completed lessons | D1 `users` / `completed_lessons` | Guests: same shape, `localStorage` only, never sent to us |
 | Session token (hashed) | D1 `sessions` | Cookie is `HttpOnly; Secure; SameSite=Lax`, 30-day TTL |
 | OAuth CSRF state | Cookie only, not persisted | 10-minute TTL |
+| Password-reset token (hashed) | D1 `password_resets` | 1h TTL, deleted on use or on next reset request; cleaned up on account deletion too |
 | Device id (`client_id`) | Browser `localStorage` | Random UUID, not a cookie, used for chat free-limit + VIP device binding |
 | Chat message text | Never stored by us | Forwarded live to DeepSeek to generate a reply, not persisted server-side |
-| IP address | Transient, Cloudflare Worker rate-limit keys | 48h TTL for the per-IP daily counter |
+| IP address | Transient, Cloudflare Worker rate-limit keys (Durable Object) | No longer enforced after 48h TTL, but note: the DO has no `alarm()`, so the stale entry isn't proactively erased from storage, just logically ignored — see live policy wording for the honest phrasing |
 | Payment details | Never received | Handled entirely by Stripe Payment Links |
 
 ## Third-party processors / recipients
@@ -35,7 +36,12 @@ Data controller: Álvaro Gómez Gómez (individual, Casarabonela, Málaga, Spain
 - **DeepSeek** — AI chat replies. Based outside the EEA, **no EU adequacy
   decision** — flagged explicitly in the live policy, with a recommendation
   not to share personal/sensitive data in chat.
+- **Resend** — transactional email (password-reset links only). US-based.
+- **Pexels** — direct video CDN for some lessons (IP exposure, no account data shared).
 - Font Awesome (cdnjs), Google Fonts, jsdelivr — static asset CDNs.
+- YouTube embed code path exists in `app.js` but is unused by any current
+  lesson — disclosed pre-emptively in the live policy in case it's ever
+  activated (sets its own tracking cookies, would need a fresh look then).
 
 ## User rights mechanism ("protest" channel, per user request)
 
@@ -46,8 +52,9 @@ Data controller: Álvaro Gómez Gómez (individual, Casarabonela, Málaga, Spain
    dependency, always works as long as the user has any mail client.
 2. A **working self-service "Delete my account" button**, calling the real
    `POST /api/auth/delete` endpoint (`functions/api/auth/delete.js`), which
-   deletes the user's rows from `completed_lessons`, `sessions`, and `users`
-   in one batch, then clears the session cookie. Requires an active session.
+   deletes the user's rows from `completed_lessons`, `sessions`,
+   `password_resets`, and `users` in one batch, then clears the session
+   cookie. Requires an active session.
 3. A direct link to the AEPD (Spanish DPA) complaint channel.
 
 ## Maintenance notes
