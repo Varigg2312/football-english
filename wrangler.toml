@@ -2,6 +2,9 @@ name = "football-english"
 pages_build_output_dir = "."
 compatibility_date = "2026-07-16"
 
+[vars]
+GOOGLE_CLIENT_ID = "101429524322-vo04gj3nfrnoq0s8b4d79tob94cb86jr.apps.googleusercontent.com"
+
 [[d1_databases]]
 binding = "DB"
 database_name = "football-english-db"
