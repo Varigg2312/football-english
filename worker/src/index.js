@@ -23,6 +23,13 @@ export class Counter {
     let data = await this.state.storage.get('data');
     if (!data || (data.expiresAt && data.expiresAt <= now)) {
       data = { count: 0, expiresAt: ttlSeconds ? now + ttlSeconds * 1000 : null };
+      // Schedule this instance's storage to actually self-erase once the
+      // window ends, instead of the entry just becoming logically-ignored
+      // dead weight — this is what makes the privacy policy's "no longer
+      // enforced after N hours" a real deletion rather than an inert leftover.
+      // Lifetime counters (ttlSeconds=0, e.g. the free-message cap) never get
+      // an alarm, matching their "kept until reset on request" retention.
+      if (data.expiresAt) await this.state.storage.setAlarm(data.expiresAt);
     }
 
     // Requests to a single Durable Object instance are handled one at a time,
@@ -43,6 +50,13 @@ export class Counter {
     }
 
     return new Response('Unknown action', { status: 400 });
+  }
+
+  // Fires once the counter's TTL window ends. Wipes this Durable Object's
+  // storage entirely so the IP/rate-limit key it was tracking doesn't just
+  // sit there unread forever — it's actually gone.
+  async alarm() {
+    await this.state.storage.deleteAll();
   }
 }
 
