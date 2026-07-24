@@ -316,21 +316,35 @@ async function handleChat(request, env) {
   }
 }
 
-// Lightweight health check — verifies the DeepSeek key/account actually work
-// (not just that the Worker is up) without spending completion tokens.
+// Health check — does an actual minimal chat completion (1 output token,
+// no system prompt) rather than just pinging /v1/models. A key/account can
+// be perfectly valid while the pinned model name is wrong or retired (as
+// happened 2026-07-24: /v1/models kept returning 200 the whole time the real
+// chat endpoint was 502ing on every request), so only a real completion call
+// actually exercises the same failure mode as the live chat feature.
 // Polled by the home-server Prometheus/Blackbox monitoring stack.
 async function handleHealth(env) {
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 8000);
-    const res = await fetch('https://api.deepseek.com/v1/models', {
-      headers: { Authorization: `Bearer ${env.SYSTEM_KEY}` },
+    const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${env.SYSTEM_KEY}`,
+      },
+      body: JSON.stringify({
+        model: DEEPSEEK_MODEL,
+        thinking: DEEPSEEK_THINKING,
+        max_tokens: 1,
+        messages: [{ role: 'user', content: 'ping' }],
+      }),
       signal: controller.signal,
     });
     clearTimeout(timeout);
-    if (!res.ok) {
-      const text = await res.text();
-      return json({ status: 'error', upstream_status: res.status, detail: text.slice(0, 300) }, 503);
+    const data = await res.json();
+    if (!res.ok || !data.choices || !data.choices[0]) {
+      return json({ status: 'error', upstream_status: res.status, detail: JSON.stringify(data).slice(0, 300) }, 503);
     }
     return json({ status: 'ok' });
   } catch (err) {
