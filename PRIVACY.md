@@ -13,6 +13,14 @@ Drafted against Regulation (EU) 2016/679 (GDPR), Spanish Organic Law 3/2018
 (LOPDGDD), and the Spanish e-commerce act (LSSI-CE) for the cookies section.
 Data controller: Álvaro Gómez Gómez (individual, Casarabonela, Málaga, Spain).
 
+**AI Act (Regulation (EU) 2024/1689), Art. 50 transparency obligation**
+(applicable from 2 Aug 2026): "The Gaffer" chat must make clear to users
+they're interacting with an AI, not a human. Satisfied via the chat header
+label ("The Gaffer (AI Tutor)" / "El Míster (Tutor IA)"), the opening chat
+message, an explicit system-prompt rule (`worker/src/index.js`,
+`GAFFER_SYSTEM_PROMPT` rule 5) forcing a plain confirmation if asked
+directly, and documented in `/privacy.html` §2.5.
+
 ## What's actually collected (verified against the current codebase)
 
 | Data | Where it lives | Notes |
