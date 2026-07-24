@@ -188,7 +188,7 @@
         <li><strong>Google sign-in CSRF cookie</strong>: expires automatically after 10 minutes.</li>
         <li><strong>Password-reset tokens</strong>: expire automatically after 1 hour, and are deleted immediately once used or when a new reset is requested; any expired, never-used tokens are swept the next time anyone requests a reset.</li>
         <li><strong>Chat message content</strong>: not retained by us at all — only forwarded to generate a reply.</li>
-        <li><strong>IP-based rate-limit counters</strong>: no longer enforced after 48 hours, at which point the counter for that IP/day resets; as with the device identifiers below, the underlying data can be cleared sooner on request.</li>
+        <li><strong>IP-based rate-limit counters</strong>: deleted automatically 48 hours after creation, and can be cleared sooner on request.</li>
         <li><strong>Device identifier / free-message counters, PRO code-to-device links</strong>: kept for as long as needed to enforce the relevant limit, and can be reset on request.</li>
     </ul>
 
@@ -359,7 +359,7 @@
         <li><strong>Cookie CSRF de inicio de sesión con Google</strong>: expira automáticamente a los 10 minutos.</li>
         <li><strong>Tokens de restablecimiento de contraseña</strong>: caducan automáticamente a la hora, y se eliminan inmediatamente al usarse o al solicitarse un nuevo restablecimiento; los tokens caducados y nunca usados se eliminan la próxima vez que alguien solicita un restablecimiento.</li>
         <li><strong>Contenido de los mensajes de chat</strong>: no se conserva en absoluto por nuestra parte — solo se reenvía para generar una respuesta.</li>
-        <li><strong>Contadores de límite por IP</strong>: dejan de aplicarse a las 48 horas, momento en el que el contador de esa IP/día se reinicia; al igual que con los identificadores de dispositivo, el dato subyacente puede eliminarse antes a petición.</li>
+        <li><strong>Contadores de límite por IP</strong>: se eliminan automáticamente a las 48 horas de su creación, y pueden eliminarse antes a petición.</li>
         <li><strong>Identificador de dispositivo / contadores de mensajes gratuitos, vinculación de códigos PRO a dispositivos</strong>: se conservan mientras sea necesario para aplicar el límite correspondiente, y pueden restablecerse a petición.</li>
     </ul>
 

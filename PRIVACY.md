@@ -25,7 +25,7 @@ Data controller: Álvaro Gómez Gómez (individual, Casarabonela, Málaga, Spain
 | Password-reset token (hashed) | D1 `password_resets` | 1h TTL, deleted on use or on next reset request; cleaned up on account deletion too |
 | Device id (`client_id`) | Browser `localStorage` | Random UUID, not a cookie, used for chat free-limit + VIP device binding |
 | Chat message text | Never stored by us | Forwarded live to DeepSeek to generate a reply, not persisted server-side |
-| IP address | Transient, Cloudflare Worker rate-limit keys (Durable Object) | No longer enforced after 48h TTL, but note: the DO has no `alarm()`, so the stale entry isn't proactively erased from storage, just logically ignored — see live policy wording for the honest phrasing |
+| IP address | Transient, Cloudflare Worker rate-limit keys (Durable Object) | 48h TTL, genuinely auto-deleted via a DO `alarm()` that calls `storage.deleteAll()` — added 2026-07-24, previously the entry just went unread after expiry without being erased |
 | Payment details | Never received | Handled entirely by Stripe Payment Links |
 
 ## Third-party processors / recipients
