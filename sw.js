@@ -1,11 +1,11 @@
-const CACHE_NAME = 'gaffer-pro-v8';
+const CACHE_NAME = 'gaffer-pro-v9';
 const OFFLINE_URL = '/offline.html';
 
 // Core shell + content precached at install so lessons already seen
 // (and the app itself) keep working with no network at all.
 const PRECACHE_URLS = [
     '/', '/index.html', '/offline.html',
-    '/football.css', '/app.js', '/i18n.js', '/manifest.json', '/lessons.json',
+    '/football.css', '/app.js', '/i18n.js', '/sw-register.js', '/manifest.json', '/lessons.json',
     '/favicon-96.png', '/apple-touch-icon.png', '/icon-192.png', '/icon-512.png', '/icon-512-maskable.png',
     '/audio/whistle.mp3', '/audio/correct.mp3', '/audio/wrong.mp3', '/audio/win.mp3'
 ];
