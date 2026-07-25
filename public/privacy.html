@@ -107,7 +107,7 @@
             <button id="btn-es" type="button">Español</button>
         </div>
         <h1>Privacy Policy</h1>
-        <p class="updated">Effective date: 24 July 2026 · Applies to <code>football-english.pages.dev</code> and the "Gaffer PRO" Android app (TWA)</p>
+        <p class="updated">Effective date: 25 July 2026 · Applies to <code>football-english.pages.dev</code> and the "Gaffer PRO" Android app (TWA)</p>
     </header>
 
     <div class="summary-box">
@@ -151,6 +151,7 @@
         <li>If you request a password reset, a one-time password-reset token is generated and emailed to you. We store only a one-way hash of this token, not the token itself, and it expires after 1 hour or immediately once used.</li>
         <li>A random, non-identifying device identifier stored in your browser (not a cookie) used to enforce the free-tier chat message limit and to link a PRO access code to up to 3 devices.</li>
         <li>Your IP address is processed transiently by our anti-abuse system to apply a daily rate limit on chat requests per network (deleted automatically after 48 hours) and is also visible to Cloudflare, our hosting provider, as part of standard web server operation.</li>
+        <li>When you attempt to log in, we temporarily record your email address and IP address to detect and block automated password-guessing attacks. A failed attempt is kept for a maximum of 24 hours, and any record tied to your account is cleared immediately the next time you log in successfully.</li>
     </ul>
     <h3>2.5 "The Gaffer" AI chat</h3>
     <p>If you use the AI tutor chat feature (PRO), the text of your message is sent to our backend and forwarded, in real time, to DeepSeek (a third-party AI provider) purely to generate a reply. <strong>We do not store the content of your chat messages on our own servers.</strong> DeepSeek's own retention practices apply to the message once it reaches their systems — see Section 4 below regarding this international transfer.</p>
@@ -166,7 +167,7 @@
         <tr><td>Providing the AI tutor chat to PRO users</td><td>Performance of a contract (Art. 6.1.b) — a feature you actively choose to use</td></tr>
         <tr><td>Processing PRO payments (via Stripe)</td><td>Performance of a contract (Art. 6.1.b)</td></tr>
         <tr><td>Sending password-reset emails (via Resend)</td><td>Performance of a contract (Art. 6.1.b) — a feature you actively trigger to regain access to your own account</td></tr>
-        <tr><td>Rate-limiting by IP/device, fraud prevention on PRO codes, session security</td><td>Legitimate interest (Art. 6.1.f) — keeping the service available and free from abuse</td></tr>
+        <tr><td>Rate-limiting by IP/device, brute-force login protection, fraud prevention on PRO codes, session security</td><td>Legitimate interest (Art. 6.1.f) — keeping the service available and free from abuse</td></tr>
     </table>
 
     <h2>4. Who we share data with — international transfers</h2>
@@ -190,6 +191,7 @@
         <li><strong>Password-reset tokens</strong>: expire automatically after 1 hour, and are deleted immediately once used or when a new reset is requested; any expired, never-used tokens are swept the next time anyone requests a reset.</li>
         <li><strong>Chat message content</strong>: not retained by us at all — only forwarded to generate a reply.</li>
         <li><strong>IP-based rate-limit counters</strong>: deleted automatically 48 hours after creation, and can be cleared sooner on request.</li>
+        <li><strong>Failed login-attempt records</strong> (email + IP): kept for a maximum of 24 hours, and cleared immediately for your account the next time you log in successfully.</li>
         <li><strong>Device identifier / free-message counters, PRO code-to-device links</strong>: kept for as long as needed to enforce the relevant limit, and can be reset on request.</li>
     </ul>
 
@@ -279,7 +281,7 @@
             <button id="btn-es-2" class="active" type="button">Español</button>
         </div>
         <h1>Política de Privacidad</h1>
-        <p class="updated">Fecha de entrada en vigor: 24 de julio de 2026 · Aplica a <code>football-english.pages.dev</code> y a la app Android "Gaffer PRO" (TWA)</p>
+        <p class="updated">Fecha de entrada en vigor: 25 de julio de 2026 · Aplica a <code>football-english.pages.dev</code> y a la app Android "Gaffer PRO" (TWA)</p>
     </header>
 
     <div class="summary-box">
@@ -323,6 +325,7 @@
         <li>Si solicitas restablecer tu contraseña, se genera un token de un solo uso que se te envía por email. Solo almacenamos un hash unidireccional de este token, no el token en sí, y caduca a la hora o inmediatamente al usarse.</li>
         <li>Un identificador de dispositivo aleatorio y no identificativo, guardado en tu navegador (no en una cookie), usado para aplicar el límite de mensajes gratuitos del chat y para vincular un código de acceso PRO a un máximo de 3 dispositivos.</li>
         <li>Tu dirección IP se procesa de forma transitoria por nuestro sistema antiabuso para aplicar un límite diario de peticiones de chat por red (se elimina automáticamente a las 48 horas), y también es visible para Cloudflare, nuestro proveedor de alojamiento, como parte del funcionamiento estándar de cualquier servidor web.</li>
+        <li>Cuando intentas iniciar sesión, registramos temporalmente tu correo electrónico y tu dirección IP para detectar y bloquear ataques automatizados de adivinación de contraseñas. Un intento fallido se conserva como máximo 24 horas, y cualquier registro asociado a tu cuenta se elimina de inmediato la próxima vez que inicies sesión correctamente.</li>
     </ul>
     <h3>2.5 Chat de IA "El Míster"</h3>
     <p>Si usas la función de chat con el tutor de IA (PRO), el texto de tu mensaje se envía a nuestro backend y se reenvía, en tiempo real, a DeepSeek (un proveedor de IA externo) únicamente para generar una respuesta. <strong>No almacenamos el contenido de tus mensajes de chat en nuestros propios servidores.</strong> Las propias políticas de conservación de DeepSeek se aplican al mensaje una vez llega a sus sistemas — ver la Sección 4 sobre esta transferencia internacional.</p>
@@ -338,7 +341,7 @@
         <tr><td>Ofrecer el chat con el tutor de IA a usuarios PRO</td><td>Ejecución de un contrato (art. 6.1.b) — una función que decides usar activamente</td></tr>
         <tr><td>Procesar pagos PRO (a través de Stripe)</td><td>Ejecución de un contrato (art. 6.1.b)</td></tr>
         <tr><td>Envío de emails de restablecimiento de contraseña (a través de Resend)</td><td>Ejecución de un contrato (art. 6.1.b) — una función que activas tú mismo para recuperar el acceso a tu propia cuenta</td></tr>
-        <tr><td>Limitación de peticiones por IP/dispositivo, prevención de fraude en códigos PRO, seguridad de sesión</td><td>Interés legítimo (art. 6.1.f) — mantener el servicio disponible y libre de abusos</td></tr>
+        <tr><td>Limitación de peticiones por IP/dispositivo, protección frente a ataques de fuerza bruta en el inicio de sesión, prevención de fraude en códigos PRO, seguridad de sesión</td><td>Interés legítimo (art. 6.1.f) — mantener el servicio disponible y libre de abusos</td></tr>
     </table>
 
     <h2>4. Con quién compartimos datos — transferencias internacionales</h2>
@@ -362,6 +365,7 @@
         <li><strong>Tokens de restablecimiento de contraseña</strong>: caducan automáticamente a la hora, y se eliminan inmediatamente al usarse o al solicitarse un nuevo restablecimiento; los tokens caducados y nunca usados se eliminan la próxima vez que alguien solicita un restablecimiento.</li>
         <li><strong>Contenido de los mensajes de chat</strong>: no se conserva en absoluto por nuestra parte — solo se reenvía para generar una respuesta.</li>
         <li><strong>Contadores de límite por IP</strong>: se eliminan automáticamente a las 48 horas de su creación, y pueden eliminarse antes a petición.</li>
+        <li><strong>Registros de intentos de inicio de sesión fallidos</strong> (email + IP): se conservan como máximo 24 horas, y se eliminan de inmediato para tu cuenta la próxima vez que inicies sesión correctamente.</li>
         <li><strong>Identificador de dispositivo / contadores de mensajes gratuitos, vinculación de códigos PRO a dispositivos</strong>: se conservan mientras sea necesario para aplicar el límite correspondiente, y pueden restablecerse a petición.</li>
     </ul>
 
