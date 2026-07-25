@@ -1,0 +1,13 @@
+# Internal project files that live in the repo root (deploy source) but must
+# never be served publicly. Rewritten to the SPA shell with a 404 status —
+# any config/schema/script file added here later is covered automatically
+# by the directory-level rules, only new root-level files need a new line.
+/wrangler.toml / 404
+/PRIVACY.md / 404
+/ROADMAP_PLAYSTORE.md / 404
+/migrations / 404
+/migrations/* / 404
+/scripts / 404
+/scripts/* / 404
+/worker / 404
+/worker/* / 404

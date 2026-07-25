@@ -2,7 +2,9 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: microphone=(self), camera=(), geolocation=()
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://*.googleusercontent.com; connect-src 'self' https://football-gaffer-api.alvaroggcasarabonela.workers.dev; frame-src https://www.youtube.com; media-src 'self' https://videos.pexels.com
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Frame-Options: DENY
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://*.googleusercontent.com; connect-src 'self' https://football-gaffer-api.alvaroggcasarabonela.workers.dev; frame-src https://www.youtube.com; frame-ancestors 'none'; media-src 'self' https://videos.pexels.com
 
 /.well-known/assetlinks.json
   Content-Type: application/json
