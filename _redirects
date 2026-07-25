@@ -2,12 +2,14 @@
 # never be served publicly. Rewritten to the SPA shell with a 404 status —
 # any config/schema/script file added here later is covered automatically
 # by the directory-level rules, only new root-level files need a new line.
-/wrangler.toml / 404
-/PRIVACY.md / 404
-/ROADMAP_PLAYSTORE.md / 404
-/migrations / 404
-/migrations/* / 404
-/scripts / 404
-/scripts/* / 404
-/worker / 404
-/worker/* / 404
+# The trailing "!" forces the rule to win over the real static asset that
+# would otherwise be served in preference to any redirect rule.
+/wrangler.toml / 404!
+/PRIVACY.md / 404!
+/ROADMAP_PLAYSTORE.md / 404!
+/migrations / 404!
+/migrations/* / 404!
+/scripts / 404!
+/scripts/* / 404!
+/worker / 404!
+/worker/* / 404!
