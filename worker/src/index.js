@@ -79,7 +79,13 @@ async function releaseSlot(env, key) {
 }
 
 const FREE_LIMIT = 10;
-const IP_DAILY_LIMIT = 30;
+// clientId lives in localStorage, so it costs an attacker nothing to reset
+// it (clear storage, or just open an incognito window) and claim a fresh
+// FREE_LIMIT. This IP-scoped counter is the only backstop that survives
+// that reset, so it's kept close to FREE_LIMIT rather than a generous
+// multiple of it — enough slack for a couple of people genuinely sharing
+// one network, not enough to make client-id resets a real free-tokens farm.
+const IP_DAILY_LIMIT = 12;
 const MAX_ACTIVATIONS_PER_CODE = 3;
 const ALLOWED_ORIGIN = 'https://football-english.pages.dev';
 const MAX_MESSAGE_LENGTH = 1000;
