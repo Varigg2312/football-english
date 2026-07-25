@@ -10,8 +10,8 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const repoRoot = path.join(__dirname, '..');
-const swPath = path.join(repoRoot, 'sw.js');
+const publicDir = path.join(__dirname, '..', 'public');
+const swPath = path.join(publicDir, 'sw.js');
 const swSource = fs.readFileSync(swPath, 'utf8');
 
 const listMatch = swSource.match(/const PRECACHE_URLS = \[([\s\S]*?)\];/);
@@ -25,7 +25,7 @@ const hash = crypto.createHash('sha256');
 for (const url of urls) {
   const rel = url === '/' ? 'index.html' : url.replace(/^\//, '');
   try {
-    hash.update(fs.readFileSync(path.join(repoRoot, rel)));
+    hash.update(fs.readFileSync(path.join(publicDir, rel)));
   } catch {
     // A precached file that's missing would break the SW install anyway —
     // hash its absence too so that state is still detected as "changed".

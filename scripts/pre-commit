@@ -6,7 +6,7 @@
 repo_root="$(git rev-parse --show-toplevel)"
 
 if command -v node >/dev/null 2>&1; then
-  node "$repo_root/scripts/bump-sw-cache.js" && git add "$repo_root/sw.js"
+  node "$repo_root/scripts/bump-sw-cache.js" && git add "$repo_root/public/sw.js"
 else
   echo "pre-commit: node not found on PATH, skipping sw.js CACHE_NAME auto-bump" >&2
 fi
