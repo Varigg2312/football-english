@@ -59,6 +59,16 @@ export async function onRequestGet({ request, env }) {
     }
   }
   if (!user) {
+    if (email) {
+      // Puede haber una cuenta con este email que no se auto-vinculo arriba
+      // (p.ej. porque Google no verifico el email). Si intentamos crear un
+      // usuario nuevo igualmente, el INSERT viola el UNIQUE(email) y revienta
+      // sin controlar — mejor cortar aqui con un error explicito.
+      const existingByEmail = await findUserByEmail(env.DB, email);
+      if (existingByEmail) {
+        return redirect('/?auth_error=google_email_taken');
+      }
+    }
     user = await createUser(env.DB, {
       email: email || `google-${googleId}@no-email.football-english`,
       googleId,
