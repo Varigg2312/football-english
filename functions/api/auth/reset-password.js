@@ -9,6 +9,7 @@ export async function onRequestPost({ request, env }) {
   const password = typeof body.password === 'string' ? body.password : '';
   if (!token) return json({ error: 'invalid_token' }, 400);
   if (password.length < 8) return json({ error: 'weak_password' }, 400);
+  if (password.length > 256) return json({ error: 'weak_password' }, 400);
 
   const tokenHash = await sha256Hex(token);
   const row = await env.DB.prepare(

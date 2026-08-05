@@ -2,6 +2,7 @@ import { generateToken, sha256Hex } from '../../_lib/crypto.js';
 import { findUserByEmail } from '../../_lib/db.js';
 import { sendEmail } from '../../_lib/email.js';
 import { json, parseJsonBody } from '../../_lib/http.js';
+import { isRateLimited, recordFailedAttempt } from '../../_lib/rateLimit.js';
 
 const RESET_TTL_SECONDS = 60 * 60; // 1 hour
 
@@ -11,6 +12,19 @@ export async function onRequestPost({ request, env }) {
 
   const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
   if (!email) return json({ error: 'invalid_email' }, 400);
+
+  // Prefijo distinto al de login.js: un fallo de login no debe bloquear que
+  // el mismo usuario pida un reset de contraseña legítimo, y viceversa.
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  const emailKey = `reset:email:${email}`;
+  const ipKey = `reset:ip:${ip}`;
+  if ((await isRateLimited(env.DB, emailKey)) || (await isRateLimited(env.DB, ipKey))) {
+    // Cada intento (incluso bloqueado) cuenta, para que un atacante no pueda
+    // sondear el límite sin gastarlo; el email de la víctima sigue protegido
+    // porque la respuesta es igual de genérica que siempre.
+    return json({ ok: true });
+  }
+  await Promise.all([recordFailedAttempt(env.DB, emailKey), recordFailedAttempt(env.DB, ipKey)]);
 
   // Always return the same generic response whether or not the email is
   // registered, and swallow send failures too — the response must not be an

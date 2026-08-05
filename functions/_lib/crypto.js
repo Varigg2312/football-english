@@ -50,10 +50,17 @@ export async function verifyPassword(password, stored) {
   const parts = stored.split('$');
   if (parts.length !== 4 || parts[0] !== 'pbkdf2') return false;
   const iterations = parseInt(parts[1], 10);
-  const salt = fromBase64(parts[2]);
-  const expected = fromBase64(parts[3]);
-  const actual = await pbkdf2(password, salt, iterations);
-  return constantTimeEqual(actual, expected);
+  if (!Number.isFinite(iterations) || iterations <= 0) return false;
+  try {
+    const salt = fromBase64(parts[2]);
+    const expected = fromBase64(parts[3]);
+    const actual = await pbkdf2(password, salt, iterations);
+    return constantTimeEqual(actual, expected);
+  } catch {
+    // Hash malformado/corrupto (p.ej. base64 inválido) — tratar como
+    // credencial incorrecta (401), no dejar que la excepción llegue a un 500.
+    return false;
+  }
 }
 
 // Opaque session token — high-entropy random, base64url-encoded. Not a JWT:

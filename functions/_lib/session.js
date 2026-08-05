@@ -42,6 +42,12 @@ export async function getSessionUser(db, request) {
   const cookies = parseCookies(request);
   const token = cookies[COOKIE_NAME];
   if (!token) return null;
+
+  // Opportunistic sweep of expired sessions — password_resets and
+  // login_attempts already do this; sessions had no equivalent, so expired
+  // rows (TTL 30 days) accumulated forever instead of actually being removed.
+  await db.prepare(`DELETE FROM sessions WHERE expires_at <= datetime('now')`).run();
+
   const tokenHash = await sha256Hex(token);
   const row = await db
     .prepare(
