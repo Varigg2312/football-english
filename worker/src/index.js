@@ -92,6 +92,13 @@ const MAX_MESSAGE_LENGTH = 1000;
 const DEEPSEEK_TIMEOUT_MS = 20000;
 const DEEPSEEK_MAX_RETRIES = 2;
 const VIP_CHECK_LIMIT_PER_HOUR = 30;
+const HEALTH_TIMEOUT_MS = 8000;
+// One retry so a single transient DeepSeek blip (a few seconds of latency or
+// a 5xx) doesn't get reported as the Worker being down — /health used to fail
+// on the first hiccup even though a retry would have gone through, which is
+// exactly what happened repeatedly in Aug 2026 and paged as "endpoint caído"
+// when the Worker itself was fine the whole time.
+const HEALTH_MAX_RETRIES = 1;
 // Single source of truth for both the real chat call and the /health check —
 // deepseek-chat's retirement on 2026-07-24 broke prod silently because
 // /health only pinged /v1/models, never an actual completion with this model
@@ -322,40 +329,63 @@ async function handleChat(request, env) {
   }
 }
 
-// Health check — does an actual minimal chat completion (1 output token,
+// Pure liveness check — no external calls, so this only ever fails if the
+// Worker itself is unreachable. Lets monitoring tell "Worker is down" apart
+// from "/health is down because DeepSeek is having a moment" (the latter used
+// to page as the former since /health's deep check has no cheap counterpart).
+function handleLiveness() {
+  return json({ status: 'ok' });
+}
+
+// Deep health check — does an actual minimal chat completion (1 output token,
 // no system prompt) rather than just pinging /v1/models. A key/account can
 // be perfectly valid while the pinned model name is wrong or retired (as
 // happened 2026-07-24: /v1/models kept returning 200 the whole time the real
 // chat endpoint was 502ing on every request), so only a real completion call
 // actually exercises the same failure mode as the live chat feature.
+// Retries once (like callDeepSeek) before reporting failure, so a single
+// transient DeepSeek blip isn't mistaken for the Worker/feature being down.
 // Polled by the home-server Prometheus/Blackbox monitoring stack.
 async function handleHealth(env) {
-  try {
+  let lastStatus;
+  let lastDetail;
+  let lastError;
+  for (let attempt = 0; attempt <= HEALTH_MAX_RETRIES; attempt++) {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000);
-    const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${env.SYSTEM_KEY}`,
-      },
-      body: JSON.stringify({
-        model: DEEPSEEK_MODEL,
-        thinking: DEEPSEEK_THINKING,
-        max_tokens: 1,
-        messages: [{ role: 'user', content: 'ping' }],
-      }),
-      signal: controller.signal,
-    });
-    clearTimeout(timeout);
-    const data = await res.json();
-    if (!res.ok || !data.choices || !data.choices[0]) {
-      return json({ status: 'error', upstream_status: res.status, detail: JSON.stringify(data).slice(0, 300) }, 503);
+    const timeout = setTimeout(() => controller.abort(), HEALTH_TIMEOUT_MS);
+    try {
+      const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${env.SYSTEM_KEY}`,
+        },
+        body: JSON.stringify({
+          model: DEEPSEEK_MODEL,
+          thinking: DEEPSEEK_THINKING,
+          max_tokens: 1,
+          messages: [{ role: 'user', content: 'ping' }],
+        }),
+        signal: controller.signal,
+      });
+      clearTimeout(timeout);
+      const data = await res.json();
+      if (!res.ok || !data.choices || !data.choices[0]) {
+        lastStatus = res.status;
+        lastDetail = JSON.stringify(data).slice(0, 300);
+        if (res.status >= 400 && res.status < 500) break; // won't be fixed by a retry
+        continue;
+      }
+      return json({ status: 'ok' });
+    } catch (err) {
+      clearTimeout(timeout);
+      lastError = err;
     }
-    return json({ status: 'ok' });
-  } catch (err) {
-    return json({ status: 'error', detail: String(err) }, 503);
   }
+  if (lastStatus !== undefined) {
+    return json({ status: 'error', upstream_status: lastStatus, detail: lastDetail }, 503);
+  }
+  return json({ status: 'error', detail: String(lastError) }, 503);
 }
 
 export default {
@@ -366,6 +396,9 @@ export default {
 
     const url = new URL(request.url);
 
+    if (url.pathname === '/health/live' && request.method === 'GET') {
+      return handleLiveness();
+    }
     if (url.pathname === '/health' && request.method === 'GET') {
       return handleHealth(env);
     }
