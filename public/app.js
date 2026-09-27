@@ -181,7 +181,8 @@ async function initLeague() {
     // so we know to try a one-time legacy-progress import right after.
     const params = new URLSearchParams(window.location.search);
     const justLoggedInViaGoogle = params.get('login') === 'success';
-    if (justLoggedInViaGoogle) window.history.replaceState({}, '', window.location.pathname);
+    const googleAuthError = params.get('auth_error');
+    if (justLoggedInViaGoogle || googleAuthError) window.history.replaceState({}, '', window.location.pathname);
 
     try {
         const res  = await fetch('/api/auth/me', { credentials: 'include' });
@@ -197,6 +198,7 @@ async function initLeague() {
             if (appIface) { appIface.classList.remove('hidden'); appIface.style.display = 'flex'; }
         } else {
             loadGuestData();
+            if (googleAuthError) showGoogleAuthError(googleAuthError);
         }
     } catch (err) {
         console.error('Session check failed:', err);
@@ -213,6 +215,18 @@ async function initLeague() {
 }
 
 // ── AUTH / SESSION ─────────────────────────────────────────
+// google/callback.js redirects failures back as /?auth_error=<code>: reopen
+// the sign-in modal with the reason instead of dropping the user on the
+// landing page with no feedback.
+function showGoogleAuthError(code) {
+    document.getElementById('landing-page')?.classList.add('hidden');
+    const appIface = document.getElementById('app-interface');
+    if (appIface) { appIface.classList.remove('hidden'); appIface.style.display = 'flex'; }
+    ui.authBtn.click();
+    ui.authMsg.className = 'error-msg';
+    ui.authMsg.innerText = t(code === 'google_email_taken' ? 'errors.google_email_taken' : 'errors.google_failed');
+}
+
 function loadGuestData() {
     playerXP = parseInt(localStorage.getItem('guest_xp') || '0');
     usedMessages = parseInt(localStorage.getItem('guest_msgs') || '0');
@@ -673,13 +687,24 @@ function showQuestion() {
     ui.quizOptions.innerHTML  = '';
     ui.feedback.className     = 'hidden';
 
-    q.options.forEach(option => {
+    shuffled(q.options).forEach(option => {
         const btn = document.createElement('button');
         btn.className = 'option-btn';
         btn.innerText = option.text;
         btn.onclick   = () => handleAnswer(option, btn);
         ui.quizOptions.appendChild(btn);
     });
+}
+
+// Fisher-Yates on a copy: lessons.json authors the correct answer in the
+// same slot almost every time, which made it guessable by position.
+function shuffled(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
 }
 
 function handleAnswer(option, btnClicked) {

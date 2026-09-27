@@ -16,10 +16,19 @@ export function parseCookies(request) {
   return cookies;
 }
 
+// Same "YYYY-MM-DD HH:MM:SS" (UTC) shape SQLite's datetime('now') returns.
+// expires_at columns are compared against datetime('now') as plain text, so
+// an ISO string ("...T...Z") would sort after any same-day datetime('now')
+// ('T' > ' ') and stay valid until the next UTC day instead of expiring on
+// time — e.g. a "1 hour" password-reset link lasting up to 24h.
+export function toSqlDateTime(ms) {
+  return new Date(ms).toISOString().slice(0, 19).replace('T', ' ');
+}
+
 export async function createSession(db, userId) {
   const token = generateToken();
   const tokenHash = await sha256Hex(token);
-  const expiresAt = new Date(Date.now() + SESSION_TTL_SECONDS * 1000).toISOString();
+  const expiresAt = toSqlDateTime(Date.now() + SESSION_TTL_SECONDS * 1000);
   await db
     .prepare('INSERT INTO sessions (token_hash, user_id, expires_at) VALUES (?, ?, ?)')
     .bind(tokenHash, userId, expiresAt)

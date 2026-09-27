@@ -18,7 +18,7 @@
                 feature_streak_title: "Daily Streak",
                 feature_streak_desc: "Keep the streak alive.",
                 enter_btn: "ENTER STADIUM",
-                disclaimer: "*Progress auto-saved in your browser."
+                disclaimer: "*Progress saved on this device. Sign in to keep it across devices."
             },
             hud: {
                 rank_label: "RANK",
@@ -82,7 +82,9 @@
                 load_error: "Error loading the tactical document.",
                 chat_expired: "🚨 Trial ended! Your free access has expired.",
                 chat_unavailable: "❌ Instructor unavailable. Connection failed.",
-                auth_generic: "Something went wrong. Please try again."
+                auth_generic: "Something went wrong. Please try again.",
+                google_failed: "Google sign-in didn't complete. Please try again.",
+                google_email_taken: "An account with this email already exists. Sign in with your password instead."
             },
             resetpw: {
                 title: "Reset Your Password",
@@ -119,7 +121,7 @@
                 feature_streak_title: "Racha Diaria",
                 feature_streak_desc: "Mantén la racha.",
                 enter_btn: "ENTRAR AL ESTADIO",
-                disclaimer: "*Progreso guardado automáticamente en tu navegador."
+                disclaimer: "*Progreso guardado en este dispositivo. Inicia sesión para conservarlo en todos tus dispositivos."
             },
             hud: {
                 rank_label: "RANGO",
@@ -183,7 +185,9 @@
                 load_error: "Error al cargar el documento táctico.",
                 chat_expired: "🚨 ¡Prueba agotada! Tu acceso gratuito ha expirado.",
                 chat_unavailable: "❌ Míster no disponible. Fallo de conexión.",
-                auth_generic: "Algo ha fallado. Inténtalo de nuevo."
+                auth_generic: "Algo ha fallado. Inténtalo de nuevo.",
+                google_failed: "No se pudo completar el inicio de sesión con Google. Inténtalo de nuevo.",
+                google_email_taken: "Ya existe una cuenta con este email. Entra con tu contraseña."
             },
             resetpw: {
                 title: "Restablecer tu Contraseña",

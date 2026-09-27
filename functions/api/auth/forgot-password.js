@@ -3,6 +3,7 @@ import { findUserByEmail } from '../../_lib/db.js';
 import { sendEmail } from '../../_lib/email.js';
 import { json, parseJsonBody } from '../../_lib/http.js';
 import { isRateLimited, recordFailedAttempt } from '../../_lib/rateLimit.js';
+import { toSqlDateTime } from '../../_lib/session.js';
 
 const RESET_TTL_SECONDS = 60 * 60; // 1 hour
 
@@ -39,7 +40,7 @@ export async function onRequestPost({ request, env }) {
   if (user && user.password_hash) {
     const token = generateToken();
     const tokenHash = await sha256Hex(token);
-    const expiresAt = new Date(Date.now() + RESET_TTL_SECONDS * 1000).toISOString();
+    const expiresAt = toSqlDateTime(Date.now() + RESET_TTL_SECONDS * 1000);
     await env.DB.batch([
       env.DB.prepare('DELETE FROM password_resets WHERE user_id = ?').bind(user.id),
       env.DB

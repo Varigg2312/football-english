@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gaffer-pro-b20e7b84f5d9';
+const CACHE_NAME = 'gaffer-pro-baa68ec02856';
 const OFFLINE_URL = '/offline.html';
 
 // Core shell + content precached at install so lessons already seen
@@ -31,6 +31,15 @@ self.addEventListener('fetch', (event) => {
     const req = event.request;
     if (req.method !== 'GET') return;
 
+    const url = new URL(req.url);
+
+    // Auth/session endpoints must never be cached: a stale cached /api/auth/me
+    // would instantly hand back a logged-in-as-someone-else (or logged-out)
+    // response before the real network answer arrives, flashing the wrong
+    // account state on every load. Bypass the SW entirely for these —
+    // including navigations (the Google OAuth start/callback redirects).
+    if (url.origin === self.location.origin && url.pathname.startsWith('/api/')) return;
+
     // Page navigations: network-first so updates show up immediately,
     // falling back to the cached shell, then the offline page.
     // ignoreSearch matters here: the installed PWA opens '/?source=pwa',
@@ -38,21 +47,17 @@ self.addEventListener('fetch', (event) => {
     if (req.mode === 'navigate') {
         event.respondWith(
             fetch(req)
-                .then(res => { cachePut(req, res.clone()); return res; })
+                // Cached under the bare path: query strings here can carry
+                // one-off secrets (reset-password ?token=, Stripe session_id)
+                // that must not be persisted in Cache Storage.
+                .then(res => { cachePut(url.origin + url.pathname, res.clone()); return res; })
                 .catch(() => caches.match(req, { ignoreSearch: true })
                     .then(cached => cached || caches.match(OFFLINE_URL)))
         );
         return;
     }
 
-    const url = new URL(req.url);
     if (url.origin !== self.location.origin) return; // let cross-origin CDN requests pass through untouched
-
-    // Auth/session endpoints must never be cached: a stale cached /api/auth/me
-    // would instantly hand back a logged-in-as-someone-else (or logged-out)
-    // response before the real network answer arrives, flashing the wrong
-    // account state on every load. Bypass the SW entirely for these.
-    if (url.pathname.startsWith('/api/')) return;
 
     // lessons.json: network-first so new/edited lessons show up when online,
     // but still readable offline from the last successful fetch.

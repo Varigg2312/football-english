@@ -47,6 +47,17 @@ export async function setCompletedLessons(db, userId, lessonIds) {
   ]);
 }
 
+// Additive: a sync from a device with a stale list must never erase lessons
+// completed elsewhere (xp/msgs already follow the same only-grows rule).
+export async function addCompletedLessons(db, userId, lessonIds) {
+  if (!lessonIds.length) return;
+  await db.batch(
+    lessonIds.map((id) =>
+      db.prepare('INSERT OR IGNORE INTO completed_lessons (user_id, lesson_id) VALUES (?, ?)').bind(userId, id)
+    )
+  );
+}
+
 export function toPublicUser(row, completedLessons = []) {
   return {
     id: row.id,

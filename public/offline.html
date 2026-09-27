@@ -46,6 +46,8 @@
             font-weight: 700;
             cursor: pointer;
             transition: transform 0.2s;
+            text-decoration: none;
+            display: inline-block;
         }
         .retry-btn:active { transform: scale(0.95); }
         .badge {
@@ -60,7 +62,7 @@
     <div class="icon">📡</div>
     <h1>You're Offside.</h1>
     <p>No internet connection detected. Check your network and try again — The Gaffer is waiting.</p>
-    <button class="retry-btn" onclick="window.location.reload()">Retry Connection</button>
+    <a class="retry-btn" href="/">Retry Connection</a>
     <p class="badge">FOOTBALL ENGLISH ACADEMY • GAFFER PRO</p>
 </body>
 </html>

@@ -247,7 +247,7 @@
         "id": 1,
         "question": "As the last defender, what is your primary visual cue to initiate the offside trap?",
         "options": [
-          { "text": "When the striker starts his run.",                           "correct": false, "feedback": "Too early. The key moment is when the ball is *played*, not when the run begins." },
+          { "text": "When the striker starts his run.",                           "correct": false, "feedback": "Too early. The key moment is when the ball is played, not when the run begins." },
           { "text": "The moment the passer's foot makes contact with the ball.", "correct": true,  "feedback": "Perfect. Offside is judged at the exact moment the ball is played — step forward at that precise instant." },
           { "text": "When you hear your goalkeeper shout 'NOW!'.",               "correct": false, "feedback": "The shout should coincide with the visual cue, not replace it. React to what you see, confirmed by what you hear." }
         ]

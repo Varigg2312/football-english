@@ -1,10 +1,14 @@
 {
+  "id": "/",
   "name": "Football English Academy",
   "short_name": "Gaffer PRO",
+  "description": "Learn football English: tactics lessons, vocabulary, quizzes and an AI coach.",
+  "lang": "en",
   "start_url": "/?source=pwa",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0f172a",
-  "theme_color": "#3b82f6",
+  "theme_color": "#0f172a",
   "orientation": "portrait-primary",
   "icons": [
     {
