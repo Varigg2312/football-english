@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gaffer-pro-fcf44d94aaa6';
+const CACHE_NAME = 'gaffer-pro-d3a647f90772';
 const OFFLINE_URL = '/offline.html';
 
 // Core shell + content precached at install so lessons already seen
@@ -7,7 +7,13 @@ const PRECACHE_URLS = [
     '/', '/index.html', '/offline.html', '/404.html',
     '/football.css', '/app.js', '/i18n.js', '/sw-register.js', '/manifest.json', '/lessons.json',
     '/favicon-96.png', '/apple-touch-icon.png', '/icon-192.png', '/icon-512.png', '/icon-512-maskable.png',
-    '/audio/whistle.mp3', '/audio/correct.mp3', '/audio/wrong.mp3', '/audio/win.mp3'
+    '/audio/whistle.mp3', '/audio/correct.mp3', '/audio/wrong.mp3', '/audio/win.mp3',
+    '/vendor/inter-5.3.0/inter.css',
+    '/vendor/inter-5.3.0/inter-latin-400-normal.woff2', '/vendor/inter-5.3.0/inter-latin-600-normal.woff2',
+    '/vendor/inter-5.3.0/inter-latin-800-normal.woff2', '/vendor/inter-5.3.0/inter-latin-900-normal.woff2',
+    '/vendor/fontawesome-6.5.2/css/fontawesome.min.css', '/vendor/fontawesome-6.5.2/css/solid.min.css',
+    '/vendor/fontawesome-6.5.2/webfonts/fa-solid-900.woff2',
+    '/vendor/canvas-confetti-1.6.0/confetti.browser.js'
 ];
 
 self.addEventListener('install', (event) => {
@@ -74,7 +80,7 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    if (url.origin !== self.location.origin) return; // let cross-origin CDN requests pass through untouched
+    if (url.origin !== self.location.origin) return; // cross-origin (YouTube, Pexels, the chat Worker): untouched
 
     // lessons.json: network-first so new/edited lessons show up when online,
     // but still readable offline from the last successful fetch.

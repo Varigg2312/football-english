@@ -16,12 +16,12 @@
     <link rel="icon" type="image/png" href="/favicon-96.png">
     <link rel="manifest" href="/manifest.json">
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"
-          integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous">
-    <!-- Google Fonts CSS is served content-negotiated per browser/UA, so it has no
-         single stable hash — SRI isn't applicable here (would break the font in
-         some browsers). -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Self-hosted (no third-party requests; works offline via the SW
+         precache). Versioned folders, so /vendor/* can be cached immutably. -->
+    <link rel="preload" href="/vendor/inter-5.3.0/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/vendor/inter-5.3.0/inter.css">
+    <link rel="stylesheet" href="/vendor/fontawesome-6.5.2/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/vendor/fontawesome-6.5.2/css/solid.min.css">
     <link rel="stylesheet" href="/football.css">
 
     <!-- i18n must load before app.js -->
@@ -333,8 +333,7 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"
-            integrity="sha384-HAH79XdRvHr6axVGh4xQWVCp14kcd32bNk4Xu0sHDHtFQ42n6BAM8ykvB47dGz6D" crossorigin="anonymous"></script>
+    <script src="/vendor/canvas-confetti-1.6.0/confetti.browser.js"></script>
     <script src="/app.js"></script>
     <script src="/sw-register.js"></script>
 </body>
