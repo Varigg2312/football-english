@@ -27,6 +27,8 @@
 | Launcher icon | Adaptive icon foregrounds regenerated from `icon-512-maskable.png` (no more clipped text) |
 | Self-hosted assets | Inter, Font Awesome (solid) and canvas-confetti served from `/vendor/*` (immutable cache, precached); CSP is `'self'`-only for scripts/fonts |
 | Chat privacy text | Privacy policy covers sending the last 6 turns of the conversation (27 Sep 2026) |
+| Chat Worker | Deployed 27 Sep 2026 (version 4c0ba6e7): conversation memory (last 6 turns), Stripe codes only for paid sessions + 5-min signature window |
+| PRO linked to the account | Migration 0004 (`users.pro_code`) + `/api/auth/pro`: PRO restored on sign-in on any device (3-device limit still enforced by the Worker) |
 | Legal | Privacy policy + terms (EN/ES), AI Act art. 50 notice, LOPDGDD 14+ |
 
 ---
@@ -46,8 +48,6 @@
 
 | Task | Notes |
 |---|---|
-| Deploy Worker update | Chat memory (last 6 turns) + Stripe `payment_status` / signature-age checks — code ready in `worker/`, privacy text already live; needs `npx wrangler login` + `npx wrangler deploy` |
-| PRO linked to the account | Implemented and tested (staging): `users.pro_code` (migration 0004) + `/api/auth/pro`; restores PRO on sign-in. Waiting for Vari's OK on the migration and privacy text |
 | Streak reminders (notifications) | TWA notification delegation is enabled; needs Web Push + a consent step |
 
 ### P2 — Post-launch
