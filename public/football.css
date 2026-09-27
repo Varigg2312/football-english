@@ -26,10 +26,11 @@ body {
     z-index: 2000;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start; /* centrado con margin auto en .landing-content: no corta el título en pantallas bajas */
     align-items: center;
     padding: 20px;
-    overflow: hidden; /* Vital para que la mancha no genere scroll */
+    overflow-x: hidden; /* Vital para que la mancha no genere scroll lateral */
+    overflow-y: auto;
 }
 
 /* El líquido (La aberración geométrica de fondo) */
@@ -53,8 +54,9 @@ body {
 
 /* El Cristal (El contenedor de la información) */
 .landing-content { 
-    max-width: 600px; 
+    max-width: 600px;
     width: 100%;
+    margin-block: auto;
     animation: fadeInUp 0.8s ease-out; 
     position: relative;
     z-index: 1; /* Por encima de la forma líquida */
