@@ -102,6 +102,8 @@ body {
    3. APP INTERFACE (DISEÑO BLANCO)
    ========================================= */
 .hidden { display: none !important; }
+/* App Android (TWA): sin enlaces de compra a Stripe (política de pagos de Google Play). Ver i18n.js */
+.in-twa #premium-banner, .in-twa #premium-hint { display: none !important; }
 
 /* Contenedor principal para centrar todo */
 #app-interface {

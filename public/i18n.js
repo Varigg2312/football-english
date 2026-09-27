@@ -74,6 +74,7 @@
                 coach_btn: "Talk to Coach",
                 coach_title: "The Gaffer (AI Tutor)",
                 coach_welcome: "Alright lad? I'm an AI coach, here 24/7. Ask me anything about football English — you've got some free messages, and PRO unlocks unlimited chat.",
+                coach_welcome_twa: "Alright lad? I'm an AI coach, here 24/7. Ask me anything about football English — you've got some free messages to try me out.",
                 password_placeholder: "🔒 PRO access code (optional)",
                 password_label: "PRO access code",
                 chat_placeholder: "Ask a question...",
@@ -120,6 +121,7 @@
                 load_error: "Couldn't load the lessons. Check your connection and try again.",
                 lesson_not_found: "That lesson doesn't exist (any more). Pick one from the list.",
                 chat_expired: "🚨 You've used all your free messages. Get PRO to keep chatting with the coach.",
+                chat_expired_twa: "🚨 You've used all your free messages. If you already have a PRO code, enter it below or sign in to restore it.",
                 chat_rate_limited: "Too many messages from this network today. Try again tomorrow.",
                 chat_unavailable: "❌ Instructor unavailable. Connection failed.",
                 auth_generic: "Something went wrong. Please try again.",
@@ -234,6 +236,7 @@
                 coach_btn: "Hablar con el Míster",
                 coach_title: "El Míster (Tutor IA)",
                 coach_welcome: "¿Qué pasa, crack? Soy un entrenador de IA, estoy 24/7. Pregúntame lo que quieras sobre inglés futbolero (en inglés) — tienes algunos mensajes gratis y con PRO el chat es ilimitado.",
+                coach_welcome_twa: "¿Qué pasa, crack? Soy un entrenador de IA, estoy 24/7. Pregúntame lo que quieras sobre inglés futbolero (en inglés) — tienes algunos mensajes gratis para probarme.",
                 password_placeholder: "🔒 Código de acceso PRO (opcional)",
                 password_label: "Código de acceso PRO",
                 chat_placeholder: "Haz una pregunta (en inglés)...",
@@ -280,6 +283,7 @@
                 load_error: "No se pudieron cargar las lecciones. Revisa tu conexión y vuelve a intentarlo.",
                 lesson_not_found: "Esa lección no existe (o ya no). Elige una de la lista.",
                 chat_expired: "🚨 Has gastado tus mensajes gratis. Hazte PRO para seguir hablando con el Míster.",
+                chat_expired_twa: "🚨 Has gastado tus mensajes gratis. Si ya tienes un código PRO, escríbelo abajo o inicia sesión para recuperarlo.",
                 chat_rate_limited: "Demasiados mensajes desde esta red hoy. Vuelve a probar mañana.",
                 chat_unavailable: "❌ Míster no disponible. Fallo de conexión.",
                 auth_generic: "Algo ha fallado. Inténtalo de nuevo.",
@@ -339,6 +343,20 @@
     try { currentLang = localStorage.getItem('app_lang') || 'en'; } catch (e) {}
     if (!TRANSLATIONS[currentLang]) currentLang = 'en';
 
+    // Inside the Android app (TWA) Google Play's payments policy forbids
+    // pointing users to Stripe, so the PRO upsell is hidden there (CSS
+    // `.in-twa`) and strings with a `<key>_twa` variant use it instead.
+    // Chrome only sets the android-app:// referrer on the launch page, so the
+    // flag is kept for the rest of the session (per tab, not shared with the
+    // normal browser).
+    let inTwa = false;
+    try {
+        inTwa = document.referrer.startsWith('android-app://com.footballenglish.academy')
+            || sessionStorage.getItem('in_twa') === '1';
+        if (inTwa) sessionStorage.setItem('in_twa', '1');
+    } catch (e) {}
+    if (inTwa) document.documentElement.classList.add('in-twa');
+
     function lookup(lang, parts) {
         let val = TRANSLATIONS[lang];
         for (const p of parts) { val = val?.[p]; }
@@ -346,6 +364,10 @@
     }
 
     function t(key) {
+        if (inTwa && !key.endsWith('_twa')) {
+            const alt = t(key + '_twa');
+            if (alt !== key + '_twa') return alt;
+        }
         const parts = key.split('.');
         const val = lookup(currentLang, parts);
         if (val !== undefined) return val;
