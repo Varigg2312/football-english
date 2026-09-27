@@ -31,6 +31,14 @@ async function poll() {
             const code = await tryRedeem();
             if (code) {
                 localStorage.setItem('user_is_vip_code', code);
+                // Signed in? Save it to the account too, so PRO comes back on
+                // any other device. 401 (not signed in) is simply ignored.
+                fetch('/api/auth/pro', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code })
+                }).catch(() => {});
                 document.getElementById('code-display').textContent = code;
                 document.getElementById('pending-state').classList.add('hidden');
                 document.getElementById('success-state').classList.remove('hidden');

@@ -142,6 +142,7 @@
     <h3>2.3 Gameplay and progress data</h3>
     <ul>
         <li>XP points, rank, daily streak, number of chat messages used, and the list of completed lessons — stored against your account so it's available across devices.</li>
+        <li>If you use a PRO access code while signed in, that code is stored against your account so PRO is restored when you sign in on another device (each code still works on up to 3 devices).</li>
         <li>If you use the app without an account ("guest mode"), this same data is kept only in your browser's local storage and is never sent to our servers.</li>
     </ul>
     <h3>2.4 Session and security data</h3>
@@ -178,7 +179,6 @@
         <li><strong>DeepSeek</strong> — an AI provider based outside the European Economic Area, used solely to generate replies in the "Gaffer" chat feature. <strong>There is currently no European Commission adequacy decision covering this transfer.</strong> We only send the text of the messages you submit in the current chat session (your latest message plus up to the 6 previous messages and replies of that same conversation, so the coach can follow it), and we do not send any other account data. For this reason, we strongly recommend you do not enter personal, financial, health, or other sensitive information into the chat box.</li>
         <li><strong>Resend</strong> — our transactional email provider, used solely to deliver password-reset emails. We only send it your email address and the reset link; no other account data is shared. Resend is a US-based company; this transfer is safeguarded through Resend's Data Processing Agreement and Standard Contractual Clauses.</li>
         <li><strong>Pexels</strong> — some lesson videos are streamed directly from Pexels' content delivery network; your browser connects to it directly to play them, which may expose your IP address to Pexels per its own privacy policy. We do not share any account data with Pexels.</li>
-        <li>Font Awesome (cdnjs), Google Fonts and jsdelivr — deliver icons, fonts and a small confetti animation library from their own content delivery networks; your browser connects to them directly, which may expose your IP address to those providers per their own policies.</li>
     </ul>
     <p>Some lessons' code supports embedding a YouTube video instead of a direct video file, though no lesson currently published uses this. If this is enabled in the future, YouTube (operated by Google LLC) would set its own cookies directly in your browser under its own policies, independently of this site, and we will update this policy before turning it on.</p>
     <p>We do <strong>not</strong> sell your data, and we do not use advertising or analytics networks of any kind.</p>
@@ -223,7 +223,7 @@
 
     <h3>Delete your account right now</h3>
     <div class="danger-box">
-        <p>If you're currently signed in on this device, you can permanently delete your account and all associated data (progress, completed lessons, sessions) immediately, with no need to wait for a manual request.</p>
+        <p>If you're currently signed in on this device, you can permanently delete your account and all associated data (progress, completed lessons, linked PRO code, sessions) immediately, with no need to wait for a manual request.</p>
         <button id="delete-account-btn" class="danger-btn" type="button">Delete my account now</button>
         <p id="delete-status"></p>
     </div>
@@ -316,6 +316,7 @@
     <h3>2.3 Datos de juego y progreso</h3>
     <ul>
         <li>Puntos de XP, rango, racha diaria, número de mensajes de chat usados y la lista de lecciones completadas — almacenados junto a tu cuenta para que estén disponibles en cualquier dispositivo.</li>
+        <li>Si usas un código de acceso PRO con la sesión iniciada, ese código se guarda junto a tu cuenta para restaurar PRO cuando inicies sesión en otro dispositivo (cada código sigue funcionando en un máximo de 3 dispositivos).</li>
         <li>Si usas la app sin cuenta ("modo invitado"), estos mismos datos se guardan solo en el almacenamiento local de tu navegador y nunca se envían a nuestros servidores.</li>
     </ul>
     <h3>2.4 Datos de sesión y seguridad</h3>
@@ -352,7 +353,6 @@
         <li><strong>DeepSeek</strong> — un proveedor de IA con sede fuera del Espacio Económico Europeo, usado únicamente para generar respuestas en la función de chat "El Míster". <strong>Actualmente no existe una decisión de adecuación de la Comisión Europea que cubra esta transferencia.</strong> Solo enviamos el texto de los mensajes que escribes en la sesión de chat actual (tu último mensaje y hasta los 6 mensajes y respuestas anteriores de esa misma conversación, para que el Míster pueda seguirla), sin ningún otro dato de tu cuenta. Por ello, recomendamos encarecidamente no introducir datos personales, financieros, de salud u otra información sensible en el cuadro de chat.</li>
         <li><strong>Resend</strong> — nuestro proveedor de email transaccional, usado únicamente para enviar los emails de restablecimiento de contraseña. Solo le enviamos tu dirección de email y el enlace de restablecimiento; ningún otro dato de tu cuenta. Resend es una empresa con sede en EE.UU.; esta transferencia se garantiza mediante el Acuerdo de Tratamiento de Datos de Resend y Cláusulas Contractuales Tipo.</li>
         <li><strong>Pexels</strong> — algunos vídeos de las lecciones se transmiten directamente desde la red de distribución de contenido de Pexels; tu navegador se conecta directamente a ella para reproducirlos, lo que puede exponer tu IP a Pexels conforme a su propia política de privacidad. No compartimos ningún dato de tu cuenta con Pexels.</li>
-        <li>Font Awesome (cdnjs), Google Fonts y jsdelivr — sirven iconos, tipografías y una pequeña librería de animación desde sus propias redes de distribución de contenido; tu navegador se conecta directamente a ellas, lo que puede exponer tu IP a dichos proveedores conforme a sus propias políticas.</li>
     </ul>
     <p>El código de algunas lecciones admite incrustar un vídeo de YouTube en lugar de un archivo de vídeo directo, aunque ninguna lección publicada actualmente usa esta opción. Si se activa en el futuro, YouTube (operado por Google LLC) establecería sus propias cookies directamente en tu navegador conforme a sus propias políticas, de forma independiente a este sitio, y actualizaremos esta política antes de activarlo.</p>
     <p><strong>No</strong> vendemos tus datos, ni utilizamos redes de publicidad o analítica de ningún tipo.</p>
@@ -397,7 +397,7 @@
 
     <h3>Elimina tu cuenta ahora mismo</h3>
     <div class="danger-box">
-        <p>Si actualmente tienes la sesión iniciada en este dispositivo, puedes eliminar tu cuenta y todos los datos asociados (progreso, lecciones completadas, sesiones) de forma permanente e inmediata, sin necesidad de esperar a una solicitud manual.</p>
+        <p>Si actualmente tienes la sesión iniciada en este dispositivo, puedes eliminar tu cuenta y todos los datos asociados (progreso, lecciones completadas, código PRO vinculado, sesiones) de forma permanente e inmediata, sin necesidad de esperar a una solicitud manual.</p>
         <button id="delete-account-btn-es" class="danger-btn" type="button">Eliminar mi cuenta ahora</button>
         <p id="delete-status-es"></p>
     </div>

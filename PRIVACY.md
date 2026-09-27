@@ -32,6 +32,7 @@ directly, and documented in `/privacy.html` §2.5.
 | OAuth CSRF state | Cookie only, not persisted | 10-minute TTL |
 | Password-reset token (hashed) | D1 `password_resets` | 1h TTL, deleted on use or on next reset request; cleaned up on account deletion too |
 | Device id (`client_id`) | Browser `localStorage` | Random UUID, not a cookie, used for chat free-limit + VIP device binding |
+| PRO access code (`users.pro_code`) | D1, with the account | Only if the user uses PRO while signed in; restores PRO on their other devices; deleted with the account |
 | Chat message text | Never stored by us | Forwarded live to DeepSeek with up to the 6 previous turns of the same conversation (kept only in the open tab) to generate a reply; not persisted server-side |
 | IP address | Transient, Cloudflare Worker rate-limit keys (Durable Object) | 48h TTL, genuinely auto-deleted via a DO `alarm()` that calls `storage.deleteAll()` — added 2026-07-24, previously the entry just went unread after expiry without being erased |
 | Email + IP (failed login attempts) | D1 `login_attempts` (migration `0003`) | Brute-force protection on `/api/auth/login` — 8 failed attempts/10min locks both the account (`email:` key) and the source IP (`ip:` key). Rows swept opportunistically once older than 1 day; the `email:` row for a given account is also deleted immediately on that account's next successful login |
@@ -47,7 +48,6 @@ directly, and documented in `/privacy.html` §2.5.
   not to share personal/sensitive data in chat.
 - **Resend** — transactional email (password-reset links only). US-based.
 - **Pexels** — direct video CDN for some lessons (IP exposure, no account data shared).
-- Font Awesome (cdnjs), Google Fonts, jsdelivr — static asset CDNs.
 - YouTube embed code path exists in `app.js` but is unused by any current
   lesson — disclosed pre-emptively in the live policy in case it's ever
   activated (sets its own tracking cookies, would need a fresh look then).

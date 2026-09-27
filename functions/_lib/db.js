@@ -68,6 +68,7 @@ export function toPublicUser(row, completedLessons = []) {
     msgs: row.msgs,
     streak: row.streak,
     lastVisit: row.last_visit,
+    proCode: row.pro_code || null,
     completedLessons,
   };
 }

@@ -355,6 +355,7 @@ async function initLeague() {
         const { valid } = await verifyVip(vipCode);
         isVipVerified = valid;
         updateChatStatus();
+        if (valid) saveProCodeToAccount(vipCode);
     }
 
     await lessonsPromise;
@@ -570,6 +571,41 @@ function applyServerUser(user) {
     ui.authBtn.classList.add('logged-in');
     updateHUD(); updateChatStatus(); renderCatalog();
     syncProgressNow(); // persist the just-recalculated streak / stamp last_visit
+    restoreProFromAccount(user);
+}
+
+// PRO follows the account: a code saved on the account (see
+// functions/api/auth/pro.js) is picked up on any device the user signs in
+// on, and a code already verified on this device is saved to the account.
+// The Worker still validates the code (and its 3-device limit) itself.
+async function restoreProFromAccount(user) {
+    if (user.proCode && user.proCode !== vipCode) {
+        const { valid, reason } = await verifyVip(user.proCode);
+        if (valid) {
+            vipCode = user.proCode;
+            storageSet('user_is_vip_code', vipCode);
+            ui.passwordInput.value = vipCode;
+            isVipVerified = true;
+        } else if (reason === 'device_limit_reached') {
+            setVipStatus(t('app.vip_device_limit'), true);
+        }
+        updateChatStatus();
+    } else if (!user.proCode && vipCode && isVipVerified) {
+        saveProCodeToAccount(vipCode);
+    }
+}
+
+async function saveProCodeToAccount(code) {
+    if (!currentUser || !code || currentUser.proCode === code) return;
+    try {
+        const res = await fetch('/api/auth/pro', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code }),
+        });
+        if (res.ok) currentUser.proCode = code;
+    } catch {}
 }
 
 async function logoutUser() {
@@ -1238,6 +1274,7 @@ function setupChat() {
         if (valid) {
             vipCode = code;
             storageSet('user_is_vip_code', vipCode);
+            saveProCodeToAccount(code);
         } else {
             setVipStatus(t(reason === 'device_limit_reached' ? 'app.vip_device_limit'
                 : reason === 'rate_limited' ? 'app.vip_rate_limited' : 'app.vip_invalid'), true);
