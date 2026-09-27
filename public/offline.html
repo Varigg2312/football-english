@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>You're Offline — Football English Academy</title>
+    <script src="/i18n.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -59,10 +60,10 @@
     </style>
 </head>
 <body>
-    <div class="icon">📡</div>
-    <h1>You're Offside.</h1>
-    <p>No internet connection detected. Check your network and try again — The Gaffer is waiting.</p>
-    <a class="retry-btn" href="/">Retry Connection</a>
+    <div class="icon" aria-hidden="true">📡</div>
+    <h1 data-i18n="offline.title">You're Offside.</h1>
+    <p data-i18n="offline.msg">No internet connection detected. Check your network and try again — The Gaffer is waiting.</p>
+    <a class="retry-btn" href="/" data-i18n="offline.retry">Retry Connection</a>
     <p class="badge">FOOTBALL ENGLISH ACADEMY • GAFFER PRO</p>
 </body>
 </html>

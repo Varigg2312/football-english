@@ -1,0 +1,10 @@
+# In-app routes handled by app.js's router. Adding 404.html turned off
+# Pages' implicit "serve index.html for every unknown path" SPA mode, so
+# these routes are rewritten (status 200, URL unchanged) to the app shell
+# explicitly; anything else now gets the real 404 page.
+/lessons      /  200
+/lessons/*    /  200
+/vocabulary   /  200
+
+# Browsers ask for /favicon.ico on pages without an icon <link>.
+/favicon.ico  /favicon-96.png  200

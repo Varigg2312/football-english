@@ -1,23 +1,35 @@
-const DB_FOLDER = './';
-// Also hardcoded in pro-unlocked.html — keep both in sync if this ever changes.
+// Also hardcoded in pro-unlocked.js — keep both in sync if this ever changes.
 const WORKER_URL = 'https://football-gaffer-api.alvaroggcasarabonela.workers.dev';
+const LESSONS_URL = '/lessons.json';
 const FREE_LIMIT = 10;
 const ANSWER_XP = 20;
 const LESSON_COMPLETE_XP = 50;
+// Previous chat turns sent along with each message so the coach can follow
+// the conversation. Kept in memory only (never stored), capped so requests
+// stay small; the Worker applies the same limits server-side.
+const CHAT_HISTORY_TURNS = 6;
+const CHAT_TURN_MAX_CHARS = 1000;
+
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function storageGet(key) { try { return localStorage.getItem(key); } catch { return null; } }
+function storageSet(key, value) { try { localStorage.setItem(key, value); } catch {} }
 
 // Persistent anonymous id used by the Worker for the free-tier message
 // counter (kept server-side, not just in localStorage — see sendMessage()).
-let clientId = localStorage.getItem('client_id');
+let clientId = storageGet('client_id');
 if (!clientId) {
     clientId = crypto.randomUUID();
-    localStorage.setItem('client_id', clientId);
+    storageSet('client_id', clientId);
 }
 
-let vipCode = localStorage.getItem('user_is_vip_code') || '';
+let vipCode = storageGet('user_is_vip_code') || '';
 let isVipVerified = false;
 
+// Returns { valid, reason } — reason is set by the Worker for the
+// device-limit and rate-limit cases so the UI can say why.
 async function verifyVip(code) {
-    if (!code) return false;
+    if (!code) return { valid: false };
     try {
         const res = await fetch(`${WORKER_URL}/verify-vip`, {
             method: 'POST',
@@ -25,9 +37,9 @@ async function verifyVip(code) {
             body: JSON.stringify({ code, clientId })
         });
         const data = await res.json();
-        return data.valid === true;
+        return { valid: data.valid === true, reason: data.reason || (res.status === 429 ? 'rate_limited' : null) };
     } catch {
-        return false;
+        return { valid: false, reason: 'network' };
     }
 }
 
@@ -40,10 +52,10 @@ const RANKS = [
 ];
 
 const sfx = {
-    whistle: new Audio('audio/whistle.mp3'),
-    correct: new Audio('audio/correct.mp3'),
-    wrong:   new Audio('audio/wrong.mp3'),
-    win:     new Audio('audio/win.mp3')
+    whistle: new Audio('/audio/whistle.mp3'),
+    correct: new Audio('/audio/correct.mp3'),
+    wrong:   new Audio('/audio/wrong.mp3'),
+    win:     new Audio('/audio/win.mp3')
 };
 
 function playSound(name) {
@@ -61,74 +73,104 @@ let playerStreak = 0;
 let currentQuiz = [];
 let currentQuestionIndex = 0;
 let currentLessonId = null;
+let quizCorrect = 0;
+let isReplay = false;    // lesson was already completed when opened → no XP
+let chatTurns = [];      // [{ role: 'user'|'assistant', content }]
 
-// completedLessons: Set stored as JSON array in localStorage
-let completedLessons = new Set(
-    JSON.parse(localStorage.getItem('completed_lessons') || '[]')
-);
+// completedLessons: the guest's list lives in localStorage; a logged-in
+// user's list comes from the server and is never written there, so logging
+// out on a shared device doesn't leave one account's progress behind for
+// the next person (it used to overwrite the guest list on every login).
+function loadGuestCompletedLessons() {
+    try { return new Set(JSON.parse(storageGet('completed_lessons') || '[]')); }
+    catch { return new Set(); }
+}
+let completedLessons = loadGuestCompletedLessons();
 
 function saveCompletedLessons() {
-    localStorage.setItem('completed_lessons', JSON.stringify([...completedLessons]));
+    if (currentUser) return; // synced to the server instead (see saveUserData)
+    storageSet('completed_lessons', JSON.stringify([...completedLessons]));
 }
 
 function markLessonComplete(id) {
-    if (completedLessons.has(id)) return;
+    if (completedLessons.has(id)) return false;
     completedLessons.add(id);
     saveCompletedLessons();
-    // Award completion XP bonus the first time only
-    addXP(LESSON_COMPLETE_XP);
+    addXP(LESSON_COMPLETE_XP); // first time only
+    return true;
 }
 
 // ── DOM REFS ───────────────────────────────────────────────
+const $ = (id) => document.getElementById(id);
 const ui = {
-    search:         document.getElementById('magic-search'),
-    results:        document.getElementById('search-results'),
-    matchInfo:      document.getElementById('match-info'),
-    main:           document.getElementById('main-content'),
-    title:          document.getElementById('lesson-title'),
-    level:          document.getElementById('lesson-level'),
-    intro:          document.getElementById('lesson-intro'),
-    concept:        document.getElementById('core-concept'),
-    vocabList:      document.getElementById('vocabulary-list'),
-    videoSection:   document.getElementById('video-section'),
-    videoContainer: document.getElementById('video-container'),
-    voiceWrapper:   document.getElementById('voice-control-wrapper'),
-    voiceBtn:       document.getElementById('voice-btn'),
-    quizHeaderText: document.getElementById('quiz-header-text'),
-    quizQuestion:   document.getElementById('quiz-question'),
-    quizOptions:    document.getElementById('options-container'),
-    feedback:       document.getElementById('feedback-zone'),
-    hud:            document.getElementById('player-hud'),
-    rankDisplay:    document.getElementById('player-rank'),
-    xpDisplay:      document.getElementById('player-xp'),
-    streakDisplay:  document.getElementById('player-streak'),
-    xpBar:          document.getElementById('xp-bar'),
-    chatTrigger:    document.getElementById('coach-trigger'),
-    chatModal:      document.getElementById('coach-modal'),
-    chatClose:      document.getElementById('close-chat'),
-    chatHistory:    document.getElementById('chat-history'),
-    chatInput:      document.getElementById('user-msg'),
-    chatSend:       document.getElementById('send-msg'),
+    landing:        $('landing-page'),
+    appIface:       $('app-interface'),
+    main:           $('main'),
+    homeHero:       $('home-hero'),
+    homeView:       $('home-view'),
+    vocabView:      $('vocab-view'),
+    lessonView:     $('lesson-view'),
+    lessonGrid:     $('lesson-grid'),
+    catalogProgress: $('catalog-progress'),
+    catalogFill:    $('catalog-progress-fill'),
+    vocabBank:      $('vocab-bank'),
+    vocabFilter:    $('vocab-filter'),
+    vocabCount:     $('vocab-count'),
+    vocabEmpty:     $('vocab-empty'),
+    backBtn:        $('back-to-lessons'),
+    premiumBanner:  $('premium-banner'),
+    search:         $('magic-search'),
+    results:        $('search-results'),
+    title:          $('lesson-title'),
+    level:          $('lesson-level'),
+    intro:          $('lesson-intro'),
+    concept:        $('core-concept'),
+    vocabList:      $('vocabulary-list'),
+    videoSection:   $('video-section'),
+    videoContainer: $('video-container'),
+    voiceWrapper:   $('voice-control-wrapper'),
+    voiceBtn:       $('voice-btn'),
+    quizHeaderText: $('quiz-header-text'),
+    quizQuestion:   $('quiz-question'),
+    quizOptions:    $('options-container'),
+    feedback:       $('feedback-zone'),
+    hud:            $('player-hud'),
+    rankDisplay:    $('player-rank'),
+    xpDisplay:      $('player-xp'),
+    streakDisplay:  $('player-streak'),
+    xpBar:          $('xp-bar'),
+    xpProgress:     $('xp-progress'),
+    chatTrigger:    $('coach-trigger'),
+    chatModal:      $('coach-modal'),
+    chatClose:      $('close-chat'),
+    chatMaximize:   $('maximize-chat'),
+    chatHistory:    $('chat-history'),
+    chatInput:      $('user-msg'),
+    chatSend:       $('send-msg'),
+    freeLeft:       $('free-msgs-left'),
+    vipStatus:      $('vip-status'),
     searchBtn:      document.querySelector('.search-btn'),
-    passwordInput:  document.getElementById('api-key-input'),
-    authBtn:        document.getElementById('auth-btn'),
-    authModal:      document.getElementById('auth-modal'),
-    closeAuth:      document.getElementById('close-auth'),
-    googleAuthBtn:  document.getElementById('google-auth-btn'),
-    authDivider:    document.getElementById('auth-divider'),
-    authEmail:      document.getElementById('auth-email'),
-    authPass:       document.getElementById('auth-pass'),
-    submitAuth:     document.getElementById('submit-auth'),
-    toggleAuth:     document.getElementById('toggle-auth-mode'),
-    toggleAuthWrap: document.getElementById('toggle-auth-wrap'),
-    forgotLink:     document.getElementById('forgot-password-link'),
-    backToSigninLink: document.getElementById('back-to-signin-link'),
-    authMsg:        document.getElementById('auth-msg'),
-    authTitle:      document.getElementById('auth-title'),
-    authSubtitle:   document.getElementById('auth-subtitle')
+    passwordInput:  $('api-key-input'),
+    authBtn:        $('auth-btn'),
+    authModal:      $('auth-modal'),
+    authForm:       $('auth-form'),
+    closeAuth:      $('close-auth'),
+    googleAuthBtn:  $('google-auth-btn'),
+    authDivider:    $('auth-divider'),
+    authEmail:      $('auth-email'),
+    authPass:       $('auth-pass'),
+    submitAuth:     $('submit-auth'),
+    toggleAuth:     $('toggle-auth-mode'),
+    toggleAuthWrap: $('toggle-auth-wrap'),
+    forgotLink:     $('forgot-password-link'),
+    backToSigninLink: $('back-to-signin-link'),
+    authMsg:        $('auth-msg'),
+    authTitle:      $('auth-title'),
+    authSubtitle:   $('auth-subtitle')
 };
 
-let allLessons = [];  // full lesson objects from lessons.json
+let allLessons = [];  // full lesson objects from lessons.json, sorted by difficulty
+let lessonsLoadFailed = false;
 
 // ── i18n BRIDGE ────────────────────────────────────────────
 window.onLangChange = function () {
@@ -137,45 +179,140 @@ window.onLangChange = function () {
     } else {
         setAuthBtnLabel('fa-solid fa-user', t('hud.login_btn'));
     }
+    updateChatStatus();
+    renderCatalog();
+    renderVocabBank();
+    if (currentLessonId && !ui.lessonView.classList.contains('hidden')) {
+        const lesson = allLessons.find(l => l.id === currentLessonId);
+        if (lesson) { renderLessonHeader(lesson); renderLessonVocab(lesson); }
+    }
+    syncMaximizeLabel();
 };
 
 // Built via DOM nodes rather than innerHTML — displayName can come from a
 // user-chosen email or a Google profile name, neither of which should be
 // interpolated into HTML.
+// The text sits in its own span so narrow screens can show just the icon
+// (see .auth-label in football.css); aria-label keeps it announced.
 function setAuthBtnLabel(iconClass, text) {
     ui.authBtn.innerHTML = '';
     const icon = document.createElement('i');
     icon.className = iconClass;
     icon.setAttribute('aria-hidden', 'true');
-    ui.authBtn.appendChild(icon);
-    ui.authBtn.appendChild(document.createTextNode(' ' + text));
+    const label = document.createElement('span');
+    label.className = 'auth-label';
+    label.textContent = text;
+    ui.authBtn.append(icon, label);
+    ui.authBtn.setAttribute('aria-label', text);
 }
+
+function levelLabel(lesson) {
+    return `${t('levels.' + lesson.difficulty)} · ${lesson.difficulty_elo} ELO`;
+}
+
+// ── ROUTER ─────────────────────────────────────────────────
+// Real URLs (served as index.html by public/_redirects) so the Android
+// app's launcher shortcuts and shared links land on the right screen.
+function parseRoute(pathname) {
+    const path = pathname.replace(/\/+$/, '') || '/';
+    if (path === '/vocabulary') return { view: 'vocab' };
+    const m = path.match(/^\/lessons\/([\w-]+)$/);
+    if (m) return { view: 'lesson', id: m[1] };
+    if (path === '/lessons') return { view: 'home', explicit: true };
+    return { view: 'home' };
+}
+
+function navigate(path, { replace = false } = {}) {
+    if (path !== location.pathname) {
+        if (replace) history.replaceState({}, '', path);
+        else history.pushState({}, '', path);
+    }
+    renderRoute();
+}
+
+function showApp() {
+    ui.landing.classList.add('hidden');
+    ui.appIface.classList.remove('hidden');
+    ui.appIface.style.display = 'flex';
+}
+
+function renderRoute() {
+    const route = parseRoute(location.pathname);
+    ui.results.classList.add('hidden');
+
+    if (route.view === 'lesson') {
+        if (!allLessons.length) return; // re-run once lessons.json arrives
+        const lesson = allLessons.find(l => l.id === route.id);
+        if (!lesson) {
+            navigate('/lessons', { replace: true });
+            showCatalogNotice(t('errors.lesson_not_found'));
+            return;
+        }
+        // Fresh quiz every time the lesson is entered (from the catalogue,
+        // search, back/forward) — only a same-lesson re-render is skipped.
+        const entering = ui.lessonView.classList.contains('hidden');
+        showView('lesson');
+        if (entering || currentLessonId !== lesson.id) renderLesson(lesson);
+        document.title = `${lesson.title} — Football English Academy`;
+        ui.title.focus({ preventScroll: true });
+        window.scrollTo({ top: 0, behavior: 'auto' });
+        return;
+    }
+
+    document.title = 'Football English Academy';
+    if (route.view === 'vocab') {
+        showView('vocab');
+        renderVocabBank();
+    } else {
+        showView('home');
+        renderCatalog();
+    }
+}
+
+function showView(name) {
+    ui.homeView.classList.toggle('hidden', name !== 'home');
+    ui.vocabView.classList.toggle('hidden', name !== 'vocab');
+    ui.lessonView.classList.toggle('hidden', name !== 'lesson');
+    ui.homeHero.classList.toggle('hidden', name === 'lesson');
+    // Keep the lesson screen focused on the lesson; the upsell stays on the
+    // catalogue/vocabulary screens (and is hidden for PRO users anyway).
+    ui.premiumBanner.classList.toggle('in-lesson', name === 'lesson');
+    document.querySelectorAll('.view-tab').forEach(tab => {
+        const active = (tab.dataset.route === 'lessons' && name === 'home') || (tab.dataset.route === 'vocabulary' && name === 'vocab');
+        tab.classList.toggle('active', active);
+        if (active) tab.setAttribute('aria-current', 'page'); else tab.removeAttribute('aria-current');
+    });
+    if (name !== 'lesson' && window.speechSynthesis) window.speechSynthesis.cancel();
+}
+
+// Same-origin in-app links (tabs, lesson cards) go through the router
+// instead of a full page load.
+document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href^="/lessons"], a[href="/vocabulary"]');
+    if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    navigate(a.getAttribute('href'));
+});
+window.addEventListener('popstate', renderRoute);
 
 // ── INIT ───────────────────────────────────────────────────
 async function initLeague() {
-    setupChat(); setupAuth(); setupVoiceControl();
+    setupChat(); setupAuth(); setupVoiceControl(); setupSearch(); setupVocabFilter(); setupModals();
     if (window.speechSynthesis) window.speechSynthesis.getVoices();
 
-    // PRO unlock now happens via pro-unlocked.html after a verified Stripe
-    // payment (see /redeem on the Worker) — it stores the code, we just
-    // confirm it's still valid with the server here.
-    if (vipCode) {
-        const passInput = document.getElementById('api-key-input');
-        if (passInput) passInput.value = vipCode;
-        isVipVerified = await verifyVip(vipCode);
-        updateChatStatus();
-    }
+    ui.backBtn.onclick = () => navigate('/lessons');
 
-    const startBtn = document.getElementById('start-btn');
-    const landing  = document.getElementById('landing-page');
-    const appIface = document.getElementById('app-interface');
+    // Returning visitors and deep links (launcher shortcuts, shared lesson
+    // links) skip the landing splash; first-time visitors to / still see it.
+    const route = parseRoute(location.pathname);
+    const skipLanding = route.view !== 'home' || route.explicit || storageGet('landing_seen') === '1';
+    if (skipLanding) showApp();
 
-    if (startBtn) {
-        startBtn.onclick = () => {
-            if (landing)  landing.classList.add('hidden');
-            if (appIface) { appIface.classList.remove('hidden'); appIface.style.display = 'flex'; }
-        };
-    }
+    $('start-btn').onclick = () => {
+        storageSet('landing_seen', '1');
+        showApp();
+        ui.main.focus({ preventScroll: true });
+    };
 
     // A redirect back from Google carries this marker (see google/callback.js)
     // so we know to try a one-time legacy-progress import right after.
@@ -183,6 +320,9 @@ async function initLeague() {
     const justLoggedInViaGoogle = params.get('login') === 'success';
     const googleAuthError = params.get('auth_error');
     if (justLoggedInViaGoogle || googleAuthError) window.history.replaceState({}, '', window.location.pathname);
+
+    // Lessons and session are independent — fetch in parallel.
+    const lessonsPromise = loadLessons();
 
     try {
         const res  = await fetch('/api/auth/me', { credentials: 'include' });
@@ -194,8 +334,8 @@ async function initLeague() {
                 if (imported) user = { ...user, ...imported };
             }
             applyServerUser(user);
-            if (landing)  landing.classList.add('hidden');
-            if (appIface) { appIface.classList.remove('hidden'); appIface.style.display = 'flex'; }
+            storageSet('landing_seen', '1');
+            showApp();
         } else {
             loadGuestData();
             if (googleAuthError) showGoogleAuthError(googleAuthError);
@@ -205,13 +345,189 @@ async function initLeague() {
         loadGuestData();
     }
 
-    if (ui.hud) ui.hud.classList.remove('hidden');
+    // PRO unlock happens via pro-unlocked.html after a verified Stripe
+    // payment (see /redeem on the Worker) — it stores the code, we just
+    // confirm it's still valid with the server here.
+    if (vipCode) {
+        ui.passwordInput.value = vipCode;
+        const { valid } = await verifyVip(vipCode);
+        isVipVerified = valid;
+        updateChatStatus();
+    }
 
+    await lessonsPromise;
+}
+
+async function loadLessons() {
+    lessonsLoadFailed = false;
     try {
-        const res = await fetch(DB_FOLDER + 'lessons.json');
-        allLessons = await res.json();
-        setupSearch();
-    } catch (err) { console.error("Error loading lessons catalogue:", err); }
+        const res = await fetch(LESSONS_URL);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        allLessons = (await res.json()).slice().sort((a, b) => a.difficulty_elo - b.difficulty_elo);
+    } catch (err) {
+        console.error('Error loading lessons catalogue:', err);
+        lessonsLoadFailed = true;
+    }
+    renderRoute();
+}
+
+// ── CATALOGUE ──────────────────────────────────────────────
+let catalogNotice = '';
+function showCatalogNotice(text) { catalogNotice = text; renderCatalog(); }
+
+function renderCatalog() {
+    const grid = ui.lessonGrid;
+    grid.innerHTML = '';
+
+    if (catalogNotice) {
+        const p = document.createElement('p');
+        p.className = 'notice';
+        p.setAttribute('role', 'status');
+        p.textContent = catalogNotice;
+        grid.appendChild(p);
+        catalogNotice = '';
+    }
+
+    if (lessonsLoadFailed) {
+        const p = document.createElement('p');
+        p.className = 'empty-state';
+        p.textContent = t('errors.load_error');
+        const retry = document.createElement('button');
+        retry.type = 'button';
+        retry.className = 'cta-button';
+        retry.textContent = t('offline.retry');
+        retry.onclick = loadLessons;
+        grid.append(p, retry);
+        ui.catalogProgress.textContent = '';
+        return;
+    }
+    if (!allLessons.length) {
+        const p = document.createElement('p');
+        p.className = 'empty-state';
+        p.textContent = t('app.loading_lessons');
+        grid.appendChild(p);
+        return;
+    }
+
+    const done = allLessons.filter(l => completedLessons.has(l.id)).length;
+    ui.catalogProgress.textContent = tf('app.lessons_done', { done, total: allLessons.length });
+    ui.catalogFill.style.width = `${Math.round((done / allLessons.length) * 100)}%`;
+
+    for (const lesson of allLessons) {
+        const isDone = completedLessons.has(lesson.id);
+        const a = document.createElement('a');
+        a.href = `/lessons/${lesson.id}`;
+        a.className = 'lesson-card' + (isDone ? ' is-done' : '');
+        a.dataset.level = lesson.difficulty;
+
+        const top = document.createElement('div');
+        top.className = 'lesson-card-top';
+        const badge = document.createElement('span');
+        badge.className = 'level-pill';
+        badge.textContent = t('levels.' + lesson.difficulty);
+        top.appendChild(badge);
+        if (lesson.video_id) {
+            const v = document.createElement('i');
+            v.className = 'fa-solid fa-video lesson-flag';
+            v.setAttribute('role', 'img');
+            v.setAttribute('aria-label', t('app.lesson_video_label'));
+            top.appendChild(v);
+        }
+        if (isDone) {
+            const check = document.createElement('span');
+            check.className = 'lesson-done';
+            check.setAttribute('role', 'img');
+            check.setAttribute('aria-label', t('app.lesson_done_label'));
+            check.textContent = '✓';
+            top.appendChild(check);
+        }
+
+        const h3 = document.createElement('h3');
+        h3.className = 'lesson-card-title';
+        h3.textContent = lesson.title;
+
+        const meta = document.createElement('p');
+        meta.className = 'lesson-card-meta';
+        meta.textContent = tf('app.lesson_meta', {
+            q: (lesson.quiz || []).length,
+            v: (lesson.content.vocabulary || []).length
+        });
+
+        a.append(top, h3, meta);
+        grid.appendChild(a);
+    }
+}
+
+// ── VOCABULARY BANK ────────────────────────────────────────
+function allVocabulary() {
+    const seen = new Map();
+    for (const lesson of allLessons) {
+        for (const word of lesson.content.vocabulary || []) {
+            const key = word.term.toLowerCase();
+            if (!seen.has(key)) seen.set(key, { ...word, lesson });
+        }
+    }
+    return [...seen.values()].sort((a, b) => a.term.localeCompare(b.term, 'en'));
+}
+
+function renderVocabBank() {
+    if (ui.vocabView.classList.contains('hidden') && ui.vocabBank.childElementCount) return;
+    const query = ui.vocabFilter.value.trim().toLowerCase();
+    const words = allVocabulary();
+    const shown = words.filter(w =>
+        !query ||
+        w.term.toLowerCase().includes(query) ||
+        w.meaning.toLowerCase().includes(query) ||
+        (w.meaning_es || '').toLowerCase().includes(query));
+
+    ui.vocabCount.textContent = words.length ? tf('app.vocab_count', { n: words.length }) : '';
+    ui.vocabBank.innerHTML = '';
+    for (const word of shown) {
+        const li = vocabItem(word);
+        const from = document.createElement('a');
+        from.href = `/lessons/${word.lesson.id}`;
+        from.className = 'vocab-from';
+        from.textContent = tf('app.vocab_from', { lesson: word.lesson.title });
+        li.querySelector('.vocab-text').appendChild(from);
+        ui.vocabBank.appendChild(li);
+    }
+    ui.vocabEmpty.classList.toggle('hidden', shown.length > 0 || !allLessons.length);
+}
+
+function setupVocabFilter() {
+    ui.vocabFilter.addEventListener('input', renderVocabBank);
+}
+
+// One vocabulary row: pronounce button + term + meaning (+ Spanish gloss
+// when the UI is in Spanish). textContent throughout, never innerHTML.
+function vocabItem(word) {
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'audio-btn';
+    btn.innerHTML = '<i class="fa-solid fa-volume-high" aria-hidden="true"></i>';
+    btn.setAttribute('aria-label', tf('app.pronounce', { term: word.term }));
+    btn.onclick = () => speak(word.term);
+    li.appendChild(btn);
+
+    const text = document.createElement('div');
+    text.className = 'vocab-text';
+    const strong = document.createElement('strong');
+    strong.lang = 'en';
+    strong.textContent = word.term;
+    const meaning = document.createElement('span');
+    meaning.lang = 'en';
+    meaning.textContent = `: ${word.meaning}`;
+    text.append(strong, meaning);
+    if (word.meaning_es && getCurrentLang() === 'es') {
+        const es = document.createElement('span');
+        es.className = 'vocab-es';
+        es.lang = 'es';
+        es.textContent = `🇪🇸 ${word.meaning_es}`;
+        text.appendChild(es);
+    }
+    li.appendChild(text);
+    return li;
 }
 
 // ── AUTH / SESSION ─────────────────────────────────────────
@@ -219,25 +535,24 @@ async function initLeague() {
 // the sign-in modal with the reason instead of dropping the user on the
 // landing page with no feedback.
 function showGoogleAuthError(code) {
-    document.getElementById('landing-page')?.classList.add('hidden');
-    const appIface = document.getElementById('app-interface');
-    if (appIface) { appIface.classList.remove('hidden'); appIface.style.display = 'flex'; }
+    showApp();
     ui.authBtn.click();
     ui.authMsg.className = 'error-msg';
     ui.authMsg.innerText = t(code === 'google_email_taken' ? 'errors.google_email_taken' : 'errors.google_failed');
 }
 
 function loadGuestData() {
-    playerXP = parseInt(localStorage.getItem('guest_xp') || '0');
-    usedMessages = parseInt(localStorage.getItem('guest_msgs') || '0');
+    playerXP = parseInt(storageGet('guest_xp') || '0');
+    usedMessages = parseInt(storageGet('guest_msgs') || '0');
+    completedLessons = loadGuestCompletedLessons();
     const guestData = {
-        streak: parseInt(localStorage.getItem('guest_streak') || '0'),
-        lastVisit: localStorage.getItem('guest_last_visit')
+        streak: parseInt(storageGet('guest_streak') || '0'),
+        lastVisit: storageGet('guest_last_visit')
     };
     calculateStreak(guestData);
-    localStorage.setItem('guest_streak', guestData.streak);
-    localStorage.setItem('guest_last_visit', guestData.lastVisit);
-    updateHUD(); updateChatStatus();
+    storageSet('guest_streak', guestData.streak);
+    storageSet('guest_last_visit', guestData.lastVisit);
+    updateHUD(); updateChatStatus(); renderCatalog();
 }
 
 // Applies a user object returned by /api/auth/register, /api/auth/login,
@@ -247,15 +562,15 @@ function applyServerUser(user) {
     playerXP     = user.xp;
     usedMessages = user.msgs;
     completedLessons = new Set(user.completedLessons || []);
-    saveCompletedLessons();
     calculateStreak({ streak: user.streak, lastVisit: parseSqlDateToDateString(user.lastVisit) });
     setAuthBtnLabel('fa-solid fa-user-check', `${user.displayName} (${t('hud.logout_suffix')})`);
     ui.authBtn.classList.add('logged-in');
-    updateHUD(); updateChatStatus();
+    updateHUD(); updateChatStatus(); renderCatalog();
     syncProgressNow(); // persist the just-recalculated streak / stamp last_visit
 }
 
 async function logoutUser() {
+    await syncProgressNow();
     try { await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }); } catch {}
     currentUser = null;
     loadGuestData();
@@ -286,8 +601,8 @@ function saveUserData() {
     if (currentUser) {
         scheduleProgressSync();
     } else {
-        localStorage.setItem('guest_xp',   playerXP);
-        localStorage.setItem('guest_msgs', usedMessages);
+        storageSet('guest_xp',   playerXP);
+        storageSet('guest_msgs', usedMessages);
     }
 }
 
@@ -310,6 +625,7 @@ function currentProgressPayload() {
 
 async function syncProgressNow() {
     if (!currentUser) return;
+    clearTimeout(progressSyncTimer);
     try {
         await fetch('/api/auth/progress', {
             method: 'POST',
@@ -338,14 +654,14 @@ window.addEventListener('pagehide', flushProgressBeacon);
 // Imported once (server-enforced, see progress/import.js) right after the
 // first login/registration under the new system.
 function collectLegacyProgress() {
-    const guestXp     = parseInt(localStorage.getItem('guest_xp') || '0');
-    const guestMsgs   = parseInt(localStorage.getItem('guest_msgs') || '0');
-    const guestStreak = parseInt(localStorage.getItem('guest_streak') || '0');
+    const guestXp     = parseInt(storageGet('guest_xp') || '0');
+    const guestMsgs   = parseInt(storageGet('guest_msgs') || '0');
+    const guestStreak = parseInt(storageGet('guest_streak') || '0');
 
     let legacyXp = 0, legacyMsgs = 0, legacyStreak = 0;
     try {
-        const oldUsername = localStorage.getItem('current_session_user');
-        const oldDb = JSON.parse(localStorage.getItem('football_users_db') || '{}');
+        const oldUsername = storageGet('current_session_user');
+        const oldDb = JSON.parse(storageGet('football_users_db') || '{}');
         if (oldUsername && oldDb[oldUsername]) {
             legacyXp     = oldDb[oldUsername].xp || 0;
             legacyMsgs   = oldDb[oldUsername].msgs || 0;
@@ -357,7 +673,7 @@ function collectLegacyProgress() {
         xp: Math.max(guestXp, legacyXp),
         msgs: Math.max(guestMsgs, legacyMsgs),
         streak: Math.max(guestStreak, legacyStreak),
-        completedLessons: [...completedLessons],
+        completedLessons: [...loadGuestCompletedLessons()],
     };
 }
 
@@ -383,29 +699,81 @@ function addXP(amount) { playerXP += amount; saveUserData(); updateHUD(); }
 
 function updateHUD() {
     if (!ui.rankDisplay) return;
-    let rank = RANKS[0]; let nextXP = RANKS[1].limit;
+    let rank = RANKS[0]; let prevXP = 0; let nextXP = RANKS[1].limit;
     for (let i = 0; i < RANKS.length; i++) {
-        if (playerXP >= RANKS[i].limit) { rank = RANKS[i]; nextXP = RANKS[i + 1] ? RANKS[i + 1].limit : playerXP * 1.5; }
+        if (playerXP >= RANKS[i].limit) {
+            rank = RANKS[i];
+            prevXP = RANKS[i].limit;
+            nextXP = RANKS[i + 1] ? RANKS[i + 1].limit : null;
+        }
     }
+    // Progress within the current rank, not since 0 — otherwise the bar sat
+    // almost full for the whole of every rank after the first.
+    const pct = nextXP === null ? 100 : Math.min(100, Math.round(((playerXP - prevXP) / (nextXP - prevXP)) * 100));
     ui.rankDisplay.innerText  = rank.name;
     ui.xpDisplay.innerText    = `${playerXP} pts`;
     ui.streakDisplay.innerText = `${playerStreak} 🔥`;
-    ui.xpBar.style.width       = `${Math.min(100, (playerXP / nextXP) * 100)}%`;
+    ui.xpBar.style.width       = `${pct}%`;
+    ui.xpProgress.setAttribute('aria-valuenow', String(pct));
+}
+
+// ── MODALS ─────────────────────────────────────────────────
+// Shared open/close for the chat and sign-in dialogs: focus moves into the
+// dialog on open, Escape closes it, and focus returns to whatever opened it.
+let openModalEl = null;
+let modalReturnFocus = null;
+
+function openModal(el, focusTarget) {
+    if (openModalEl && openModalEl !== el) closeModal(openModalEl);
+    modalReturnFocus = document.activeElement;
+    el.classList.remove('hidden');
+    openModalEl = el;
+    if (el === ui.chatModal) ui.chatTrigger.setAttribute('aria-expanded', 'true');
+    const target = focusTarget || el.querySelector('input:not([disabled]):not(.hidden), button:not([disabled])');
+    if (target) setTimeout(() => target.focus(), 0);
+}
+
+function closeModal(el) {
+    el.classList.add('hidden');
+    if (el === ui.chatModal) {
+        ui.chatTrigger.setAttribute('aria-expanded', 'false');
+        // Always leave fullscreen behind on close, so it never reopens stuck
+        // in a state where its own controls could be unreachable again.
+        ui.chatModal.classList.remove('fullscreen');
+        syncMaximizeLabel();
+    }
+    if (openModalEl === el) openModalEl = null;
+    if (modalReturnFocus && document.contains(modalReturnFocus)) modalReturnFocus.focus();
+    modalReturnFocus = null;
+}
+
+function setupModals() {
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && openModalEl) { e.preventDefault(); closeModal(openModalEl); }
+        // Keep Tab inside the open dialog.
+        if (e.key === 'Tab' && openModalEl) {
+            const focusables = [...openModalEl.querySelectorAll('button, a[href], input, select, textarea')]
+                .filter(n => !n.disabled && n.offsetParent !== null);
+            if (!focusables.length) return;
+            const first = focusables[0], last = focusables[focusables.length - 1];
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+    });
 }
 
 function setupAuth() {
-    if (!ui.authBtn) return;
-
     let mode = 'signin'; // 'signin' | 'register' | 'forgot'
 
     function renderAuthMode() {
         const isForgot = mode === 'forgot';
         ui.authPass.classList.toggle('hidden', isForgot);
-        if (ui.googleAuthBtn) ui.googleAuthBtn.classList.toggle('hidden', isForgot);
-        if (ui.authDivider) ui.authDivider.classList.toggle('hidden', isForgot);
+        ui.googleAuthBtn.classList.toggle('hidden', isForgot);
+        ui.authDivider.classList.toggle('hidden', isForgot);
         ui.toggleAuthWrap.classList.toggle('hidden', isForgot);
         ui.forgotLink.classList.toggle('hidden', mode !== 'signin');
         ui.backToSigninLink.classList.toggle('hidden', !isForgot);
+        ui.authPass.setAttribute('autocomplete', mode === 'register' ? 'new-password' : 'current-password');
 
         if (mode === 'register') {
             ui.authTitle.innerText    = t('app.auth_title_register');
@@ -426,24 +794,23 @@ function setupAuth() {
         ui.authMsg.innerText = '';
     }
 
-    function openAuthModal() {
+    ui.authBtn.onclick  = () => {
+        if (currentUser) { logoutUser(); return; }
         mode = 'signin';
         renderAuthMode();
-        ui.authModal.classList.remove('hidden');
-    }
+        openModal(ui.authModal, ui.googleAuthBtn);
+    };
+    ui.closeAuth.onclick = () => closeModal(ui.authModal);
 
-    ui.authBtn.onclick  = () => { if (currentUser) logoutUser(); else openAuthModal(); };
-    ui.closeAuth.onclick = () => ui.authModal.classList.add('hidden');
+    ui.toggleAuth.onclick = () => { mode = mode === 'register' ? 'signin' : 'register'; renderAuthMode(); ui.authEmail.focus(); };
+    ui.forgotLink.onclick = (e) => { e.preventDefault(); mode = 'forgot'; renderAuthMode(); ui.authEmail.focus(); };
+    ui.backToSigninLink.onclick = (e) => { e.preventDefault(); mode = 'signin'; renderAuthMode(); ui.authEmail.focus(); };
 
-    ui.toggleAuth.onclick = () => { mode = mode === 'register' ? 'signin' : 'register'; renderAuthMode(); };
-    ui.forgotLink.onclick = (e) => { e.preventDefault(); mode = 'forgot'; renderAuthMode(); };
-    ui.backToSigninLink.onclick = (e) => { e.preventDefault(); mode = 'signin'; renderAuthMode(); };
+    ui.googleAuthBtn.onclick = () => { window.location.href = '/api/auth/google/start'; };
 
-    if (ui.googleAuthBtn) {
-        ui.googleAuthBtn.onclick = () => { window.location.href = '/api/auth/google/start'; };
-    }
-
-    ui.submitAuth.onclick = async () => {
+    // A real <form> so Enter submits and password managers recognise it.
+    ui.authForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
         const email = ui.authEmail.value.trim();
 
         if (mode === 'forgot') {
@@ -489,14 +856,14 @@ function setupAuth() {
             if (imported) user = { ...user, ...imported };
 
             applyServerUser(user);
-            ui.authModal.classList.add('hidden');
+            closeModal(ui.authModal);
             ui.authEmail.value = ''; ui.authPass.value = '';
         } catch {
             ui.authMsg.innerText = t('errors.auth_generic');
         } finally {
             ui.submitAuth.disabled = false;
         }
-    };
+    });
 }
 
 function authErrorMessage(code) {
@@ -505,6 +872,7 @@ function authErrorMessage(code) {
         case 'invalid_email':       return t('errors.invalid_email');
         case 'weak_password':       return t('errors.weak_password');
         case 'invalid_credentials': return t('errors.invalid_credentials');
+        case 'too_many_attempts':   return t('errors.too_many_attempts');
         default:                    return t('errors.auth_generic');
     }
 }
@@ -514,161 +882,192 @@ let speechSupported = false;
 
 function setupVoiceControl() {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-        if (ui.voiceWrapper) ui.voiceWrapper.classList.add('hidden');
+        ui.voiceWrapper.classList.add('hidden');
         return;
     }
     speechSupported = true;
-    if (ui.voiceWrapper) ui.voiceWrapper.classList.remove('hidden');
+    ui.voiceWrapper.classList.remove('hidden');
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
     recognition.lang = 'en-US'; recognition.interimResults = false; recognition.maxAlternatives = 1;
     let isListening = false;
 
-    if (ui.voiceBtn) {
-        ui.voiceBtn.onclick = () => {
-            if (isListening) { recognition.stop(); return; }
-            playSound('whistle');
-            try { recognition.start(); isListening = true; ui.voiceBtn.classList.add('mic-listening'); }
-            catch(e) { isListening = false; ui.voiceBtn.classList.remove('mic-listening'); }
-        };
-    }
-    recognition.onresult = (e) => {
-        const speech = e.results[0][0].transcript.toLowerCase();
-        isListening = false; if (ui.voiceBtn) ui.voiceBtn.classList.remove('mic-listening');
-        ui.quizOptions.querySelectorAll('button').forEach(btn => {
-            if (btn.disabled) return;
-            const t2 = btn.innerText.toLowerCase();
-            if (speech.includes(t2) || t2.includes(speech)) btn.click();
-        });
+    ui.voiceBtn.onclick = () => {
+        if (isListening) { recognition.stop(); return; }
+        playSound('whistle');
+        try { recognition.start(); isListening = true; ui.voiceBtn.classList.add('mic-listening'); }
+        catch(e) { isListening = false; ui.voiceBtn.classList.remove('mic-listening'); }
     };
-    recognition.onend = () => { isListening = false; if (ui.voiceBtn) ui.voiceBtn.classList.remove('mic-listening'); };
+    recognition.onresult = (e) => {
+        const speech = normalizeSpeech(e.results[0][0].transcript);
+        isListening = false; ui.voiceBtn.classList.remove('mic-listening');
+        if (speech.length < 3) return;
+        // Pick the single best-matching option (most shared words) instead
+        // of clicking every button whose text merely contains a short word.
+        const spokenWords = new Set(speech.split(' '));
+        let best = null, bestScore = 0;
+        ui.quizOptions.querySelectorAll('button.option-btn').forEach(btn => {
+            if (btn.disabled) return;
+            const text = normalizeSpeech(btn.innerText);
+            let score = text.includes(speech) || speech.includes(text) ? 100 : 0;
+            for (const w of text.split(' ')) if (w.length > 2 && spokenWords.has(w)) score++;
+            if (score > bestScore) { best = btn; bestScore = score; }
+        });
+        if (best && bestScore >= 2) best.click();
+    };
+    recognition.onend = () => { isListening = false; ui.voiceBtn.classList.remove('mic-listening'); };
+}
+
+function normalizeSpeech(s) {
+    return s.toLowerCase().replace(/[^a-z0-9\s-]/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
 // ── SEARCH ─────────────────────────────────────────────────
+// Matches lesson titles and vocabulary terms (so "penalty" finds the lesson
+// that teaches the word even if it's not in the title).
+function searchLessons(query) {
+    return allLessons.filter(l =>
+        l.title.toLowerCase().includes(query) ||
+        (l.content.vocabulary || []).some(v => v.term.toLowerCase().includes(query) || (v.meaning_es || '').toLowerCase().includes(query)));
+}
+
 function performSearch() {
-    const query = ui.search.value.toLowerCase();
+    const query = ui.search.value.trim().toLowerCase();
     ui.results.innerHTML = '';
     if (query.length < 1) { ui.results.classList.add('hidden'); return; }
-    const matches = allLessons.filter(l => l.title.toLowerCase().includes(query));
+    const matches = searchLessons(query);
     if (matches.length > 0) {
-        ui.results.classList.remove('hidden');
         matches.forEach(lesson => renderSearchResult(lesson));
     } else {
-        ui.results.innerHTML = `<div class="result-item" style="color:#6b7280">${t('errors.no_matches')}</div>`;
-        ui.results.classList.remove('hidden');
+        const div = document.createElement('div');
+        div.className = 'result-item result-empty';
+        div.textContent = t('errors.no_matches');
+        ui.results.appendChild(div);
     }
+    ui.results.classList.remove('hidden');
 }
 
 function setupSearch() {
-    if (!ui.search) return;
-    ui.search.addEventListener('keyup', performSearch);
-    if (ui.searchBtn) {
-        ui.searchBtn.addEventListener('click', () => { ui.search.focus(); performSearch(); });
-    }
-    document.addEventListener('click', (e) => { if (!ui.search.contains(e.target)) ui.results.classList.add('hidden'); });
+    ui.search.addEventListener('input', performSearch);
+    ui.search.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            performSearch();
+            const first = ui.results.querySelector('[role="option"]');
+            if (first) first.click();
+        } else if (e.key === 'ArrowDown') {
+            const first = ui.results.querySelector('[role="option"]');
+            if (first) { e.preventDefault(); first.focus(); }
+        } else if (e.key === 'Escape') {
+            ui.results.classList.add('hidden');
+        }
+    });
+    ui.searchBtn.addEventListener('click', () => { ui.search.focus(); performSearch(); });
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-wrapper')) ui.results.classList.add('hidden');
+    });
 }
 
 function renderSearchResult(lesson) {
     const done = completedLessons.has(lesson.id);
     const div  = document.createElement('div');
     div.className = 'result-item';
-    div.setAttribute('role', 'button');
+    div.setAttribute('role', 'option');
     div.setAttribute('tabindex', '0');
-    div.innerHTML = `
-        <span>
-            ${done ? '<span class="lesson-done" title="Completed">✓</span>' : ''}
-            ${lesson.title}
-        </span>
-        <strong>${t('app.search_go')} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></strong>`;
+
+    const label = document.createElement('span');
+    if (done) {
+        const check = document.createElement('span');
+        check.className = 'lesson-done';
+        check.setAttribute('role', 'img');
+        check.setAttribute('aria-label', t('app.lesson_done_label'));
+        check.textContent = '✓';
+        label.appendChild(check);
+    }
+    label.appendChild(document.createTextNode(lesson.title));
+    const go = document.createElement('strong');
+    go.textContent = `${t('app.search_go')} `;
+    go.insertAdjacentHTML('beforeend', '<i class="fa-solid fa-arrow-right" aria-hidden="true"></i>');
+    div.append(label, go);
+
     const select = () => {
-        loadLesson(lesson.id);
-        ui.search.value = lesson.title;
+        ui.search.value = '';
         ui.results.classList.add('hidden');
+        navigate(`/lessons/${lesson.id}`);
     };
     div.onclick = select;
     div.onkeydown = (e) => {
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(); }
+        else if (e.key === 'ArrowDown' && div.nextElementSibling) { e.preventDefault(); div.nextElementSibling.focus(); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); (div.previousElementSibling || ui.search).focus(); }
+        else if (e.key === 'Escape') { ui.results.classList.add('hidden'); ui.search.focus(); }
     };
     ui.results.appendChild(div);
 }
 
-// ── LESSON LOADER ──────────────────────────────────────────
-function loadLesson(id) {
-    const lesson = allLessons.find(l => l.id === id);
-    if (!lesson) { alert(t('errors.load_error')); return; }
-    currentLessonId = id;
-    ui.main.classList.add('hidden'); ui.matchInfo.classList.add('hidden');
-    renderLesson(lesson);
-    ui.matchInfo.classList.remove('hidden'); ui.main.classList.remove('hidden');
+// ── LESSON RENDERER ────────────────────────────────────────
+function renderLessonHeader(lesson) {
+    ui.title.innerText = lesson.title;
+    ui.level.innerText = levelLabel(lesson);
+    ui.intro.innerText = lesson.content.intro_hook;
 }
 
-// ── LESSON RENDERER (new lessons.json schema) ──────────────
+function renderLessonVocab(lesson) {
+    ui.vocabList.innerHTML = '';
+    (lesson.content.vocabulary || []).forEach(word => ui.vocabList.appendChild(vocabItem(word)));
+}
+
 function renderLesson(lesson) {
     playSound('whistle');
+    currentLessonId = lesson.id;
+    isReplay = completedLessons.has(lesson.id);
 
     // Video
     if (lesson.video_id) {
         ui.videoSection.classList.remove('hidden');
+        ui.videoContainer.innerHTML = '';
         if (lesson.video_id.includes('http')) {
-            ui.videoContainer.innerHTML = `<video controls autoplay muted style="position:absolute;top:0;left:0;width:100%;height:100%;border:none"><source src="${lesson.video_id}" type="video/mp4"></video>`;
+            const video = document.createElement('video');
+            video.controls = true; video.muted = true; video.playsInline = true;
+            video.preload = 'metadata';
+            const source = document.createElement('source');
+            source.src = lesson.video_id; source.type = 'video/mp4';
+            video.appendChild(source);
+            ui.videoContainer.appendChild(video);
         } else {
-            ui.videoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${lesson.video_id}?rel=0&modestbranding=1" frameborder="0" allowfullscreen></iframe>`;
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://www.youtube.com/embed/${encodeURIComponent(lesson.video_id)}?rel=0&modestbranding=1`;
+            iframe.title = lesson.title;
+            iframe.allowFullscreen = true;
+            iframe.loading = 'lazy';
+            ui.videoContainer.appendChild(iframe);
         }
     } else { ui.videoSection.classList.add('hidden'); ui.videoContainer.innerHTML = ''; }
 
-    // Header info. The placeholder text in index.html carries data-i18n
-    // attributes for the "no lesson loaded yet" state — drop them once real
-    // lesson content lands here, otherwise a later language switch would
-    // stomp this over with the placeholder string again.
-    ui.title.removeAttribute('data-i18n');
-    ui.title.innerText = lesson.title;
-    if (ui.level) ui.level.innerText = `${lesson.difficulty_elo} ELO`;
-    ui.intro.removeAttribute('data-i18n');
-    ui.intro.innerText = lesson.content.intro_hook;
+    renderLessonHeader(lesson);
 
-    // Core concept + analogy. Content is first-party (authored in
-    // lessons.json), but built with textContent rather than innerHTML anyway
-    // so this doesn't become the one exception to the "never interpolate
-    // untrusted-shaped strings into HTML" rule the chat code follows.
+    // Core concept + analogy — textContent, see vocabItem().
     ui.concept.innerHTML = '';
     const conceptP = document.createElement('p');
+    conceptP.lang = 'en';
     conceptP.textContent = lesson.content.core_concept;
     ui.concept.appendChild(conceptP);
     if (lesson.content.analogy) {
         const analogyP = document.createElement('p');
         analogyP.className = 'concept-analogy';
+        analogyP.lang = 'en';
         const em = document.createElement('em');
         em.textContent = `💡 ${lesson.content.analogy}`;
         analogyP.appendChild(em);
         ui.concept.appendChild(analogyP);
     }
 
-    // Vocabulary
-    ui.vocabList.innerHTML = '';
-    (lesson.content.vocabulary || []).forEach(word => {
-        const li = document.createElement('li');
-        const btn = document.createElement('button');
-        btn.className = 'audio-btn';
-        btn.innerHTML = '<i class="fa-solid fa-volume-high" aria-hidden="true"></i>';
-        btn.setAttribute('aria-label', `Pronounce "${word.term}"`);
-        btn.onclick = () => speak(word.term);
-        li.appendChild(btn);
-        // Appended as a sibling node instead of `li.innerHTML +=`, which would
-        // re-parse (and thus discard) the button's onclick handler above.
-        // textContent throughout, not innerHTML — see core-concept comment above.
-        const label = document.createElement('span');
-        const strong = document.createElement('strong');
-        strong.textContent = word.term;
-        label.appendChild(document.createTextNode(' '));
-        label.appendChild(strong);
-        label.appendChild(document.createTextNode(`: ${word.meaning}`));
-        li.appendChild(label);
-        ui.vocabList.appendChild(li);
-    });
+    renderLessonVocab(lesson);
 
     // Quiz
     currentQuiz = lesson.quiz || [];
     currentQuestionIndex = 0;
+    quizCorrect = 0;
     showQuestion();
 }
 
@@ -678,20 +1077,22 @@ function showQuestion() {
     if (!q) return;
     // Restore the mic control (hidden by finishLesson on a previous lesson)
     // now that there's a question again to answer.
-    if (ui.voiceWrapper && speechSupported) ui.voiceWrapper.classList.remove('hidden');
-    if (ui.quizHeaderText) {
-        ui.quizHeaderText.removeAttribute('data-i18n');
-        ui.quizHeaderText.textContent = `${t('quiz.scenario_label')} ${currentQuestionIndex + 1}/${currentQuiz.length}`;
-    }
+    if (speechSupported) ui.voiceWrapper.classList.remove('hidden');
+    ui.quizHeaderText.removeAttribute('data-i18n');
+    ui.quizHeaderText.textContent = `${t('quiz.scenario_label')} ${currentQuestionIndex + 1}/${currentQuiz.length}`;
     ui.quizQuestion.innerText = q.question;
+    ui.quizQuestion.lang = 'en';
     ui.quizOptions.innerHTML  = '';
     ui.feedback.className     = 'hidden';
+    ui.feedback.innerHTML     = '';
 
     shuffled(q.options).forEach(option => {
         const btn = document.createElement('button');
+        btn.type = 'button';
         btn.className = 'option-btn';
+        btn.lang = 'en';
         btn.innerText = option.text;
-        btn.onclick   = () => handleAnswer(option, btn);
+        btn.onclick   = () => handleAnswer(option, btn, q);
         ui.quizOptions.appendChild(btn);
     });
 }
@@ -707,114 +1108,181 @@ function shuffled(arr) {
     return a;
 }
 
-function handleAnswer(option, btnClicked) {
+function handleAnswer(option, btnClicked, question) {
     const isCorrect = option.correct === true;
 
-    ui.feedback.innerHTML = `<p>${option.feedback}</p>`;
+    ui.feedback.innerHTML = '';
+    const p = document.createElement('p');
+    p.lang = 'en';
+    p.textContent = option.feedback;
+    ui.feedback.appendChild(p);
     ui.feedback.className = isCorrect ? 'feedback-box feedback-success' : 'feedback-box feedback-error';
-    ui.feedback.style.display = 'block';
-    ui.quizOptions.querySelectorAll('button').forEach(b => b.disabled = true);
+
+    ui.quizOptions.querySelectorAll('button').forEach(b => {
+        b.disabled = true;
+        // Always reveal the right answer, so a wrong guess still teaches.
+        const opt = question.options.find(o => o.text === b.innerText);
+        if (opt && opt.correct) b.classList.add('is-correct');
+    });
 
     if (isCorrect) {
-        playSound('correct'); addXP(ANSWER_XP);
-        btnClicked.style.borderColor     = '#4ade80';
-        btnClicked.style.backgroundColor = '#f0fdf4';
-        // Explicit dark text: in dark mode .option-btn's own rule sets a
-        // light color, which against this always-light green background
-        // was nearly unreadable (light-on-light).
-        btnClicked.style.color           = '#166534';
-        ui.feedback.innerHTML += ` <strong>${t('quiz.xp_gain')}</strong>`;
+        quizCorrect++;
+        playSound('correct');
+        if (!isReplay) {
+            addXP(ANSWER_XP);
+            const strong = document.createElement('strong');
+            strong.textContent = tf('quiz.xp_gain', { xp: ANSWER_XP });
+            ui.feedback.appendChild(strong);
+        }
     } else {
         playSound('wrong');
-        btnClicked.style.borderColor = '#fca5a5';
+        btnClicked.classList.add('is-wrong');
     }
 
     const nextBtn = document.createElement('button');
-    nextBtn.className = 'cta-button';
-    nextBtn.style.cssText = 'margin-top:15px;width:100%';
+    nextBtn.type = 'button';
+    nextBtn.className = 'cta-button next-btn';
 
     const isLastQuestion = currentQuestionIndex >= currentQuiz.length - 1;
-
     if (!isLastQuestion) {
-        nextBtn.innerHTML = `${t('quiz.next_btn')} <i class="fa-solid fa-forward"></i>`;
-        nextBtn.onclick   = () => { currentQuestionIndex++; showQuestion(); };
+        nextBtn.innerHTML = `${t('quiz.next_btn')} <i class="fa-solid fa-forward" aria-hidden="true"></i>`;
+        nextBtn.onclick   = () => { currentQuestionIndex++; showQuestion(); ui.quizOptions.querySelector('button')?.focus(); };
     } else {
-        nextBtn.innerHTML = t('quiz.finish_btn');
+        nextBtn.textContent = t('quiz.finish_btn');
         nextBtn.onclick   = () => finishLesson();
     }
     ui.feedback.appendChild(nextBtn);
+    nextBtn.focus({ preventScroll: true });
 }
 
 function finishLesson() {
     playSound('win');
-    if (typeof confetti === 'function') confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-    if (ui.quizHeaderText) ui.quizHeaderText.textContent = t('quiz.results_header');
+    if (typeof confetti === 'function' && !prefersReducedMotion) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    ui.quizHeaderText.textContent = t('quiz.results_header');
     ui.quizQuestion.innerText = t('quiz.completed');
+    ui.quizQuestion.removeAttribute('lang');
     ui.quizOptions.innerHTML  = '';
-    ui.feedback.classList.add('hidden');
+    ui.feedback.className = 'hidden';
     // No more question to answer, so the "tap & speak" mic control has
     // nothing left to do — leaving it visible here reads as broken/dead UI.
-    if (ui.voiceWrapper) ui.voiceWrapper.classList.add('hidden');
+    ui.voiceWrapper.classList.add('hidden');
 
-    // Mark lesson as completed
-    if (currentLessonId) markLessonComplete(currentLessonId);
+    const firstCompletion = currentLessonId ? markLessonComplete(currentLessonId) : false;
 
-    // Show progress badge
-    const badge = document.createElement('div');
-    badge.className = 'lesson-complete-banner';
-    badge.innerHTML = `<span class="lesson-done-big">✓</span> ${t('quiz.completed')} <strong>${t('quiz.completion_bonus').replace('{xp}', LESSON_COMPLETE_XP)}</strong>`;
-    ui.quizOptions.appendChild(badge);
+    const banner = document.createElement('div');
+    banner.className = 'lesson-complete-banner';
+    banner.setAttribute('role', 'status');
+    const big = document.createElement('span');
+    big.className = 'lesson-done-big';
+    big.setAttribute('aria-hidden', 'true');
+    big.textContent = '✓';
+    const text = document.createElement('div');
+    const score = document.createElement('p');
+    score.textContent = tf('quiz.score', { n: quizCorrect, total: currentQuiz.length });
+    text.appendChild(score);
+    const bonus = document.createElement('p');
+    if (firstCompletion) {
+        const strong = document.createElement('strong');
+        strong.textContent = tf('quiz.completion_bonus', { xp: LESSON_COMPLETE_XP });
+        bonus.appendChild(strong);
+    } else {
+        bonus.className = 'replay-note';
+        bonus.textContent = t('quiz.replay_note');
+    }
+    text.appendChild(bonus);
+    banner.append(big, text);
+    ui.quizOptions.appendChild(banner);
+
+    // Suggest the next lesson in the programme that isn't done yet.
+    const idx = allLessons.findIndex(l => l.id === currentLessonId);
+    const next = allLessons.slice(idx + 1).find(l => !completedLessons.has(l.id))
+        || allLessons.find(l => !completedLessons.has(l.id));
+    if (next) {
+        const a = document.createElement('a');
+        a.href = `/lessons/${next.id}`;
+        a.className = 'cta-button next-lesson-btn';
+        a.textContent = `${t('quiz.next_lesson')}: ${next.title} →`;
+        ui.quizOptions.appendChild(a);
+    }
+    renderCatalog();
 }
 
 // ── CHAT ───────────────────────────────────────────────────
+function syncMaximizeLabel() {
+    const isFullscreen = ui.chatModal.classList.contains('fullscreen');
+    ui.chatMaximize.querySelector('i').className = isFullscreen ? 'fa-solid fa-compress' : 'fa-solid fa-expand';
+    ui.chatMaximize.setAttribute('aria-label', t(isFullscreen ? 'app.restore_label' : 'app.maximize_label'));
+}
+
 function setupChat() {
-    if (!ui.chatTrigger) return;
-    const mb = document.getElementById('maximize-chat');
-    ui.chatTrigger.onclick = () => ui.chatModal.classList.remove('hidden');
-    ui.chatClose.onclick   = () => {
-        ui.chatModal.classList.add('hidden');
-        // Always leave fullscreen behind on close, so it never reopens stuck
-        // in a state where its own controls could be unreachable again.
-        ui.chatModal.classList.remove('fullscreen');
-        if (mb) { mb.querySelector('i').className = 'fa-solid fa-expand'; mb.setAttribute('aria-label', 'Maximize'); }
+    ui.chatTrigger.onclick = () => {
+        if (openModalEl === ui.chatModal) closeModal(ui.chatModal);
+        else openModal(ui.chatModal, ui.chatInput.disabled ? ui.passwordInput : ui.chatInput);
     };
-    if (mb) mb.onclick = () => {
-        const isFullscreen = ui.chatModal.classList.toggle('fullscreen');
-        mb.querySelector('i').className = isFullscreen ? 'fa-solid fa-compress' : 'fa-solid fa-expand';
-        mb.setAttribute('aria-label', isFullscreen ? 'Restore' : 'Maximize');
+    ui.chatClose.onclick = () => closeModal(ui.chatModal);
+    ui.chatMaximize.onclick = () => {
+        ui.chatModal.classList.toggle('fullscreen');
+        syncMaximizeLabel();
     };
+    syncMaximizeLabel();
     updateChatStatus();
     ui.passwordInput.addEventListener('change', async () => {
-        const code = ui.passwordInput.value.trim();
-        isVipVerified = await verifyVip(code);
-        if (isVipVerified) {
+        const code = ui.passwordInput.value.trim().toUpperCase();
+        ui.passwordInput.value = code;
+        if (!code) { isVipVerified = false; setVipStatus(''); updateChatStatus(); return; }
+        const { valid, reason } = await verifyVip(code);
+        isVipVerified = valid;
+        if (valid) {
             vipCode = code;
-            localStorage.setItem('user_is_vip_code', vipCode);
+            storageSet('user_is_vip_code', vipCode);
+        } else {
+            setVipStatus(t(reason === 'device_limit_reached' ? 'app.vip_device_limit'
+                : reason === 'rate_limited' ? 'app.vip_rate_limited' : 'app.vip_invalid'), true);
         }
         updateChatStatus();
     });
     ui.chatSend.onclick = sendMessage;
-    ui.chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+    ui.chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.isComposing) sendMessage(); });
+}
+
+function setVipStatus(text, isError) {
+    ui.vipStatus.textContent = text;
+    ui.vipStatus.className = 'vip-status' + (isError ? ' is-error' : text ? ' is-ok' : '');
 }
 
 function updateChatStatus() {
-    const msgsLeft = FREE_LIMIT - usedMessages;
-    if (isVipVerified) { ui.passwordInput.style.borderColor = '#00ff88'; ui.chatInput.disabled = false; ui.chatSend.disabled = false; return; }
-    if (msgsLeft > 0) { ui.passwordInput.style.borderColor = '#e5e7eb'; ui.chatInput.disabled = false; ui.chatSend.disabled = false; }
-    else { ui.passwordInput.style.borderColor = '#fee2e2'; ui.chatInput.disabled = true; ui.chatSend.disabled = true; }
+    if (!ui.chatInput) return;
+    const msgsLeft = Math.max(0, FREE_LIMIT - usedMessages);
+    ui.passwordInput.classList.toggle('is-valid', isVipVerified);
+    ui.premiumBanner.classList.toggle('hidden', isVipVerified);
+    if (isVipVerified) {
+        setVipStatus(t('app.vip_ok'));
+        ui.freeLeft.textContent = '';
+        ui.chatInput.disabled = false; ui.chatSend.disabled = false;
+        return;
+    }
+    if (ui.vipStatus.classList.contains('is-ok')) setVipStatus('');
+    ui.freeLeft.textContent = tf('app.free_left', { n: msgsLeft });
+    const canChat = msgsLeft > 0;
+    ui.chatInput.disabled = !canChat; ui.chatSend.disabled = !canChat;
+    ui.passwordInput.classList.toggle('is-exhausted', !canChat);
 }
 
+let chatBusy = false;
 async function sendMessage() {
-    const text = ui.chatInput.value;
-    if (!text) return;
+    const text = ui.chatInput.value.trim();
+    if (!text || chatBusy) return;
     // Local counter is only a UX shortcut to avoid pointless requests —
     // the Worker enforces the real limit server-side regardless.
-    if (!isVipVerified && usedMessages >= FREE_LIMIT) { alert(t('errors.chat_expired')); return; }
+    if (!isVipVerified && usedMessages >= FREE_LIMIT) { addMessage(t('errors.chat_expired'), 'bot-msg'); return; }
 
     addMessage(text, 'user-msg');
     ui.chatInput.value = '';
+    chatBusy = true;
+    ui.chatSend.disabled = true;
 
-    const loadingDiv = addMessage(t('quiz.thinking'), 'bot-msg');
+    const history = chatTurns.slice(-CHAT_HISTORY_TURNS);
+    const loadingDiv = addMessage(t('quiz.thinking'), 'bot-msg is-loading');
     try {
         const res = await fetch(`${WORKER_URL}/`, {
             method: 'POST',
@@ -823,18 +1291,34 @@ async function sendMessage() {
                 'X-Client-Id': clientId,
                 'X-Vip-Code': isVipVerified ? vipCode : ''
             },
-            body: JSON.stringify({ message: text })
+            body: JSON.stringify({ message: text, history })
         });
-        if (res.status === 403) { loadingDiv.innerText = t('errors.chat_expired'); return; }
+        loadingDiv.classList.remove('is-loading');
+        if (res.status === 403) {
+            loadingDiv.innerText = t('errors.chat_expired');
+            usedMessages = Math.max(usedMessages, FREE_LIMIT); saveUserData();
+            return;
+        }
+        if (res.status === 429) { loadingDiv.innerText = t('errors.chat_rate_limited'); return; }
         if (!res.ok) throw new Error('API unavailable');
         const data = await res.json();
-        loadingDiv.innerText = stripMarkdown(data.reply);
+        const reply = stripMarkdown(data.reply);
+        loadingDiv.innerText = reply;
+        chatTurns.push(
+            { role: 'user', content: text.slice(0, CHAT_TURN_MAX_CHARS) },
+            { role: 'assistant', content: String(reply || '').slice(0, CHAT_TURN_MAX_CHARS) }
+        );
         // Only counted on a successful reply — the Worker mirrors this same
         // rule server-side, so a timeout/502/invalid request never costs the
         // user one of their free messages on either side.
-        if (!isVipVerified) { usedMessages++; saveUserData(); updateChatStatus(); }
+        if (!isVipVerified) { usedMessages++; saveUserData(); }
     } catch {
+        loadingDiv.classList.remove('is-loading');
         loadingDiv.innerText = t('errors.chat_unavailable');
+    } finally {
+        chatBusy = false;
+        updateChatStatus();
+        ui.chatHistory.scrollTop = ui.chatHistory.scrollHeight;
     }
 }
 

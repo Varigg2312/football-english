@@ -1,18 +1,468 @@
 [
   {
+    "id": "les_positions",
+    "title": "Positions on the Pitch: Who Plays Where",
+    "difficulty": "Rookie",
+    "difficulty_elo": 1000,
+    "video_id": null,
+    "content": {
+      "intro_hook": "Before you can talk tactics, you need to know who's who on the team sheet.",
+      "core_concept": "A football team has eleven players. The goalkeeper guards the goal, defenders stop the other team from attacking, midfielders connect defence and attack, and forwards try to score. Wingers are wide attackers who play near the touchlines.",
+      "analogy": "Think of a team like a house: the goalkeeper and defenders are the foundations, the midfielders are the walls holding everything together, and the forwards are the roof that everyone looks at.",
+      "vocabulary": [
+        {
+          "term": "Goalkeeper",
+          "meaning": "The player who defends the goal and is allowed to use their hands inside the penalty area.",
+          "meaning_es": "Portero"
+        },
+        {
+          "term": "Centre-back",
+          "meaning": "A defender who plays in the middle of the back line.",
+          "meaning_es": "Defensa central"
+        },
+        {
+          "term": "Midfielder",
+          "meaning": "A player who operates between the defence and the attack.",
+          "meaning_es": "Centrocampista"
+        },
+        {
+          "term": "Striker",
+          "meaning": "The most advanced attacker, whose main job is to score goals.",
+          "meaning_es": "Delantero centro"
+        },
+        {
+          "term": "Winger",
+          "meaning": "An attacker who plays on the left or right side, close to the touchline.",
+          "meaning_es": "Extremo"
+        }
+      ]
+    },
+    "quiz": [
+      {
+        "id": 1,
+        "question": "Which player is allowed to handle the ball inside their own penalty area?",
+        "options": [
+          {
+            "text": "The goalkeeper",
+            "correct": true,
+            "feedback": "Correct! Only the goalkeeper can use their hands, and only inside their own penalty area."
+          },
+          {
+            "text": "The captain",
+            "correct": false,
+            "feedback": "No. Being captain doesn't give a player any special right to handle the ball."
+          },
+          {
+            "text": "The centre-back",
+            "correct": false,
+            "feedback": "No. A centre-back who handles the ball concedes a free kick or a penalty."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "question": "Your coach says: 'I need you on the wing today.' Where will you play?",
+        "options": [
+          {
+            "text": "In goal",
+            "correct": false,
+            "feedback": "No. 'On the wing' means a wide position, not the goal."
+          },
+          {
+            "text": "Wide, near the touchline",
+            "correct": true,
+            "feedback": "Spot on. Wingers stretch the play by staying wide."
+          },
+          {
+            "text": "In the centre of defence",
+            "correct": false,
+            "feedback": "No. That would be a centre-back position."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "question": "Which sentence is correct?",
+        "options": [
+          {
+            "text": "\"He plays as a striker because he scores a lot of goals.\"",
+            "correct": true,
+            "feedback": "Perfect. We say someone 'plays as' a position."
+          },
+          {
+            "text": "\"He plays of striker because he scores a lot of goals.\"",
+            "correct": false,
+            "feedback": "Not quite. The preposition is 'as', not 'of'."
+          },
+          {
+            "text": "\"He plays in striker because he scores a lot of goals.\"",
+            "correct": false,
+            "feedback": "Not quite. We say 'plays as a striker' or 'plays up front'."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "question": "Who links the defence and the attack?",
+        "options": [
+          {
+            "text": "The goalkeeper",
+            "correct": false,
+            "feedback": "No. The goalkeeper is the last line of defence."
+          },
+          {
+            "text": "The winger",
+            "correct": false,
+            "feedback": "Not really. Wingers are mainly attackers."
+          },
+          {
+            "text": "The midfielder",
+            "correct": true,
+            "feedback": "Yes! The midfield is the 'engine room' of the team."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "question": "How many players does each team have on the pitch at kick-off?",
+        "options": [
+          {
+            "text": "Ten",
+            "correct": false,
+            "feedback": "No. Ten players only if someone has been sent off."
+          },
+          {
+            "text": "Eleven",
+            "correct": true,
+            "feedback": "Correct. Eleven players, including the goalkeeper."
+          },
+          {
+            "text": "Twelve",
+            "correct": false,
+            "feedback": "No. Fans are sometimes called 'the twelfth man', but only eleven play."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "les_matchday",
+    "title": "Match Day Basics: From Kick-off to Full-time",
+    "difficulty": "Rookie",
+    "difficulty_elo": 1050,
+    "video_id": null,
+    "content": {
+      "intro_hook": "Ninety minutes, two halves, and a lot of time words. Let's get the clock right.",
+      "core_concept": "A professional match has two halves of 45 minutes separated by half-time. The referee adds stoppage time at the end of each half for time lost to injuries, substitutions and delays. In some cup matches, a draw leads to extra time and then a penalty shootout.",
+      "analogy": "A match is like a film with an interval: the first half, a break for a drink, the second half — and sometimes a surprise bonus scene called stoppage time.",
+      "vocabulary": [
+        {
+          "term": "Kick-off",
+          "meaning": "The pass from the centre spot that starts each half, and restarts play after a goal.",
+          "meaning_es": "Saque inicial"
+        },
+        {
+          "term": "Half-time",
+          "meaning": "The break between the first and second halves.",
+          "meaning_es": "Descanso"
+        },
+        {
+          "term": "Stoppage time",
+          "meaning": "Extra minutes added at the end of a half for time lost during play. Also called 'added time' or 'injury time'.",
+          "meaning_es": "Tiempo de descuento"
+        },
+        {
+          "term": "Extra time",
+          "meaning": "Two additional periods of 15 minutes played when a knockout match is level.",
+          "meaning_es": "Prórroga"
+        },
+        {
+          "term": "Full-time",
+          "meaning": "The end of the match, signalled by the referee's final whistle.",
+          "meaning_es": "Final del partido"
+        }
+      ]
+    },
+    "quiz": [
+      {
+        "id": 1,
+        "question": "The fourth official holds up a board showing '+4'. What does it mean?",
+        "options": [
+          {
+            "text": "Four minutes of stoppage time will be played",
+            "correct": true,
+            "feedback": "Exactly. At least four minutes will be added on."
+          },
+          {
+            "text": "The home team has four substitutions left",
+            "correct": false,
+            "feedback": "No. The board with '+4' shows added time, not substitutions."
+          },
+          {
+            "text": "Extra time will last four minutes",
+            "correct": false,
+            "feedback": "No. Extra time is two periods of 15 minutes."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "question": "Complete the commentary: 'And they score right on the stroke of ___!'",
+        "options": [
+          {
+            "text": "half-time",
+            "correct": true,
+            "feedback": "Correct. 'On the stroke of half-time' means just before the break."
+          },
+          {
+            "text": "kick-off",
+            "correct": false,
+            "feedback": "No. The expression is 'on the stroke of half-time' or 'full-time'."
+          },
+          {
+            "text": "the whistle time",
+            "correct": false,
+            "feedback": "No. That isn't a natural expression in English."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "question": "A cup final finishes 1-1 after 90 minutes. What usually happens next?",
+        "options": [
+          {
+            "text": "Both teams share the trophy",
+            "correct": false,
+            "feedback": "No. A final needs a winner."
+          },
+          {
+            "text": "Extra time, and then penalties if it's still level",
+            "correct": true,
+            "feedback": "Correct. Extra time first, then a penalty shootout."
+          },
+          {
+            "text": "The match is replayed next season",
+            "correct": false,
+            "feedback": "No. Finals are decided on the day."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "question": "What is another name for stoppage time?",
+        "options": [
+          {
+            "text": "Overtime",
+            "correct": false,
+            "feedback": "Americans say 'overtime' in other sports, but in football we say 'added time' or 'injury time'."
+          },
+          {
+            "text": "Injury time",
+            "correct": true,
+            "feedback": "Yes. 'Injury time', 'added time' and 'stoppage time' all mean the same thing."
+          },
+          {
+            "text": "Break time",
+            "correct": false,
+            "feedback": "No. That sounds like a school break."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "question": "Which sentence is correct?",
+        "options": [
+          {
+            "text": "\"The match finished 2-0 at the full-time.\"",
+            "correct": false,
+            "feedback": "Almost. We don't use 'the' here: 'at full-time'."
+          },
+          {
+            "text": "\"The match finished 2-0 at full-time.\"",
+            "correct": true,
+            "feedback": "Perfect. No article before 'full-time' or 'half-time'."
+          },
+          {
+            "text": "\"The match finished 2-0 in full-time.\"",
+            "correct": false,
+            "feedback": "Not quite. The preposition is 'at'."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "les_referee",
+    "title": "The Referee's Decisions: Fouls, Cards & Penalties",
+    "difficulty": "Rookie",
+    "difficulty_elo": 1100,
+    "video_id": null,
+    "content": {
+      "intro_hook": "The whistle blows. Is it a free kick, a booking or a penalty? Learn to speak like a referee.",
+      "core_concept": "When a player commits a foul, the referee awards a free kick to the other team. If the foul happens inside the penalty area, the attacking team gets a penalty. Serious fouls are punished with a yellow card (a caution) or a red card (a sending-off). Two yellow cards in one match equal a red card.",
+      "analogy": "Cards work like warnings at school: a yellow card is a note to your parents, a red card means you're sent out of the classroom.",
+      "vocabulary": [
+        {
+          "term": "Foul",
+          "meaning": "An unfair action against an opponent, such as tripping, pushing or holding.",
+          "meaning_es": "Falta"
+        },
+        {
+          "term": "Free kick",
+          "meaning": "A kick awarded to a team after the opponent commits a foul.",
+          "meaning_es": "Tiro libre"
+        },
+        {
+          "term": "Booking",
+          "meaning": "A yellow card; the referee writes the player's name in his notebook.",
+          "meaning_es": "Amonestación (tarjeta amarilla)"
+        },
+        {
+          "term": "Sent off",
+          "meaning": "Shown a red card and forced to leave the pitch for the rest of the match.",
+          "meaning_es": "Expulsado"
+        },
+        {
+          "term": "Penalty",
+          "meaning": "A shot from the penalty spot, awarded for a foul inside the penalty area.",
+          "meaning_es": "Penalti"
+        }
+      ]
+    },
+    "quiz": [
+      {
+        "id": 1,
+        "question": "A defender trips an attacker inside his own penalty area. What should the referee give?",
+        "options": [
+          {
+            "text": "A corner",
+            "correct": false,
+            "feedback": "No. A corner is given when the ball goes out off a defender over the goal line."
+          },
+          {
+            "text": "A penalty",
+            "correct": true,
+            "feedback": "Correct! A direct free-kick foul inside the box means a penalty."
+          },
+          {
+            "text": "A throw-in",
+            "correct": false,
+            "feedback": "No. Throw-ins are for when the ball crosses the touchline."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "question": "Complete the sentence: 'He was ___ for a second yellow card.'",
+        "options": [
+          {
+            "text": "sent off",
+            "correct": true,
+            "feedback": "Perfect. Two yellow cards mean a red card, so he was sent off."
+          },
+          {
+            "text": "sent out",
+            "correct": false,
+            "feedback": "Close, but the fixed expression is 'sent off'."
+          },
+          {
+            "text": "kicked off",
+            "correct": false,
+            "feedback": "No. 'Kick-off' is how a match starts."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "question": "What does 'He picked up a booking' mean?",
+        "options": [
+          {
+            "text": "He received a yellow card",
+            "correct": true,
+            "feedback": "Yes. 'Booking' and 'caution' both mean a yellow card."
+          },
+          {
+            "text": "He bought a ticket for the match",
+            "correct": false,
+            "feedback": "Ha! In everyday English yes, but in football it means a yellow card."
+          },
+          {
+            "text": "He scored a goal",
+            "correct": false,
+            "feedback": "No. That would be 'he got on the scoresheet'."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "question": "Which of these is a foul?",
+        "options": [
+          {
+            "text": "A shoulder-to-shoulder challenge for the ball",
+            "correct": false,
+            "feedback": "No. A fair shoulder challenge is allowed."
+          },
+          {
+            "text": "Winning the ball with a clean tackle",
+            "correct": false,
+            "feedback": "No. A clean tackle is perfectly legal."
+          },
+          {
+            "text": "Pulling an opponent's shirt",
+            "correct": true,
+            "feedback": "Correct. Holding or pulling a shirt is a foul."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "question": "The referee points to the spot. What has he awarded?",
+        "options": [
+          {
+            "text": "A penalty",
+            "correct": true,
+            "feedback": "Yes. 'Pointing to the spot' means a penalty kick."
+          },
+          {
+            "text": "A goal kick",
+            "correct": false,
+            "feedback": "No. For a goal kick the referee points to the six-yard box."
+          },
+          {
+            "text": "Offside",
+            "correct": false,
+            "feedback": "No. Offside is usually flagged by the assistant referee."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "vid_001",
     "title": "🎥 Ball Mastery: Close Control Masterclass",
-    "difficulty": "Legend",
-    "difficulty_elo": 2000,
+    "difficulty": "Academy",
+    "difficulty_elo": 1150,
     "video_id": "https://videos.pexels.com/video-files/3194247/3194247-hd_1920_1080_30fps.mp4",
     "content": {
       "intro_hook": "Control is everything. Watch the technique and own every touch.",
       "core_concept": "Close control allows a player to manipulate the ball in tight spaces, keeping it away from defenders and creating time to make decisions.",
       "analogy": "Like a magnet attached to your boots — the ball should feel like an extension of your body, not a separate object you are chasing.",
       "vocabulary": [
-        { "term": "Juggling", "meaning": "Keeping the ball in the air repeatedly using feet, thighs, and head." },
-        { "term": "First touch", "meaning": "The initial contact made with the ball to bring it under control." },
-        { "term": "Agility", "meaning": "The ability to move quickly and change direction easily while maintaining balance." }
+        {
+          "term": "Juggling",
+          "meaning": "Keeping the ball in the air repeatedly using feet, thighs, and head.",
+          "meaning_es": "Toques / malabares con el balón"
+        },
+        {
+          "term": "First touch",
+          "meaning": "The initial contact made with the ball to bring it under control.",
+          "meaning_es": "Primer control"
+        },
+        {
+          "term": "Agility",
+          "meaning": "The ability to move quickly and change direction easily while maintaining balance.",
+          "meaning_es": "Agilidad"
+        }
       ]
     },
     "quiz": [
@@ -20,8 +470,642 @@
         "id": 1,
         "question": "Look at his knees while he controls the ball. Why are they slightly bent throughout the drill?",
         "options": [
-          { "text": "For better balance and faster reaction to the ball's movement", "correct": true,  "feedback": "Spot on! A lower centre of gravity gives you a stable base and lets you adjust your touch instantly." },
-          { "text": "Because he is tired from the drill",                                  "correct": false, "feedback": "Negative. This is an active athletic stance, not a sign of fatigue." }
+          {
+            "text": "For better balance and faster reaction to the ball's movement",
+            "correct": true,
+            "feedback": "Spot on! A lower centre of gravity gives you a stable base and lets you adjust your touch instantly."
+          },
+          {
+            "text": "Because he is tired from the drill",
+            "correct": false,
+            "feedback": "Negative. This is an active athletic stance, not a sign of fatigue."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "question": "The coach says: \"Great first touch!\" What did the player do well?",
+        "options": [
+          {
+            "text": "He controlled the ball cleanly the moment it arrived",
+            "correct": true,
+            "feedback": "Exactly. Your first touch is the first contact to bring the ball under control."
+          },
+          {
+            "text": "He was the first player to touch the ball in the match",
+            "correct": false,
+            "feedback": "No. That would be the kick-off."
+          },
+          {
+            "text": "He touched the ball with his hand",
+            "correct": false,
+            "feedback": "Definitely not — that would be a handball!"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "question": "Which word describes changing direction quickly while keeping your balance?",
+        "options": [
+          {
+            "text": "Agility",
+            "correct": true,
+            "feedback": "Correct. Agility is key for dribblers in tight spaces."
+          },
+          {
+            "text": "Stamina",
+            "correct": false,
+            "feedback": "No. Stamina is the ability to keep going for a long time."
+          },
+          {
+            "text": "Strength",
+            "correct": false,
+            "feedback": "No. Strength is about power, not changing direction."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "les_pitch",
+    "title": "Parts of the Pitch: Boxes, Lines & Flags",
+    "difficulty": "Academy",
+    "difficulty_elo": 1200,
+    "video_id": null,
+    "content": {
+      "intro_hook": "Commentators say 'edge of the box' and 'down the touchline' all the time. Time to learn the map.",
+      "core_concept": "The pitch is divided by lines. The halfway line splits it in two, the touchlines run along the sides and the goal lines run along each end. In front of each goal there is a penalty area (the 'box') and, inside it, a smaller six-yard box. A corner flag stands in each corner.",
+      "analogy": "The pitch is like a map of a city: the lines are the streets, the boxes are the important neighbourhoods, and every place has a name that players use to tell each other where to go.",
+      "vocabulary": [
+        {
+          "term": "Penalty area",
+          "meaning": "The large rectangle in front of each goal, also called 'the box' or 'the 18-yard box'.",
+          "meaning_es": "Área grande / área de penalti"
+        },
+        {
+          "term": "Six-yard box",
+          "meaning": "The small rectangle directly in front of the goal.",
+          "meaning_es": "Área pequeña"
+        },
+        {
+          "term": "Halfway line",
+          "meaning": "The line that divides the pitch into two halves.",
+          "meaning_es": "Línea de medio campo"
+        },
+        {
+          "term": "Touchline",
+          "meaning": "The long line on each side of the pitch; if the ball crosses it, it's a throw-in.",
+          "meaning_es": "Línea de banda"
+        },
+        {
+          "term": "Corner flag",
+          "meaning": "The flag at each of the four corners of the pitch.",
+          "meaning_es": "Banderín de córner"
+        }
+      ]
+    },
+    "quiz": [
+      {
+        "id": 1,
+        "question": "The ball goes over the touchline. How does play restart?",
+        "options": [
+          {
+            "text": "With a corner kick",
+            "correct": false,
+            "feedback": "No. Corners are for the goal line, not the touchline."
+          },
+          {
+            "text": "With a throw-in",
+            "correct": true,
+            "feedback": "Correct. Touchline means throw-in."
+          },
+          {
+            "text": "With a drop ball",
+            "correct": false,
+            "feedback": "No. A drop ball is used after the referee stops play for other reasons."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "question": "'He shoots from the edge of the box.' Where is he?",
+        "options": [
+          {
+            "text": "Near the line of the penalty area",
+            "correct": true,
+            "feedback": "Exactly. 'The box' is the penalty area."
+          },
+          {
+            "text": "Next to the corner flag",
+            "correct": false,
+            "feedback": "No. That would be 'from the corner' or 'from a tight angle'."
+          },
+          {
+            "text": "On the halfway line",
+            "correct": false,
+            "feedback": "No. That would be a very long-range shot!"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "question": "Which line divides the pitch into two equal halves?",
+        "options": [
+          {
+            "text": "The goal line",
+            "correct": false,
+            "feedback": "No. The goal lines are at each end."
+          },
+          {
+            "text": "The touchline",
+            "correct": false,
+            "feedback": "No. Touchlines run along the sides."
+          },
+          {
+            "text": "The halfway line",
+            "correct": true,
+            "feedback": "Correct. The kick-off takes place on the halfway line, from the centre spot."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "question": "What is the small rectangle directly in front of the goal called?",
+        "options": [
+          {
+            "text": "The six-yard box",
+            "correct": true,
+            "feedback": "Yes. Goal kicks are taken from inside it."
+          },
+          {
+            "text": "The penalty spot",
+            "correct": false,
+            "feedback": "No. The penalty spot is a single point, 12 yards from goal."
+          },
+          {
+            "text": "The centre circle",
+            "correct": false,
+            "feedback": "No. The centre circle is in the middle of the pitch."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "question": "A winger 'runs down the line'. What does he do?",
+        "options": [
+          {
+            "text": "He runs along the touchline",
+            "correct": true,
+            "feedback": "Correct. 'Down the line' means along the touchline."
+          },
+          {
+            "text": "He falls over",
+            "correct": false,
+            "feedback": "No. That would be 'he goes down'."
+          },
+          {
+            "text": "He runs back to his own goal",
+            "correct": false,
+            "feedback": "No. That would be 'tracking back'."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "les_shooting",
+    "title": "Shooting & Scoring: Describe the Perfect Goal",
+    "difficulty": "Academy",
+    "difficulty_elo": 1250,
+    "video_id": null,
+    "content": {
+      "intro_hook": "A goal is a goal — but a volley into the top corner deserves better words.",
+      "core_concept": "English has many words to describe how a goal is scored. A header is scored with the head, a volley is struck before the ball touches the ground, and a tap-in is an easy finish from very close range. A rebound is when a player scores after the ball bounces back from the goalkeeper or the post.",
+      "analogy": "Describing goals is like describing food: 'it was nice' is fine, but 'a crispy, golden, perfectly-seasoned dish' makes people hungry. Precise words make your story come alive.",
+      "vocabulary": [
+        {
+          "term": "Header",
+          "meaning": "A shot or pass made with the head.",
+          "meaning_es": "Remate de cabeza"
+        },
+        {
+          "term": "Volley",
+          "meaning": "A shot struck before the ball touches the ground.",
+          "meaning_es": "Volea"
+        },
+        {
+          "term": "Tap-in",
+          "meaning": "A very easy goal from close range, often into an empty net.",
+          "meaning_es": "Gol a puerta vacía / empujarla"
+        },
+        {
+          "term": "Rebound",
+          "meaning": "The ball bouncing back off the goalkeeper, a defender or the post.",
+          "meaning_es": "Rechace"
+        },
+        {
+          "term": "Top corner",
+          "meaning": "The high corner of the goal, the hardest place for a goalkeeper to reach.",
+          "meaning_es": "Escuadra"
+        }
+      ]
+    },
+    "quiz": [
+      {
+        "id": 1,
+        "question": "A striker hits the ball in the air before it bounces and scores. What is it?",
+        "options": [
+          {
+            "text": "A tap-in",
+            "correct": false,
+            "feedback": "No. A tap-in is an easy finish from very close range."
+          },
+          {
+            "text": "A volley",
+            "correct": true,
+            "feedback": "Correct! Striking the ball before it touches the ground is a volley."
+          },
+          {
+            "text": "A header",
+            "correct": false,
+            "feedback": "No. A header uses the head."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "question": "The goalkeeper saves, but the ball bounces back and a striker scores. The striker scored from...",
+        "options": [
+          {
+            "text": "a rebound",
+            "correct": true,
+            "feedback": "Correct. He was first to react to the rebound."
+          },
+          {
+            "text": "a free kick",
+            "correct": false,
+            "feedback": "No. There was no foul here."
+          },
+          {
+            "text": "a throw-in",
+            "correct": false,
+            "feedback": "No. You can't score directly from a throw-in."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "question": "Choose the most natural commentary line.",
+        "options": [
+          {
+            "text": "\"He puts it into the top corner!\"",
+            "correct": true,
+            "feedback": "Perfect — 'top corner' and 'top bins' are what commentators say."
+          },
+          {
+            "text": "\"He puts it into the upper angle!\"",
+            "correct": false,
+            "feedback": "Understandable, but English speakers say 'top corner'."
+          },
+          {
+            "text": "\"He puts it into the high square!\"",
+            "correct": false,
+            "feedback": "No. That's not a football expression in English."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "question": "'He only had to tap it in.' What does this tell you about the goal?",
+        "options": [
+          {
+            "text": "It was very difficult",
+            "correct": false,
+            "feedback": "No. 'Tap it in' suggests the opposite."
+          },
+          {
+            "text": "It was very easy",
+            "correct": true,
+            "feedback": "Correct. A tap-in needs just a light touch from close range."
+          },
+          {
+            "text": "It was disallowed",
+            "correct": false,
+            "feedback": "No. Nothing here suggests the goal was ruled out."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "question": "Which verb do we normally use with 'goal'?",
+        "options": [
+          {
+            "text": "Make a goal",
+            "correct": false,
+            "feedback": "Not quite. We 'score' a goal. ('Make' can mean create one for a teammate.)"
+          },
+          {
+            "text": "Do a goal",
+            "correct": false,
+            "feedback": "No. That's a common mistake for Spanish speakers ('hacer un gol')."
+          },
+          {
+            "text": "Score a goal",
+            "correct": true,
+            "feedback": "Perfect. 'Score a goal', 'score a header', 'score from the spot'."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "les_passing",
+    "title": "Passing Vocabulary: One-twos, Crosses & Through Balls",
+    "difficulty": "Academy",
+    "difficulty_elo": 1300,
+    "video_id": null,
+    "content": {
+      "intro_hook": "Great teams talk with the ball. Learn the names of the passes that unlock defences.",
+      "core_concept": "Not all passes are the same. A through ball is played into space behind the defence for a runner. A one-two is a quick exchange: you pass, run, and get the ball straight back. A cross is a pass from a wide area into the penalty box, and a switch of play moves the ball quickly from one side of the pitch to the other.",
+      "analogy": "Passing is a conversation: a one-two is a quick question and answer, a through ball is finishing your teammate's sentence, and a switch of play is suddenly changing the subject to surprise everyone.",
+      "vocabulary": [
+        {
+          "term": "Through ball",
+          "meaning": "A pass played between or behind defenders into the path of a running teammate.",
+          "meaning_es": "Pase al hueco"
+        },
+        {
+          "term": "One-two",
+          "meaning": "A quick pass and return between two players to get past an opponent. Also called a 'wall pass'.",
+          "meaning_es": "Pared"
+        },
+        {
+          "term": "Cross",
+          "meaning": "A pass from a wide position into the penalty area.",
+          "meaning_es": "Centro"
+        },
+        {
+          "term": "Back pass",
+          "meaning": "A pass played backwards, often to the goalkeeper.",
+          "meaning_es": "Pase atrás / cesión"
+        },
+        {
+          "term": "Switch of play",
+          "meaning": "A long pass that moves the attack from one side of the pitch to the other.",
+          "meaning_es": "Cambio de orientación"
+        }
+      ]
+    },
+    "quiz": [
+      {
+        "id": 1,
+        "question": "You pass to a teammate, sprint past the defender and immediately receive the ball back. What did you play?",
+        "options": [
+          {
+            "text": "A one-two",
+            "correct": true,
+            "feedback": "Correct! Also called a 'give-and-go' or a 'wall pass'."
+          },
+          {
+            "text": "A cross",
+            "correct": false,
+            "feedback": "No. A cross goes from a wide area into the box."
+          },
+          {
+            "text": "A back pass",
+            "correct": false,
+            "feedback": "No. A back pass goes backwards."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "question": "The winger gets to the byline and sends the ball into the box. What is it?",
+        "options": [
+          {
+            "text": "A through ball",
+            "correct": false,
+            "feedback": "No. A through ball splits the defence, usually from central areas."
+          },
+          {
+            "text": "A switch of play",
+            "correct": false,
+            "feedback": "No. A switch moves the ball across the pitch."
+          },
+          {
+            "text": "A cross",
+            "correct": true,
+            "feedback": "Correct. Crosses come from wide areas into the penalty box."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "question": "Complete the sentence: 'She played a perfect through ball ___ the striker.'",
+        "options": [
+          {
+            "text": "for",
+            "correct": true,
+            "feedback": "Perfect. You play a ball 'for' or 'to' a teammate."
+          },
+          {
+            "text": "at",
+            "correct": false,
+            "feedback": "Not quite. 'At' sounds like you're aiming to hit him!"
+          },
+          {
+            "text": "of",
+            "correct": false,
+            "feedback": "No. 'Of' doesn't work here."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "question": "The left side is crowded, but the right-back is completely free. What should the midfielder do?",
+        "options": [
+          {
+            "text": "Switch the play to the right-back",
+            "correct": true,
+            "feedback": "Exactly. Switching play attacks the space where the opponent is weak."
+          },
+          {
+            "text": "Play a back pass to the goalkeeper",
+            "correct": false,
+            "feedback": "Safe, but you're wasting a great opportunity."
+          },
+          {
+            "text": "Dribble into the crowded area",
+            "correct": false,
+            "feedback": "Risky. You'll probably lose the ball."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "question": "Why can't the goalkeeper pick up a deliberate back pass kicked by a teammate?",
+        "options": [
+          {
+            "text": "It's against the Laws of the Game — an indirect free kick is awarded",
+            "correct": true,
+            "feedback": "Correct. The back-pass rule has existed since 1992 to stop time-wasting."
+          },
+          {
+            "text": "Because it's bad luck",
+            "correct": false,
+            "feedback": "No. It's a rule, not a superstition."
+          },
+          {
+            "text": "He can; there's no rule about it",
+            "correct": false,
+            "feedback": "There is! Handling a deliberate kicked back pass gives an indirect free kick."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "les_433",
+    "title": "Formations: Reading a 4-3-3",
+    "difficulty": "Pro",
+    "difficulty_elo": 1450,
+    "video_id": null,
+    "content": {
+      "intro_hook": "'They lined up in a 4-3-3.' Do you know what that actually means on the pitch?",
+      "core_concept": "A formation describes how the ten outfield players are arranged, from defence to attack. A 4-3-3 has four defenders (two centre-backs and two full-backs), three midfielders (often one holding midfielder and two central midfielders) and three forwards (a striker and two wide forwards). It gives a team width in attack and control in midfield.",
+      "analogy": "A formation is like the seating plan at a wedding: it tells everyone where to start, but once the music begins, people move around the dance floor.",
+      "vocabulary": [
+        {
+          "term": "Formation",
+          "meaning": "The arrangement of players on the pitch, written as numbers from defence to attack.",
+          "meaning_es": "Sistema / formación"
+        },
+        {
+          "term": "Full-back",
+          "meaning": "A defender who plays on the right or left of the back four.",
+          "meaning_es": "Lateral"
+        },
+        {
+          "term": "Holding midfielder",
+          "meaning": "A defensive midfielder who stays in front of the back four to protect it. Also called a 'number 6'.",
+          "meaning_es": "Mediocentro defensivo / pivote"
+        },
+        {
+          "term": "Front three",
+          "meaning": "The three attacking players in a 4-3-3.",
+          "meaning_es": "Tridente ofensivo"
+        },
+        {
+          "term": "Width",
+          "meaning": "How wide a team spreads across the pitch in attack.",
+          "meaning_es": "Amplitud"
+        }
+      ]
+    },
+    "quiz": [
+      {
+        "id": 1,
+        "question": "In a 4-3-3, how many defenders are there?",
+        "options": [
+          {
+            "text": "Three",
+            "correct": false,
+            "feedback": "No. The first number always refers to the defence: four."
+          },
+          {
+            "text": "Four",
+            "correct": true,
+            "feedback": "Correct. Numbers go from defence to attack: 4 defenders, 3 midfielders, 3 forwards."
+          },
+          {
+            "text": "Five",
+            "correct": false,
+            "feedback": "No. That would be a back five, like a 5-3-2."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "question": "Who is the 'number 6' in a 4-3-3?",
+        "options": [
+          {
+            "text": "The striker",
+            "correct": false,
+            "feedback": "No. The striker is usually the 'number 9'."
+          },
+          {
+            "text": "The holding midfielder",
+            "correct": true,
+            "feedback": "Yes. The 6 screens the back four."
+          },
+          {
+            "text": "The goalkeeper",
+            "correct": false,
+            "feedback": "No. The goalkeeper is traditionally number 1."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "question": "The coach says: 'Our full-backs must give us width.' What should they do?",
+        "options": [
+          {
+            "text": "Push forward and stay wide near the touchline",
+            "correct": true,
+            "feedback": "Exactly. Width stretches the opposition defence."
+          },
+          {
+            "text": "Stay in the centre next to the centre-backs",
+            "correct": false,
+            "feedback": "That's the opposite of providing width."
+          },
+          {
+            "text": "Swap positions with the goalkeeper",
+            "correct": false,
+            "feedback": "Definitely not!"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "question": "Which sentence is correct?",
+        "options": [
+          {
+            "text": "\"They played with a 4-3-3.\"",
+            "correct": false,
+            "feedback": "Understandable, but the most natural forms are 'played a 4-3-3' or 'lined up in a 4-3-3'."
+          },
+          {
+            "text": "\"They lined up in a 4-3-3.\"",
+            "correct": true,
+            "feedback": "Perfect. We say 'line up in' or 'set up in' a formation."
+          },
+          {
+            "text": "\"They formed at 4-3-3.\"",
+            "correct": false,
+            "feedback": "No. That isn't natural English."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "question": "How do you say '4-3-3' out loud in English?",
+        "options": [
+          {
+            "text": "\"Four-three-three\"",
+            "correct": true,
+            "feedback": "Correct. Just say the numbers one by one."
+          },
+          {
+            "text": "\"Four hundred and thirty-three\"",
+            "correct": false,
+            "feedback": "No! That's a number, not a formation."
+          },
+          {
+            "text": "\"Four minus three minus three\"",
+            "correct": false,
+            "feedback": "No. The dashes aren't read aloud."
+          }
         ]
       }
     ]
@@ -37,14 +1121,46 @@
       "core_concept": "A post-match interview is a conversation where a player or manager answers questions from journalists immediately after a game. It's a chance to explain performance, give credit, and show sportsmanship. The language used is often diplomatic, positive, and focused on the team.",
       "analogy": "Think of it like the team's post-game debrief, but for the public. You analyse the key moments, praise your teammates' work rate, and set your sights on the next fixture — just as you would in the dressing room.",
       "vocabulary": [
-        { "term": "Gutted",             "meaning": "Extremely disappointed or upset." },
-        { "term": "Over the moon",      "meaning": "Extremely happy or delighted." },
-        { "term": "A game of two halves", "meaning": "A match where each team dominated one half." },
-        { "term": "Credit to the lads", "meaning": "Praise for the effort and performance of the players." },
-        { "term": "We go again",        "meaning": "We move on and focus on the next match." },
-        { "term": "A tough place to come", "meaning": "Referring to an opponent's stadium that is difficult to play at." },
-        { "term": "The rub of the green", "meaning": "Luck, especially good luck during a match." },
-        { "term": "A proper shift",     "meaning": "A hard, honest effort from a player or the team." }
+        {
+          "term": "Gutted",
+          "meaning": "Extremely disappointed or upset.",
+          "meaning_es": "Hundido / destrozado"
+        },
+        {
+          "term": "Over the moon",
+          "meaning": "Extremely happy or delighted.",
+          "meaning_es": "Encantado / en una nube"
+        },
+        {
+          "term": "A game of two halves",
+          "meaning": "A match where each team dominated one half.",
+          "meaning_es": "Un partido de dos caras"
+        },
+        {
+          "term": "Credit to the lads",
+          "meaning": "Praise for the effort and performance of the players.",
+          "meaning_es": "Mérito de los chicos"
+        },
+        {
+          "term": "We go again",
+          "meaning": "We move on and focus on the next match.",
+          "meaning_es": "A seguir / pensamos ya en el siguiente"
+        },
+        {
+          "term": "A tough place to come",
+          "meaning": "Referring to an opponent's stadium that is difficult to play at.",
+          "meaning_es": "Un campo difícil"
+        },
+        {
+          "term": "The rub of the green",
+          "meaning": "Luck, especially good luck during a match.",
+          "meaning_es": "La suerte (del partido)"
+        },
+        {
+          "term": "A proper shift",
+          "meaning": "A hard, honest effort from a player or the team.",
+          "meaning_es": "Un buen partido de trabajo / dejarse la piel"
+        }
       ]
     },
     "quiz": [
@@ -52,45 +1168,105 @@
         "id": 1,
         "question": "Your team lost 1-0 to a last-minute penalty. The interviewer asks 'How do you feel about that result?' What is the most professional response?",
         "options": [
-          { "text": "\"The referee was a disgrace. He cost us the game.\"", "correct": false, "feedback": "Blaming officials is unprofessional and can lead to fines. Always focus on your team's performance." },
-          { "text": "\"Absolutely gutted. We gave everything and to lose like that at the death is cruel, but we have to take it on the chin.\"", "correct": true, "feedback": "Perfect. Shows honest emotion, credits the team's effort, and demonstrates resilience." },
-          { "text": "\"I don't want to talk about it. Next question.\"", "correct": false, "feedback": "This is rude and uncooperative. Post-match interviews are part of a professional footballer's job." }
+          {
+            "text": "\"The referee was a disgrace. He cost us the game.\"",
+            "correct": false,
+            "feedback": "Blaming officials is unprofessional and can lead to fines. Always focus on your team's performance."
+          },
+          {
+            "text": "\"Absolutely gutted. We gave everything and to lose like that at the death is cruel, but we have to take it on the chin.\"",
+            "correct": true,
+            "feedback": "Perfect. Shows honest emotion, credits the team's effort, and demonstrates resilience."
+          },
+          {
+            "text": "\"I don't want to talk about it. Next question.\"",
+            "correct": false,
+            "feedback": "This is rude and uncooperative. Post-match interviews are part of a professional footballer's job."
+          }
         ]
       },
       {
         "id": 2,
         "question": "You've scored a hat-trick in a 3-2 win. The interviewer says 'Three goals! You must be delighted?' How do you respond?",
         "options": [
-          { "text": "\"Yeah, of course. It's all about me today, I was on fire.\"", "correct": false, "feedback": "This sounds arrogant. Always try to share credit with the team." },
-          { "text": "\"Over the moon, but the most important thing is the three points. The lads were brilliant in creating the chances.\"", "correct": true, "feedback": "Excellent. Shows happiness but prioritises the team result and praises teammates — a hallmark of a top professional." },
-          { "text": "\"It was okay. I should have scored four, really.\"", "correct": false, "feedback": "This sounds ungrateful and dismissive of a brilliant individual achievement." }
+          {
+            "text": "\"Yeah, of course. It's all about me today, I was on fire.\"",
+            "correct": false,
+            "feedback": "This sounds arrogant. Always try to share credit with the team."
+          },
+          {
+            "text": "\"Over the moon, but the most important thing is the three points. The lads were brilliant in creating the chances.\"",
+            "correct": true,
+            "feedback": "Excellent. Shows happiness but prioritises the team result and praises teammates — a hallmark of a top professional."
+          },
+          {
+            "text": "\"It was okay. I should have scored four, really.\"",
+            "correct": false,
+            "feedback": "This sounds ungrateful and dismissive of a brilliant individual achievement."
+          }
         ]
       },
       {
         "id": 3,
         "question": "Your team played poorly in the first half but improved massively to win in the second. The interviewer asks for your analysis.",
         "options": [
-          { "text": "\"The manager gave us a proper rollicking at half-time, and it worked.\"", "correct": false, "feedback": "Revealing private dressing room details is generally frowned upon in the professional game." },
-          { "text": "\"It was a real game of two halves. We weren't at the races early on, but we showed great character to turn it around after the break.\"", "correct": true, "feedback": "Uses the perfect idiom, honestly acknowledges the poor start, and highlights the positive reaction." },
-          { "text": "\"We just decided to start playing football in the second half.\"", "correct": false, "feedback": "This implies you weren't trying in the first half — a very unhelpful admission to make publicly." }
+          {
+            "text": "\"The manager gave us a proper rollicking at half-time, and it worked.\"",
+            "correct": false,
+            "feedback": "Revealing private dressing room details is generally frowned upon in the professional game."
+          },
+          {
+            "text": "\"It was a real game of two halves. We weren't at the races early on, but we showed great character to turn it around after the break.\"",
+            "correct": true,
+            "feedback": "Uses the perfect idiom, honestly acknowledges the poor start, and highlights the positive reaction."
+          },
+          {
+            "text": "\"We just decided to start playing football in the second half.\"",
+            "correct": false,
+            "feedback": "This implies you weren't trying in the first half — a very unhelpful admission to make publicly."
+          }
         ]
       },
       {
         "id": 4,
         "question": "You're the manager. A key player missed a sitter in the 89th minute. A journalist asks about that miss directly.",
         "options": [
-          { "text": "\"If he scores that, we win. It's that simple. He knows he let us down.\"", "correct": false, "feedback": "Publicly criticising an individual player destroys team morale and your relationship with that player." },
-          { "text": "\"These things happen in football. He's been brilliant all season and we create and miss chances as a team. We'll support him.\"", "correct": true, "feedback": "Protects the player, spreads collective responsibility, and shows excellent man-management." },
-          { "text": "\"I didn't see it. I was already thinking about the next game.\"", "correct": false, "feedback": "Dismissive and clearly untrue. You must address the defining moment of the match." }
+          {
+            "text": "\"If he scores that, we win. It's that simple. He knows he let us down.\"",
+            "correct": false,
+            "feedback": "Publicly criticising an individual player destroys team morale and your relationship with that player."
+          },
+          {
+            "text": "\"These things happen in football. He's been brilliant all season and we create and miss chances as a team. We'll support him.\"",
+            "correct": true,
+            "feedback": "Protects the player, spreads collective responsibility, and shows excellent man-management."
+          },
+          {
+            "text": "\"I didn't see it. I was already thinking about the next game.\"",
+            "correct": false,
+            "feedback": "Dismissive and clearly untrue. You must address the defining moment of the match."
+          }
         ]
       },
       {
         "id": 5,
         "question": "Your team drew 0-0 away at a top-four rival. The interviewer asks if it's a good point.",
         "options": [
-          { "text": "\"No, we came to win. A draw is useless.\"", "correct": false, "feedback": "This devalues a solid result at a genuinely difficult ground and can demotivate the squad." },
-          { "text": "\"It's a solid point. This is a tough place to come, they're a top side, and we defended well. We go again next week.\"", "correct": true, "feedback": "Realistic, respectful to the opponent, highlights a positive (the defence), and looks forward positively." },
-          { "text": "\"We were lucky. They should have beaten us.\"", "correct": false, "feedback": "Undermines your team's achievement and makes the performance sound weak in the media." }
+          {
+            "text": "\"No, we came to win. A draw is useless.\"",
+            "correct": false,
+            "feedback": "This devalues a solid result at a genuinely difficult ground and can demotivate the squad."
+          },
+          {
+            "text": "\"It's a solid point. This is a tough place to come, they're a top side, and we defended well. We go again next week.\"",
+            "correct": true,
+            "feedback": "Realistic, respectful to the opponent, highlights a positive (the defence), and looks forward positively."
+          },
+          {
+            "text": "\"We were lucky. They should have beaten us.\"",
+            "correct": false,
+            "feedback": "Undermines your team's achievement and makes the performance sound weak in the media."
+          }
         ]
       }
     ]
@@ -106,10 +1282,26 @@
       "core_concept": "Corner kicks are planned attacking plays from the corner flag. Teams use specific routines to create scoring opportunities, involving player movement, blocking defenders, and precise delivery. The aim is to outsmart the organised defence.",
       "analogy": "Think of it like a rehearsed play in basketball or American football. Everyone has a specific role and timing to create space for the key scorer.",
       "vocabulary": [
-        { "term": "Near Post",  "meaning": "The goalpost closest to where the corner is being taken. A common target for flick-ons." },
-        { "term": "Far Post",   "meaning": "The goalpost furthest from the corner taker. Often targeted for deeper, lofted crosses." },
-        { "term": "Delivery",   "meaning": "The act of kicking the ball from the corner flag. Can be in-swinging (curving towards goal) or out-swinging (curving away)." },
-        { "term": "Block/Run",  "meaning": "An attacking player's movement to impede a defender, legally creating space for a teammate to attack the ball." }
+        {
+          "term": "Near Post",
+          "meaning": "The goalpost closest to where the corner is being taken. A common target for flick-ons.",
+          "meaning_es": "Primer palo"
+        },
+        {
+          "term": "Far Post",
+          "meaning": "The goalpost furthest from the corner taker. Often targeted for deeper, lofted crosses.",
+          "meaning_es": "Segundo palo"
+        },
+        {
+          "term": "Delivery",
+          "meaning": "The act of kicking the ball from the corner flag. Can be in-swinging (curving towards goal) or out-swinging (curving away).",
+          "meaning_es": "Centro / envío"
+        },
+        {
+          "term": "Block/Run",
+          "meaning": "An attacking player's movement to impede a defender, legally creating space for a teammate to attack the ball.",
+          "meaning_es": "Bloqueo / desmarque"
+        }
       ]
     },
     "quiz": [
@@ -117,45 +1309,105 @@
         "id": 1,
         "question": "Your team wins a corner on the left. Your tallest player is marked by two defenders in the centre. What's the best tactical option?",
         "options": [
-          { "text": "Lump the ball directly onto your tall player's head.", "correct": false, "feedback": "With two markers, it's a low-percentage play. The defence has the numbers to deal with a direct ball." },
-          { "text": "Play a short corner to a teammate to change the angle of attack.", "correct": true, "feedback": "Smart call. A short pass pulls defenders out of position, potentially freeing your key aerial player." },
-          { "text": "Take the corner quickly before your tall player gets into the box.", "correct": false, "feedback": "Rushing wastes your main aerial threat. Organisation and timing are key for effective corners." }
+          {
+            "text": "Lump the ball directly onto your tall player's head.",
+            "correct": false,
+            "feedback": "With two markers, it's a low-percentage play. The defence has the numbers to deal with a direct ball."
+          },
+          {
+            "text": "Play a short corner to a teammate to change the angle of attack.",
+            "correct": true,
+            "feedback": "Smart call. A short pass pulls defenders out of position, potentially freeing your key aerial player."
+          },
+          {
+            "text": "Take the corner quickly before your tall player gets into the box.",
+            "correct": false,
+            "feedback": "Rushing wastes your main aerial threat. Organisation and timing are key for effective corners."
+          }
         ]
       },
       {
         "id": 2,
         "question": "The opposition goalkeeper is poor at claiming crosses. What type of delivery is most effective?",
         "options": [
-          { "text": "A low, driven cross along the six-yard box.", "correct": false, "feedback": "This is risky and often cleared by the first defender. It doesn't directly test the keeper." },
-          { "text": "A high, looping cross aimed at the penalty spot.", "correct": true, "feedback": "Perfect. A high ball into a crowded area forces the hesitant keeper to commit, causing chaos and chances." },
-          { "text": "A pass back to your centre-back 30 yards from goal.", "correct": false, "feedback": "This surrenders all attacking pressure from the corner — a wasted opportunity." }
+          {
+            "text": "A low, driven cross along the six-yard box.",
+            "correct": false,
+            "feedback": "This is risky and often cleared by the first defender. It doesn't directly test the keeper."
+          },
+          {
+            "text": "A high, looping cross aimed at the penalty spot.",
+            "correct": true,
+            "feedback": "Perfect. A high ball into a crowded area forces the hesitant keeper to commit, causing chaos and chances."
+          },
+          {
+            "text": "A pass back to your centre-back 30 yards from goal.",
+            "correct": false,
+            "feedback": "This surrenders all attacking pressure from the corner — a wasted opportunity."
+          }
         ]
       },
       {
         "id": 3,
         "question": "You are taking an in-swinging corner from the right. Where should a teammate make a 'near-post run'?",
         "options": [
-          { "text": "From the edge of the box to the far post.", "correct": false, "feedback": "That's a far-post run, not a near-post one. The near post is closest to the corner taker." },
-          { "text": "From a central position towards the front post (nearest to you).", "correct": true, "feedback": "Yes. They attack the ball's flight path early, aiming to flick it on or score directly." },
-          { "text": "They should stand still on the penalty spot.", "correct": false, "feedback": "Static players are easy to mark. Movement is essential to create separation from defenders." }
+          {
+            "text": "From the edge of the box to the far post.",
+            "correct": false,
+            "feedback": "That's a far-post run, not a near-post one. The near post is closest to the corner taker."
+          },
+          {
+            "text": "From a central position towards the front post (nearest to you).",
+            "correct": true,
+            "feedback": "Yes. They attack the ball's flight path early, aiming to flick it on or score directly."
+          },
+          {
+            "text": "They should stand still on the penalty spot.",
+            "correct": false,
+            "feedback": "Static players are easy to mark. Movement is essential to create separation from defenders."
+          }
         ]
       },
       {
         "id": 4,
         "question": "What is the primary purpose of a 'block' or 'screen' during a corner routine?",
         "options": [
-          { "text": "To physically foul a key defender.", "correct": false, "feedback": "It's a tactical obstruction, not an illegal foul. The blocker must be stationary to be legal." },
-          { "text": "To create space for an attacker by impeding their marker.", "correct": true, "feedback": "Exactly. A teammate legally stands in the defender's path, giving the attacker a free run at the ball." },
-          { "text": "To protect the goalkeeper from opposing players.", "correct": false, "feedback": "This is not a standard tactic for attacking corners. Blocking is used to free attackers, not protect keepers." }
+          {
+            "text": "To physically foul a key defender.",
+            "correct": false,
+            "feedback": "It's a tactical obstruction, not an illegal foul. The blocker must be stationary to be legal."
+          },
+          {
+            "text": "To create space for an attacker by impeding their marker.",
+            "correct": true,
+            "feedback": "Exactly. A teammate legally stands in the defender's path, giving the attacker a free run at the ball."
+          },
+          {
+            "text": "To protect the goalkeeper from opposing players.",
+            "correct": false,
+            "feedback": "This is not a standard tactic for attacking corners. Blocking is used to free attackers, not protect keepers."
+          }
         ]
       },
       {
         "id": 5,
         "question": "Your team is losing 1-0 in the 89th minute. Your goalkeeper is excellent in the air. What might you do?",
         "options": [
-          { "text": "Send the goalkeeper up to join the attack in the opposition box.", "correct": true, "feedback": "In a desperate situation, this adds a powerful extra aerial threat — a high-risk, high-reward gamble." },
-          { "text": "Take the corner short to keep possession and build slowly.", "correct": false, "feedback": "There is no time for a slow build-up. You need the ball in the danger area immediately." },
-          { "text": "Have every player stay back to defend a potential counter-attack.", "correct": false, "feedback": "You must commit players to the box to score. You are losing — defence alone won't help you now." }
+          {
+            "text": "Send the goalkeeper up to join the attack in the opposition box.",
+            "correct": true,
+            "feedback": "In a desperate situation, this adds a powerful extra aerial threat — a high-risk, high-reward gamble."
+          },
+          {
+            "text": "Take the corner short to keep possession and build slowly.",
+            "correct": false,
+            "feedback": "There is no time for a slow build-up. You need the ball in the danger area immediately."
+          },
+          {
+            "text": "Have every player stay back to defend a potential counter-attack.",
+            "correct": false,
+            "feedback": "You must commit players to the box to score. You are losing — defence alone won't help you now."
+          }
         ]
       }
     ]
@@ -171,10 +1423,26 @@
       "core_concept": "Zonal marking is a defensive strategy where players are responsible for a specific zone or area of the pitch, rather than tracking a specific opponent. The primary objective is to protect dangerous spaces, force attackers into less threatening areas, and maintain the team's defensive shape. It relies on communication, spatial awareness, and collective responsibility.",
       "analogy": "Think of it like a goalkeeper organising a wall for a free-kick. Each player in the wall is responsible for blocking their specific section, not for marking the kicker. They hold their zone.",
       "vocabulary": [
-        { "term": "Zone",             "meaning": "A designated area of the pitch for which a defender is responsible." },
-        { "term": "Defensive Shape",  "meaning": "The organised structure and formation of a team when not in possession of the ball." },
-        { "term": "Cover Shadow",     "meaning": "The area of the pitch that a defender blocks access to simply by their body position, without making a tackle." },
-        { "term": "Handover",         "meaning": "The moment a defender passes responsibility for an attacker to a teammate as they move between zones." }
+        {
+          "term": "Zone",
+          "meaning": "A designated area of the pitch for which a defender is responsible.",
+          "meaning_es": "Zona"
+        },
+        {
+          "term": "Defensive Shape",
+          "meaning": "The organised structure and formation of a team when not in possession of the ball.",
+          "meaning_es": "Estructura defensiva"
+        },
+        {
+          "term": "Cover Shadow",
+          "meaning": "The area of the pitch that a defender blocks access to simply by their body position, without making a tackle.",
+          "meaning_es": "Sombra de cobertura"
+        },
+        {
+          "term": "Handover",
+          "meaning": "The moment a defender passes responsibility for an attacker to a teammate as they move between zones.",
+          "meaning_es": "Entrega de marca"
+        }
       ]
     },
     "quiz": [
@@ -182,45 +1450,105 @@
         "id": 1,
         "question": "You are in the near-post zone defending a corner. An attacker runs directly at you. What is your primary responsibility?",
         "options": [
-          { "text": "Follow the runner wherever they go, even if it leaves your zone.", "correct": false, "feedback": "This breaks the zonal system. Chasing the player leaves the near post unguarded for a different attacker." },
-          { "text": "Hold your position in the near-post zone and challenge any ball that enters it.", "correct": true, "feedback": "Correct. In zonal marking you defend the space. Trust your teammates in adjacent zones to pick up the runner." },
-          { "text": "Run towards the penalty spot to reinforce the central area.", "correct": false, "feedback": "This abandons your critical zone. The near post is a high-danger area for flick-ons — never leave it." }
+          {
+            "text": "Follow the runner wherever they go, even if it leaves your zone.",
+            "correct": false,
+            "feedback": "This breaks the zonal system. Chasing the player leaves the near post unguarded for a different attacker."
+          },
+          {
+            "text": "Hold your position in the near-post zone and challenge any ball that enters it.",
+            "correct": true,
+            "feedback": "Correct. In zonal marking you defend the space. Trust your teammates in adjacent zones to pick up the runner."
+          },
+          {
+            "text": "Run towards the penalty spot to reinforce the central area.",
+            "correct": false,
+            "feedback": "This abandons your critical zone. The near post is a high-danger area for flick-ons — never leave it."
+          }
         ]
       },
       {
         "id": 2,
         "question": "A central defender drops too deep, following a striker who retreats into midfield. What should the other centre-back do?",
         "options": [
-          { "text": "Follow your partner to maintain close contact with the striker.", "correct": false, "feedback": "This creates a massive hole in the defensive line. Midfielders should pick up deep-lying forwards." },
-          { "text": "Hold your position and communicate for a midfielder to pick up the dropping striker.", "correct": true, "feedback": "Perfect. Maintain the defensive shape and alert a midfielder — this preserves both the line and zonal coverage." },
-          { "text": "Sprint forward to play the remaining attackers offside.", "correct": false, "feedback": "Without a coordinated line, you'll play attackers onside and leave enormous space behind you." }
+          {
+            "text": "Follow your partner to maintain close contact with the striker.",
+            "correct": false,
+            "feedback": "This creates a massive hole in the defensive line. Midfielders should pick up deep-lying forwards."
+          },
+          {
+            "text": "Hold your position and communicate for a midfielder to pick up the dropping striker.",
+            "correct": true,
+            "feedback": "Perfect. Maintain the defensive shape and alert a midfielder — this preserves both the line and zonal coverage."
+          },
+          {
+            "text": "Sprint forward to play the remaining attackers offside.",
+            "correct": false,
+            "feedback": "Without a coordinated line, you'll play attackers onside and leave enormous space behind you."
+          }
         ]
       },
       {
         "id": 3,
         "question": "What is the main weakness often cited against zonal marking from set-pieces?",
         "options": [
-          { "text": "It requires less communication than man-marking.", "correct": false, "feedback": "The opposite is true — zonal marking demands constant, precise communication to coordinate between zones." },
-          { "text": "Attackers can get a running start to attack the ball in a static zone.", "correct": true, "feedback": "Classic criticism. A well-timed run gives an attacker momentum over a defender focused on holding their ground." },
-          { "text": "It makes it easier for defenders to track their direct opponent.", "correct": false, "feedback": "That's the strength of man-marking. In zonal, you are not tasked with tracking one specific player." }
+          {
+            "text": "It requires less communication than man-marking.",
+            "correct": false,
+            "feedback": "The opposite is true — zonal marking demands constant, precise communication to coordinate between zones."
+          },
+          {
+            "text": "Attackers can get a running start to attack the ball in a static zone.",
+            "correct": true,
+            "feedback": "Classic criticism. A well-timed run gives an attacker momentum over a defender focused on holding their ground."
+          },
+          {
+            "text": "It makes it easier for defenders to track their direct opponent.",
+            "correct": false,
+            "feedback": "That's the strength of man-marking. In zonal, you are not tasked with tracking one specific player."
+          }
         ]
       },
       {
         "id": 4,
         "question": "When an attacker moves from your zone into an adjacent zone, what is the correct action?",
         "options": [
-          { "text": "Follow them into the new zone to maintain pressure.", "correct": false, "feedback": "This is man-marking logic and disrupts the system, pulling you out of position and potentially causing a chain reaction." },
-          { "text": "The next defender communicates 'I've got him' and takes over; you hold your zone.", "correct": true, "feedback": "Perfect — this is the 'handover'. Clear communication ensures pressure continues while the team shape remains intact." },
-          { "text": "Both defenders double-mark the attacker until the danger passes.", "correct": false, "feedback": "Temporary doubling happens, but as standard procedure it's inefficient — it leaves another zone understaffed." }
+          {
+            "text": "Follow them into the new zone to maintain pressure.",
+            "correct": false,
+            "feedback": "This is man-marking logic and disrupts the system, pulling you out of position and potentially causing a chain reaction."
+          },
+          {
+            "text": "The next defender communicates 'I've got him' and takes over; you hold your zone.",
+            "correct": true,
+            "feedback": "Perfect — this is the 'handover'. Clear communication ensures pressure continues while the team shape remains intact."
+          },
+          {
+            "text": "Both defenders double-mark the attacker until the danger passes.",
+            "correct": false,
+            "feedback": "Temporary doubling happens, but as standard procedure it's inefficient — it leaves another zone understaffed."
+          }
         ]
       },
       {
         "id": 5,
         "question": "How does a well-executed zonal system help launch a counter-attack?",
         "options": [
-          { "text": "It doesn't — it's purely a safety-first defensive tactic.", "correct": false, "feedback": "Incorrect. A major benefit is the link to positive possession. Organised defenders know where teammates will be." },
-          { "text": "Defenders are in structured positions, making it easy to find passing options after winning the ball.", "correct": true, "feedback": "Exactly. Winning the ball in an organised structure allows for quicker, more coherent ball circulation to counter-attack." },
-          { "text": "It allows the fastest defender to sprint forward immediately once the ball is won.", "correct": false, "feedback": "Individualistic sprinting breaks team structure. Counter-attacks must be coordinated, not lone sprints." }
+          {
+            "text": "It doesn't — it's purely a safety-first defensive tactic.",
+            "correct": false,
+            "feedback": "Incorrect. A major benefit is the link to positive possession. Organised defenders know where teammates will be."
+          },
+          {
+            "text": "Defenders are in structured positions, making it easy to find passing options after winning the ball.",
+            "correct": true,
+            "feedback": "Exactly. Winning the ball in an organised structure allows for quicker, more coherent ball circulation to counter-attack."
+          },
+          {
+            "text": "It allows the fastest defender to sprint forward immediately once the ball is won.",
+            "correct": false,
+            "feedback": "Individualistic sprinting breaks team structure. Counter-attacks must be coordinated, not lone sprints."
+          }
         ]
       }
     ]
@@ -236,10 +1564,26 @@
       "core_concept": "The offside trap is a coordinated defensive strategy where defenders step forward in unison just before an opponent's pass is played, aiming to leave an attacking player in an offside position. It requires perfect timing, communication, and a high defensive line. When executed correctly, it stops an attack and awards your team a free-kick.",
       "analogy": "It's like a perfectly timed jump in a game of jump rope. The defenders are the rope-turners, deciding the exact moment to 'swing' the rope (the defensive line) up, catching the attacker (the jumper) who mistimed their entry.",
       "vocabulary": [
-        { "term": "Offside Line",    "meaning": "The imaginary line across the pitch, level with the second-last defender." },
-        { "term": "High Line",       "meaning": "A defensive strategy where the back line positions themselves far up the pitch to compress space." },
-        { "term": "Stepping Up",     "meaning": "The synchronised movement of the defensive line forward to catch an opponent offside." },
-        { "term": "Playing the Trap","meaning": "Deliberately luring an opponent into an offside position by holding a high line and timing the step forward." }
+        {
+          "term": "Offside Line",
+          "meaning": "The imaginary line across the pitch, level with the second-last defender.",
+          "meaning_es": "Línea del fuera de juego"
+        },
+        {
+          "term": "High Line",
+          "meaning": "A defensive strategy where the back line positions themselves far up the pitch to compress space.",
+          "meaning_es": "Línea adelantada"
+        },
+        {
+          "term": "Stepping Up",
+          "meaning": "The synchronised movement of the defensive line forward to catch an opponent offside.",
+          "meaning_es": "Subir la línea"
+        },
+        {
+          "term": "Playing the Trap",
+          "meaning": "Deliberately luring an opponent into an offside position by holding a high line and timing the step forward.",
+          "meaning_es": "Tirar el fuera de juego"
+        }
       ]
     },
     "quiz": [
@@ -247,45 +1591,105 @@
         "id": 1,
         "question": "As the last defender, what is your primary visual cue to initiate the offside trap?",
         "options": [
-          { "text": "When the striker starts his run.",                           "correct": false, "feedback": "Too early. The key moment is when the ball is played, not when the run begins." },
-          { "text": "The moment the passer's foot makes contact with the ball.", "correct": true,  "feedback": "Perfect. Offside is judged at the exact moment the ball is played — step forward at that precise instant." },
-          { "text": "When you hear your goalkeeper shout 'NOW!'.",               "correct": false, "feedback": "The shout should coincide with the visual cue, not replace it. React to what you see, confirmed by what you hear." }
+          {
+            "text": "When the striker starts his run.",
+            "correct": false,
+            "feedback": "Too early. The key moment is when the ball is played, not when the run begins."
+          },
+          {
+            "text": "The moment the passer's foot makes contact with the ball.",
+            "correct": true,
+            "feedback": "Perfect. Offside is judged at the exact moment the ball is played — step forward at that precise instant."
+          },
+          {
+            "text": "When you hear your goalkeeper shout 'NOW!'.",
+            "correct": false,
+            "feedback": "The shout should coincide with the visual cue, not replace it. React to what you see, confirmed by what you hear."
+          }
         ]
       },
       {
         "id": 2,
         "question": "The right-back is slightly deeper than the rest of the back four when a through ball is played. Has the offside trap worked?",
         "options": [
-          { "text": "Yes, as long as the striker is ahead of the ball.",                  "correct": false, "feedback": "Offside is judged against the second-last defender. A staggered line makes this impossible to judge correctly." },
-          { "text": "No. The right-back is deeper, so they are playing the attacker onside.", "correct": true,  "feedback": "Correct. The back line must move as one flat unit. The deepest defender sets the line — everyone must be level." },
-          { "text": "Yes, because three defenders are still ahead of the striker.",        "correct": false, "feedback": "Just one defender being deeper is enough to play the attacker onside. The line is broken." }
+          {
+            "text": "Yes, as long as the striker is ahead of the ball.",
+            "correct": false,
+            "feedback": "Offside is judged against the second-last defender. A staggered line makes this impossible to judge correctly."
+          },
+          {
+            "text": "No. The right-back is deeper, so they are playing the attacker onside.",
+            "correct": true,
+            "feedback": "Correct. The back line must move as one flat unit. The deepest defender sets the line — everyone must be level."
+          },
+          {
+            "text": "Yes, because three defenders are still ahead of the striker.",
+            "correct": false,
+            "feedback": "Just one defender being deeper is enough to play the attacker onside. The line is broken."
+          }
         ]
       },
       {
         "id": 3,
         "question": "What is the major risk if the offside trap is mistimed?",
         "options": [
-          { "text": "Conceding a corner kick.",                             "correct": false, "feedback": "Not the primary risk — a failed trap leads to a far more dangerous situation." },
-          { "text": "Giving away a penalty.",                              "correct": false, "feedback": "Unlikely as a direct consequence of a mistimed step forward." },
-          { "text": "Leaving the attacker one-on-one with the goalkeeper.", "correct": true,  "feedback": "Correct. The defensive line has moved up, leaving a huge gap behind for the attacker to run into." }
+          {
+            "text": "Conceding a corner kick.",
+            "correct": false,
+            "feedback": "Not the primary risk — a failed trap leads to a far more dangerous situation."
+          },
+          {
+            "text": "Giving away a penalty.",
+            "correct": false,
+            "feedback": "Unlikely as a direct consequence of a mistimed step forward."
+          },
+          {
+            "text": "Leaving the attacker one-on-one with the goalkeeper.",
+            "correct": true,
+            "feedback": "Correct. The defensive line has moved up, leaving a huge gap behind for the attacker to run into."
+          }
         ]
       },
       {
         "id": 4,
         "question": "A winger is level with the last defender when the through ball is played, then uses pace to collect it. Is he offside?",
         "options": [
-          { "text": "Yes, he ended up in front of the defender.",          "correct": false, "feedback": "Offside is judged at the moment the ball is played, not where players end up afterwards." },
-          { "text": "No, he was level at the moment the pass was made.",  "correct": true,  "feedback": "Correct. Being level is not offside. The trap failed because the line didn't step up quickly enough." },
-          { "text": "Yes, because he gained an advantage from his position.", "correct": false, "feedback": "He didn't gain an advantage from an offside position — he was onside when the ball was played." }
+          {
+            "text": "Yes, he ended up in front of the defender.",
+            "correct": false,
+            "feedback": "Offside is judged at the moment the ball is played, not where players end up afterwards."
+          },
+          {
+            "text": "No, he was level at the moment the pass was made.",
+            "correct": true,
+            "feedback": "Correct. Being level is not offside. The trap failed because the line didn't step up quickly enough."
+          },
+          {
+            "text": "Yes, because he gained an advantage from his position.",
+            "correct": false,
+            "feedback": "He didn't gain an advantage from an offside position — he was onside when the ball was played."
+          }
         ]
       },
       {
         "id": 5,
         "question": "A player cannot be offside from which type of restart?",
         "options": [
-          { "text": "A corner kick.",  "correct": false, "feedback": "You can be offside directly from a corner kick — Law 11 applies." },
-          { "text": "A throw-in.",     "correct": true,  "feedback": "Correct. Law 11 explicitly states there is no offside from a throw-in — the trap should not be attempted in this scenario." },
-          { "text": "A goal kick.",    "correct": false, "feedback": "Offside does not apply from a goal kick until the ball has left the penalty area, but the throw-in is the clearest exception." }
+          {
+            "text": "A corner kick.",
+            "correct": false,
+            "feedback": "You can be offside directly from a corner kick — Law 11 applies."
+          },
+          {
+            "text": "A throw-in.",
+            "correct": true,
+            "feedback": "Correct. Law 11 explicitly states there is no offside from a throw-in — the trap should not be attempted in this scenario."
+          },
+          {
+            "text": "A goal kick.",
+            "correct": false,
+            "feedback": "Offside does not apply from a goal kick until the ball has left the penalty area, but the throw-in is the clearest exception."
+          }
         ]
       }
     ]
@@ -301,10 +1705,26 @@
       "core_concept": "A tactical foul is a deliberate infringement committed to stop an opponent's promising attack, usually by a defender who is out of position. While it results in a free-kick and often a yellow card, it is considered a worthwhile trade-off to prevent a more dangerous scoring opportunity.",
       "analogy": "It's like a defender in basketball intentionally fouling a player on a fast break to prevent an easy layup — accepting the free throws to reset the defence is the calculated, professional decision.",
       "vocabulary": [
-        { "term": "Professional Foul",       "meaning": "A deliberate foul, usually a trip or pull, committed to stop a promising attack." },
-        { "term": "Taking One for the Team", "meaning": "A phrase describing a player who commits a tactical foul and accepts the resulting booking." },
-        { "term": "Last Man",               "meaning": "The final defender between the attacker and the goalkeeper; a foul by this player typically results in a red card." },
-        { "term": "DOGSO",                  "meaning": "Denying an Obvious Goal-Scoring Opportunity — a red-card offence when committed by the last defender." }
+        {
+          "term": "Professional Foul",
+          "meaning": "A deliberate foul, usually a trip or pull, committed to stop a promising attack.",
+          "meaning_es": "Falta táctica"
+        },
+        {
+          "term": "Taking One for the Team",
+          "meaning": "A phrase describing a player who commits a tactical foul and accepts the resulting booking.",
+          "meaning_es": "Sacrificarse por el equipo"
+        },
+        {
+          "term": "Last Man",
+          "meaning": "The final defender between the attacker and the goalkeeper; a foul by this player typically results in a red card.",
+          "meaning_es": "Último hombre"
+        },
+        {
+          "term": "DOGSO",
+          "meaning": "Denying an Obvious Goal-Scoring Opportunity — a red-card offence when committed by the last defender.",
+          "meaning_es": "Ocasión manifiesta de gol (DOGSO)"
+        }
       ]
     },
     "quiz": [
@@ -312,45 +1732,689 @@
         "id": 1,
         "question": "Your team loses the ball in midfield. An opponent turns and sprints towards goal with only one defender ahead. What should the nearest midfielder do?",
         "options": [
-          { "text": "Sprint back to goal to help defend.",                                     "correct": false, "feedback": "You won't get there in time. The immediate threat is the player with the ball right now." },
-          { "text": "Commit a tactical foul to stop the counter-attack immediately.",          "correct": true,  "feedback": "Correct. A strategic foul here stops the dangerous break, allows your team to regroup, and concedes only a distant free-kick." },
-          { "text": "Shout at your defender to step up and play offside.",                    "correct": false, "feedback": "Too risky and difficult to coordinate in a fast break. The attacker is already in control of the situation." }
+          {
+            "text": "Sprint back to goal to help defend.",
+            "correct": false,
+            "feedback": "You won't get there in time. The immediate threat is the player with the ball right now."
+          },
+          {
+            "text": "Commit a tactical foul to stop the counter-attack immediately.",
+            "correct": true,
+            "feedback": "Correct. A strategic foul here stops the dangerous break, allows your team to regroup, and concedes only a distant free-kick."
+          },
+          {
+            "text": "Shout at your defender to step up and play offside.",
+            "correct": false,
+            "feedback": "Too risky and difficult to coordinate in a fast break. The attacker is already in control of the situation."
+          }
         ]
       },
       {
         "id": 2,
         "question": "You are the last defender. A striker plays the ball past you and is about to run through on goal. You trip him. What is the most likely outcome?",
         "options": [
-          { "text": "Yellow card and a free-kick.",         "correct": false, "feedback": "Denying an obvious goal-scoring opportunity (DOGSO) as the last defender is usually a red card, not a yellow." },
-          { "text": "Red card and a penalty (if in box).", "correct": true,  "feedback": "Correct. As the last man, you have illegally denied a clear goal-scoring opportunity — straight red and a penalty if inside the area." },
-          { "text": "A warning from the referee.",         "correct": false, "feedback": "A serious foul in the most critical area of the pitch. A simple warning is extremely unlikely." }
+          {
+            "text": "Yellow card and a free-kick.",
+            "correct": false,
+            "feedback": "Denying an obvious goal-scoring opportunity (DOGSO) as the last defender is usually a red card, not a yellow."
+          },
+          {
+            "text": "Red card and a penalty (if in box).",
+            "correct": true,
+            "feedback": "Correct. As the last man, you have illegally denied a clear goal-scoring opportunity — straight red and a penalty if inside the area."
+          },
+          {
+            "text": "A warning from the referee.",
+            "correct": false,
+            "feedback": "A serious foul in the most critical area of the pitch. A simple warning is extremely unlikely."
+          }
         ]
       },
       {
         "id": 3,
         "question": "You're winning 1-0 in the 89th minute and already have a yellow card. An opponent receives the ball near halfway with space. What do you do?",
         "options": [
-          { "text": "Make a tactical foul immediately.",                                          "correct": false, "feedback": "A second yellow means red and suspension. This is a catastrophic risk so late in a winning game." },
-          { "text": "Jockey and shepherd the player away from goal, buying time until help arrives.", "correct": true,  "feedback": "Correct. The priority is staying on the pitch. Use your body to slow them and force them wide without fouling." },
-          { "text": "Shout for a teammate without a yellow card to make the foul.",              "correct": false, "feedback": "Not a reliable plan — you are responsible for your own positioning and immediate decisions." }
+          {
+            "text": "Make a tactical foul immediately.",
+            "correct": false,
+            "feedback": "A second yellow means red and suspension. This is a catastrophic risk so late in a winning game."
+          },
+          {
+            "text": "Jockey and shepherd the player away from goal, buying time until help arrives.",
+            "correct": true,
+            "feedback": "Correct. The priority is staying on the pitch. Use your body to slow them and force them wide without fouling."
+          },
+          {
+            "text": "Shout for a teammate without a yellow card to make the foul.",
+            "correct": false,
+            "feedback": "Not a reliable plan — you are responsible for your own positioning and immediate decisions."
+          }
         ]
       },
       {
         "id": 4,
         "question": "Where on the pitch is committing a tactical foul generally considered MOST effective and LEAST risky?",
         "options": [
-          { "text": "Inside your own penalty area.",                          "correct": false, "feedback": "A foul here gives away a penalty — the highest-value chance for the opponent. Never the right choice." },
-          { "text": "In the central area just inside the opponent's half.",  "correct": true,  "feedback": "Correct. Stops the break, but the free-kick is from long distance with many defenders between ball and goal." },
-          { "text": "On the wing, level with the opponent's penalty area.", "correct": false, "feedback": "Dangerous for crossing free-kicks. Better to defend from open play than gift a set-piece in this area." }
+          {
+            "text": "Inside your own penalty area.",
+            "correct": false,
+            "feedback": "A foul here gives away a penalty — the highest-value chance for the opponent. Never the right choice."
+          },
+          {
+            "text": "In the central area just inside the opponent's half.",
+            "correct": true,
+            "feedback": "Correct. Stops the break, but the free-kick is from long distance with many defenders between ball and goal."
+          },
+          {
+            "text": "On the wing, level with the opponent's penalty area.",
+            "correct": false,
+            "feedback": "Dangerous for crossing free-kicks. Better to defend from open play than gift a set-piece in this area."
+          }
         ]
       },
       {
         "id": 5,
         "question": "After committing the foul, how should you behave towards the referee to minimise risk of a harsher punishment?",
         "options": [
-          { "text": "Immediately protest that it wasn't a foul.",                                                         "correct": false, "feedback": "This annoys the referee and may lead to a quicker booking or dissent charge on top of the foul." },
-          { "text": "Accept the decision, put your hands up in a slight apology, and walk back to your position calmly.", "correct": true,  "feedback": "Correct. Showing respect to the official's decision reduces the risk of the foul being judged as more cynical." },
-          { "text": "Walk away quickly, avoiding all eye contact.",                                                        "correct": false, "feedback": "This can look dismissive and disrespectful. The referee will call you back, which only creates more friction." }
+          {
+            "text": "Immediately protest that it wasn't a foul.",
+            "correct": false,
+            "feedback": "This annoys the referee and may lead to a quicker booking or dissent charge on top of the foul."
+          },
+          {
+            "text": "Accept the decision, put your hands up in a slight apology, and walk back to your position calmly.",
+            "correct": true,
+            "feedback": "Correct. Showing respect to the official's decision reduces the risk of the foul being judged as more cynical."
+          },
+          {
+            "text": "Walk away quickly, avoiding all eye contact.",
+            "correct": false,
+            "feedback": "This can look dismissive and disrespectful. The referee will call you back, which only creates more friction."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "les_pressing",
+    "title": "Pressing & Counter-pressing: Win It Back Fast",
+    "difficulty": "Pro",
+    "difficulty_elo": 1550,
+    "video_id": null,
+    "content": {
+      "intro_hook": "The best moment to win the ball is right after you've lost it. Welcome to the press.",
+      "core_concept": "Pressing means putting pressure on the opponent with the ball to force a mistake. Teams press together, starting when a 'trigger' happens — for example a bad touch or a pass to a full-back. Counter-pressing (from the German 'Gegenpressing') means pressing immediately after losing possession, when the opponent is still disorganised.",
+      "analogy": "Pressing is like a pack of wolves: one wolf alone is easy to escape, but when the whole pack closes in together, there's nowhere to run.",
+      "vocabulary": [
+        {
+          "term": "Press",
+          "meaning": "To close down the player with the ball and force them into a mistake.",
+          "meaning_es": "Presionar"
+        },
+        {
+          "term": "Pressing trigger",
+          "meaning": "A signal, like a poor touch or a backwards pass, that tells the team to start pressing.",
+          "meaning_es": "Detonante de presión"
+        },
+        {
+          "term": "Counter-press",
+          "meaning": "To press immediately after losing the ball.",
+          "meaning_es": "Presión tras pérdida"
+        },
+        {
+          "term": "Compact",
+          "meaning": "Keeping short distances between players so there is little space for the opponent.",
+          "meaning_es": "Junto / compacto"
+        },
+        {
+          "term": "Win the ball back",
+          "meaning": "To regain possession from the opponent.",
+          "meaning_es": "Recuperar el balón"
+        }
+      ]
+    },
+    "quiz": [
+      {
+        "id": 1,
+        "question": "Your team has just lost the ball. What does counter-pressing ask you to do?",
+        "options": [
+          {
+            "text": "Drop back to your own box immediately",
+            "correct": false,
+            "feedback": "No. That's a retreat, not a counter-press."
+          },
+          {
+            "text": "Press the ball straight away to win it back",
+            "correct": true,
+            "feedback": "Correct! The first seconds after losing the ball are the best moment to regain it."
+          },
+          {
+            "text": "Complain to the referee",
+            "correct": false,
+            "feedback": "Never a tactic!"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "question": "Which of these is a typical pressing trigger?",
+        "options": [
+          {
+            "text": "The opponent takes a heavy first touch",
+            "correct": true,
+            "feedback": "Yes. A poor touch means the player is vulnerable."
+          },
+          {
+            "text": "Your goalkeeper has the ball",
+            "correct": false,
+            "feedback": "No. You can't press when you're in possession."
+          },
+          {
+            "text": "The half-time whistle",
+            "correct": false,
+            "feedback": "No. That's time for a cup of tea."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "question": "The coach shouts: 'Stay compact!' What does he want?",
+        "options": [
+          {
+            "text": "Players spread out as wide as possible",
+            "correct": false,
+            "feedback": "That's the opposite of compact."
+          },
+          {
+            "text": "Short distances between players, leaving little space",
+            "correct": true,
+            "feedback": "Exactly. A compact team is hard to play through."
+          },
+          {
+            "text": "Players stop running to save energy",
+            "correct": false,
+            "feedback": "No. Staying compact requires lots of running!"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "question": "Complete the sentence: 'Our striker closed ___ the centre-back and forced an error.'",
+        "options": [
+          {
+            "text": "down",
+            "correct": true,
+            "feedback": "Perfect. To 'close down' a player means to press them quickly."
+          },
+          {
+            "text": "up",
+            "correct": false,
+            "feedback": "Not quite. The phrasal verb is 'close down'."
+          },
+          {
+            "text": "off",
+            "correct": false,
+            "feedback": "No. 'Close off' means to block an area, not a player."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "question": "Why is pressing done as a team and not by one player alone?",
+        "options": [
+          {
+            "text": "Because one player alone can easily be passed around",
+            "correct": true,
+            "feedback": "Right. If only one player presses, the opponent simply passes to a free teammate."
+          },
+          {
+            "text": "Because the rules require at least three players",
+            "correct": false,
+            "feedback": "No. There's no rule about pressing."
+          },
+          {
+            "text": "Because it looks better on television",
+            "correct": false,
+            "feedback": "It does look good, but that's not the reason!"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "les_transfers",
+    "title": "The Transfer Window: Deals, Loans & Deadline Day",
+    "difficulty": "Pro",
+    "difficulty_elo": 1600,
+    "video_id": null,
+    "content": {
+      "intro_hook": "'Here we go!' Every summer the transfer rumours start. Understand the language of the deals.",
+      "core_concept": "Clubs can only register new players during the transfer window. A permanent transfer usually involves a transfer fee paid to the selling club. On a loan, a player plays for another club temporarily. A player whose contract has ended is a free agent and can join any club without a fee. Many contracts, especially in Spain, include a release clause: a fixed price that lets the player leave if another club pays it.",
+      "analogy": "The transfer window is like the sales season in shops: there's a start and an end date, prices go crazy, and the best deals often happen at the very last minute.",
+      "vocabulary": [
+        {
+          "term": "Transfer fee",
+          "meaning": "The money one club pays another to sign a player under contract.",
+          "meaning_es": "Traspaso (importe)"
+        },
+        {
+          "term": "Loan",
+          "meaning": "A temporary move of a player to another club.",
+          "meaning_es": "Cesión"
+        },
+        {
+          "term": "Free agent",
+          "meaning": "A player without a contract who can join a club for free.",
+          "meaning_es": "Jugador libre"
+        },
+        {
+          "term": "Release clause",
+          "meaning": "A fixed amount in a contract that allows a player to leave if it is paid.",
+          "meaning_es": "Cláusula de rescisión"
+        },
+        {
+          "term": "Deadline day",
+          "meaning": "The last day of the transfer window, famous for last-minute deals.",
+          "meaning_es": "Último día del mercado de fichajes"
+        }
+      ]
+    },
+    "quiz": [
+      {
+        "id": 1,
+        "question": "A young player joins another club for one season and then returns. What is this?",
+        "options": [
+          {
+            "text": "A loan",
+            "correct": true,
+            "feedback": "Correct! He's 'on loan' for a season."
+          },
+          {
+            "text": "A free transfer",
+            "correct": false,
+            "feedback": "No. A free transfer is a permanent move without a fee."
+          },
+          {
+            "text": "A release clause",
+            "correct": false,
+            "feedback": "No. That's a price written in a contract."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "question": "Which sentence is correct?",
+        "options": [
+          {
+            "text": "\"The club signed him for €50 million.\"",
+            "correct": true,
+            "feedback": "Perfect. Clubs 'sign' players; players 'join' or 'sign for' clubs."
+          },
+          {
+            "text": "\"The club fichó him for €50 million.\"",
+            "correct": false,
+            "feedback": "Ha! 'Fichar' in English is 'to sign'."
+          },
+          {
+            "text": "\"The club bought for him €50 million.\"",
+            "correct": false,
+            "feedback": "Wrong word order. Say 'bought him for €50 million'."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "question": "A player's contract ends in June and he joins a new club in July without a fee. He left...",
+        "options": [
+          {
+            "text": "on a free",
+            "correct": true,
+            "feedback": "Yes. 'On a free' is the informal way to say 'on a free transfer'."
+          },
+          {
+            "text": "on loan",
+            "correct": false,
+            "feedback": "No. A loan is temporary."
+          },
+          {
+            "text": "on deadline",
+            "correct": false,
+            "feedback": "No. That's not an expression."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "question": "What is 'deadline day'?",
+        "options": [
+          {
+            "text": "The last day a club can register new signings in the window",
+            "correct": true,
+            "feedback": "Correct. Expect breaking news all day long."
+          },
+          {
+            "text": "The day the league season finishes",
+            "correct": false,
+            "feedback": "No. That's the final matchday."
+          },
+          {
+            "text": "The day players must pay their fines",
+            "correct": false,
+            "feedback": "No!"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "question": "Translate: 'Tiene una cláusula de rescisión de 100 millones.'",
+        "options": [
+          {
+            "text": "\"He has a release clause of 100 million.\"",
+            "correct": true,
+            "feedback": "Perfect. You'll also hear 'buyout clause'."
+          },
+          {
+            "text": "\"He has a rescission clause of 100 million.\"",
+            "correct": false,
+            "feedback": "Understandable, but English media say 'release clause' or 'buyout clause'."
+          },
+          {
+            "text": "\"He has an exit ticket of 100 million.\"",
+            "correct": false,
+            "feedback": "No. That's not used in football English."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "les_var",
+    "title": "VAR & Match Officials: Checks and Reviews",
+    "difficulty": "World Class",
+    "difficulty_elo": 1800,
+    "video_id": null,
+    "content": {
+      "intro_hook": "Goal! Or is it? Everybody looks at the referee touching his ear. Learn the language of VAR.",
+      "core_concept": "VAR (Video Assistant Referee) checks four types of decisions: goals, penalties, direct red cards and mistaken identity. VAR only intervenes when there is a 'clear and obvious error' or a serious missed incident. In that case the referee may go to the pitchside monitor for an on-field review. The assistant referees (linesmen) run along the touchlines and flag for offside, while the fourth official manages substitutions and the technical areas.",
+      "analogy": "VAR is like a teacher's second marking of an exam: the first mark stands unless the second marker spots a clear mistake — not just a different opinion.",
+      "vocabulary": [
+        {
+          "term": "VAR check",
+          "meaning": "An automatic review by the video team to see if there was a clear error.",
+          "meaning_es": "Revisión del VAR"
+        },
+        {
+          "term": "On-field review",
+          "meaning": "When the referee watches the incident himself on the pitchside monitor.",
+          "meaning_es": "Revisión a pie de campo (ir al monitor)"
+        },
+        {
+          "term": "Clear and obvious error",
+          "meaning": "The standard needed for VAR to overturn the referee's original decision.",
+          "meaning_es": "Error claro y manifiesto"
+        },
+        {
+          "term": "Assistant referee",
+          "meaning": "One of the two officials with a flag on the touchlines, formerly called a 'linesman'.",
+          "meaning_es": "Árbitro asistente (juez de línea)"
+        },
+        {
+          "term": "Overturn",
+          "meaning": "To change a decision into the opposite one.",
+          "meaning_es": "Revocar / anular una decisión"
+        }
+      ]
+    },
+    "quiz": [
+      {
+        "id": 1,
+        "question": "Which of these decisions can VAR review?",
+        "options": [
+          {
+            "text": "Whether a goal should stand",
+            "correct": true,
+            "feedback": "Correct. Goals, penalties, direct red cards and mistaken identity are the four reviewable areas."
+          },
+          {
+            "text": "Whether a throw-in went the right way",
+            "correct": false,
+            "feedback": "No. Throw-ins are not reviewable by VAR."
+          },
+          {
+            "text": "Whether a corner should have been a goal kick",
+            "correct": false,
+            "feedback": "No. VAR does not review corners or goal kicks."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "question": "Complete the sentence: 'After an on-field review, the referee ___ his decision and gave a penalty.'",
+        "options": [
+          {
+            "text": "overturned",
+            "correct": true,
+            "feedback": "Perfect. To overturn = to reverse a decision."
+          },
+          {
+            "text": "turned over",
+            "correct": false,
+            "feedback": "Careful! 'Turn over' means to flip something, or to lose possession."
+          },
+          {
+            "text": "overtook",
+            "correct": false,
+            "feedback": "No. 'Overtake' is what cars do on a motorway."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "question": "When does VAR intervene?",
+        "options": [
+          {
+            "text": "Whenever the fans disagree with a decision",
+            "correct": false,
+            "feedback": "No. Crowd noise isn't a factor."
+          },
+          {
+            "text": "Only for a clear and obvious error or a serious missed incident",
+            "correct": true,
+            "feedback": "Correct. That's the key phrase to remember."
+          },
+          {
+            "text": "Every time a player falls down",
+            "correct": false,
+            "feedback": "No. Matches would never end!"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "question": "Who raises a flag to signal offside?",
+        "options": [
+          {
+            "text": "The fourth official",
+            "correct": false,
+            "feedback": "No. The fourth official is between the dugouts."
+          },
+          {
+            "text": "The assistant referee",
+            "correct": true,
+            "feedback": "Yes. Assistant referees patrol the touchlines."
+          },
+          {
+            "text": "The club captain",
+            "correct": false,
+            "feedback": "No. Captains can't make decisions."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "question": "The commentator says: 'The goal stands.' What does it mean?",
+        "options": [
+          {
+            "text": "The goal is confirmed and will count",
+            "correct": true,
+            "feedback": "Correct. The opposite is 'the goal is ruled out' or 'disallowed'."
+          },
+          {
+            "text": "The goalposts are still standing",
+            "correct": false,
+            "feedback": "Ha! No, it's about the decision."
+          },
+          {
+            "text": "The players must stand still",
+            "correct": false,
+            "feedback": "No. It's about the goal being valid."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "les_commentary",
+    "title": "Commentary English: Talk Like a Pundit",
+    "difficulty": "World Class",
+    "difficulty_elo": 1850,
+    "video_id": null,
+    "content": {
+      "intro_hook": "'What a worldie! Against the run of play, too!' Crack the code of TV commentary.",
+      "core_concept": "Commentators and pundits use colourful expressions to describe what happens in a match. A clinical finisher rarely misses. A goal scored 'against the run of play' comes from the team that was being dominated. A team that 'parks the bus' defends with almost every player behind the ball, and hitting 'the woodwork' means striking the post or the crossbar.",
+      "analogy": "Pundit language is like the seasoning in a recipe: the match facts are the ingredients, but the idioms are what give the story its flavour.",
+      "vocabulary": [
+        {
+          "term": "Clinical",
+          "meaning": "Very efficient in front of goal; scores the chances they get.",
+          "meaning_es": "Letal / efectivo de cara a puerta"
+        },
+        {
+          "term": "Against the run of play",
+          "meaning": "Scored by the team that was not dominating the game at that moment.",
+          "meaning_es": "En contra del desarrollo del juego"
+        },
+        {
+          "term": "Worldie",
+          "meaning": "(Informal, British) An amazing, world-class goal.",
+          "meaning_es": "Golazo"
+        },
+        {
+          "term": "The woodwork",
+          "meaning": "The posts and crossbar of the goal.",
+          "meaning_es": "Los palos (poste o larguero)"
+        },
+        {
+          "term": "Park the bus",
+          "meaning": "To defend with almost all players behind the ball.",
+          "meaning_es": "Encerrarse atrás / poner el autobús"
+        }
+      ]
+    },
+    "quiz": [
+      {
+        "id": 1,
+        "question": "The away team has had no shots in 30 minutes, then scores on a counter-attack. The goal came...",
+        "options": [
+          {
+            "text": "against the run of play",
+            "correct": true,
+            "feedback": "Perfect. They scored while the other team was dominating."
+          },
+          {
+            "text": "on the stroke of play",
+            "correct": false,
+            "feedback": "No. You're mixing it with 'on the stroke of half-time'."
+          },
+          {
+            "text": "off the woodwork",
+            "correct": false,
+            "feedback": "Maybe, but that describes how the ball went in, not the flow of the game."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "question": "'He's hit the woodwork twice today.' What happened?",
+        "options": [
+          {
+            "text": "He scored two goals",
+            "correct": false,
+            "feedback": "No. Hitting the woodwork means the ball hit the post or bar."
+          },
+          {
+            "text": "He hit the post or the crossbar twice",
+            "correct": true,
+            "feedback": "Correct. Unlucky!"
+          },
+          {
+            "text": "He kicked the advertising boards",
+            "correct": false,
+            "feedback": "No, and he'd probably get a booking for that."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "question": "A manager is criticised for 'parking the bus'. What did his team do?",
+        "options": [
+          {
+            "text": "Arrived late to the stadium",
+            "correct": false,
+            "feedback": "Ha! No, it's a tactical expression."
+          },
+          {
+            "text": "Defended very deep with almost everyone behind the ball",
+            "correct": true,
+            "feedback": "Exactly. It's often said about ultra-defensive tactics."
+          },
+          {
+            "text": "Attacked with ten players",
+            "correct": false,
+            "feedback": "That's the opposite."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "question": "Which word best describes a striker who scores three goals from three shots?",
+        "options": [
+          {
+            "text": "Clinical",
+            "correct": true,
+            "feedback": "Yes. Clinical finishing means maximum efficiency."
+          },
+          {
+            "text": "Wasteful",
+            "correct": false,
+            "feedback": "No. 'Wasteful' is for a player who misses many chances."
+          },
+          {
+            "text": "Sloppy",
+            "correct": false,
+            "feedback": "No. 'Sloppy' means careless."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "question": "In which context is 'What a worldie!' appropriate?",
+        "options": [
+          {
+            "text": "Chatting with mates about an incredible goal",
+            "correct": true,
+            "feedback": "Correct. It's informal British slang — perfect for fans and pundits."
+          },
+          {
+            "text": "Writing a formal report for the club board",
+            "correct": false,
+            "feedback": "Too informal. Use 'an outstanding goal' instead."
+          },
+          {
+            "text": "Describing an own goal",
+            "correct": false,
+            "feedback": "Only if it was a spectacular one — but usually no!"
+          }
         ]
       }
     ]

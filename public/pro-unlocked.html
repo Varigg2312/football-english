@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PRO Unlocked — Football English Academy</title>
+    <meta name="robots" content="noindex">
+    <script src="/i18n.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -57,25 +59,25 @@
     </style>
 </head>
 <body>
-    <div id="pending-state">
-        <div class="spinner"></div>
-        <h1>Confirming your payment...</h1>
-        <p>This usually takes a couple of seconds.</p>
+    <div id="pending-state" role="status">
+        <div class="spinner" aria-hidden="true"></div>
+        <h1 data-i18n="pro.pending_title">Confirming your payment...</h1>
+        <p data-i18n="pro.pending_msg">This usually takes a couple of seconds.</p>
     </div>
 
     <div id="success-state" class="hidden">
-        <div class="icon">🏆</div>
-        <h1>PRO Unlocked!</h1>
-        <p>Your access code (save it if you want to use it on another device):</p>
+        <div class="icon" aria-hidden="true">🏆</div>
+        <h1 data-i18n="pro.success_title">PRO Unlocked!</h1>
+        <p data-i18n="pro.success_msg">Your access code (save it if you want to use it on another device):</p>
         <div class="code" id="code-display"></div>
-        <a href="/" class="cta-btn" id="continue-btn">Continue to the Academy</a>
+        <a href="/lessons" class="cta-btn" id="continue-btn" data-i18n="pro.continue">Continue to the Academy</a>
     </div>
 
     <div id="error-state" class="hidden">
-        <div class="icon">⚠️</div>
-        <h1>Still processing...</h1>
-        <p>Your payment went through, but confirmation is taking longer than usual. Reload this page in a minute — if it still doesn't work, contact support with your payment email.</p>
-        <a href="/" class="cta-btn">Back to the Academy</a>
+        <div class="icon" aria-hidden="true">⚠️</div>
+        <h1 data-i18n="pro.error_title">Still processing...</h1>
+        <p data-i18n="pro.error_msg">Your payment went through, but confirmation is taking longer than usual. Reload this page in a minute — if it still doesn't work, contact support with your payment email.</p>
+        <a href="/lessons" class="cta-btn" data-i18n="pro.back_home">Back to the Academy</a>
     </div>
 
     <script src="pro-unlocked.js"></script>

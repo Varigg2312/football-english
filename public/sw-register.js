@@ -7,7 +7,9 @@
 // weakening the CSP.
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
+        // Absolute: this page is also served at /lessons/<id>, where './sw.js'
+        // resolved to /lessons/sw.js (the HTML shell) and registration failed.
+        navigator.serviceWorker.register('/sw.js')
             .then(reg => console.log('SW active.', reg))
             .catch(err => console.error('SW failed.', err));
     });

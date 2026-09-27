@@ -1,10 +1,10 @@
-const CACHE_NAME = 'gaffer-pro-baa68ec02856';
+const CACHE_NAME = 'gaffer-pro-963081d4138b';
 const OFFLINE_URL = '/offline.html';
 
 // Core shell + content precached at install so lessons already seen
 // (and the app itself) keep working with no network at all.
 const PRECACHE_URLS = [
-    '/', '/index.html', '/offline.html',
+    '/', '/index.html', '/offline.html', '/404.html',
     '/football.css', '/app.js', '/i18n.js', '/sw-register.js', '/manifest.json', '/lessons.json',
     '/favicon-96.png', '/apple-touch-icon.png', '/icon-192.png', '/icon-512.png', '/icon-512-maskable.png',
     '/audio/whistle.mp3', '/audio/correct.mp3', '/audio/wrong.mp3', '/audio/win.mp3'
@@ -12,10 +12,23 @@ const PRECACHE_URLS = [
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
-        caches.open(CACHE_NAME).then(cache => cache.addAll(PRECACHE_URLS))
+        caches.open(CACHE_NAME).then(cache => Promise.all(PRECACHE_URLS.map(async (url) => {
+            const res = await fetch(url, { cache: 'reload' });
+            if (!res.ok) throw new Error(`precache ${url}: ${res.status}`);
+            await cache.put(url, await unredirect(res));
+        })))
     );
     self.skipWaiting();
 });
+
+// Cloudflare Pages 308-redirects "/x.html" to "/x" (and "/index.html" to
+// "/"). A cached response that went through a redirect can't be used to
+// answer a navigation — the browser rejects it — so the offline page never
+// actually showed. Re-wrap such responses as plain, non-redirected ones.
+async function unredirect(res) {
+    if (!res.redirected) return res;
+    return new Response(await res.blob(), { status: res.status, statusText: res.statusText, headers: res.headers });
+}
 
 self.addEventListener('activate', (event) => {
     event.waitUntil(
@@ -52,6 +65,10 @@ self.addEventListener('fetch', (event) => {
                 // that must not be persisted in Cache Storage.
                 .then(res => { cachePut(url.origin + url.pathname, res.clone()); return res; })
                 .catch(() => caches.match(req, { ignoreSearch: true })
+                    // In-app routes (/lessons, /lessons/<id>, /vocabulary)
+                    // are all index.html, so fall back to the cached shell
+                    // for them rather than the offline page.
+                    .then(cached => cached || (isAppRoute(url.pathname) ? caches.match('/') : null))
                     .then(cached => cached || caches.match(OFFLINE_URL)))
         );
         return;
@@ -88,6 +105,10 @@ self.addEventListener('fetch', (event) => {
         })
     );
 });
+
+function isAppRoute(pathname) {
+    return /^\/(lessons(\/[\w-]+)?|vocabulary)\/?$/.test(pathname);
+}
 
 function cachePut(request, response) {
     if (!response || !response.ok) return;
