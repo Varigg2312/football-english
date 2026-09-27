@@ -169,6 +169,7 @@ const ui = {
     authSubtitle:   $('auth-subtitle')
 };
 
+let catalogNotice = ''; // one-off message shown above the catalogue until the next navigation
 let allLessons = [];  // full lesson objects from lessons.json, sorted by difficulty
 let lessonsLoadFailed = false;
 
@@ -223,6 +224,7 @@ function parseRoute(pathname) {
 }
 
 function navigate(path, { replace = false } = {}) {
+    catalogNotice = '';
     if (path !== location.pathname) {
         if (replace) history.replaceState({}, '', path);
         else history.pushState({}, '', path);
@@ -293,7 +295,7 @@ document.addEventListener('click', (e) => {
     e.preventDefault();
     navigate(a.getAttribute('href'));
 });
-window.addEventListener('popstate', renderRoute);
+window.addEventListener('popstate', () => { catalogNotice = ''; renderRoute(); });
 
 // ── INIT ───────────────────────────────────────────────────
 async function initLeague() {
@@ -372,7 +374,7 @@ async function loadLessons() {
 }
 
 // ── CATALOGUE ──────────────────────────────────────────────
-let catalogNotice = '';
+// (catalogNotice is declared near the top, before the router uses it.)
 function showCatalogNotice(text) { catalogNotice = text; renderCatalog(); }
 
 function renderCatalog() {
@@ -385,7 +387,8 @@ function renderCatalog() {
         p.setAttribute('role', 'status');
         p.textContent = catalogNotice;
         grid.appendChild(p);
-        catalogNotice = '';
+        // Not cleared here: a later re-render (e.g. once the session check
+        // returns) must keep showing it. navigate() clears it instead.
     }
 
     if (lessonsLoadFailed) {
