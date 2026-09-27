@@ -4,7 +4,7 @@
 > **Status:** Pre-launch — app content & web shell ready, Play Console steps pending
 > **Target:** Google Play Store (TWA via Bubblewrap), package `com.footballenglish.academy`
 > **Host:** football-english.pages.dev (Cloudflare Pages + Pages Functions + D1)
-> **Last reviewed:** 2026-09-27
+> **Last reviewed:** 2026-09-27 (evening)
 
 ---
 
@@ -24,6 +24,9 @@
 | i18n | EN/ES for app, offline page, PRO unlocked page, reset password |
 | Accessibility | Focus-visible, skip link, dialogs with focus trap/Escape, ≥48px touch targets, reduced motion, AA contrast pass |
 | Manifest | `id`, `scope`, description, shortcuts, separate `any` / `maskable` icons, theme colour aligned |
+| Launcher icon | Adaptive icon foregrounds regenerated from `icon-512-maskable.png` (no more clipped text) |
+| Self-hosted assets | Inter, Font Awesome (solid) and canvas-confetti served from `/vendor/*` (immutable cache, precached); CSP is `'self'`-only for scripts/fonts |
+| Chat privacy text | Privacy policy covers sending the last 6 turns of the conversation (27 Sep 2026) |
 | Legal | Privacy policy + terms (EN/ES), AI Act art. 50 notice, LOPDGDD 14+ |
 
 ---
@@ -35,7 +38,6 @@
 | Task | Owner | Notes |
 |---|---|---|
 | Release AAB | Vari | Create `keystore/signing.properties` from the template, then `./gradlew bundleRelease` |
-| Regenerate launcher icons from the maskable icon | Vari/Claude | `twa-manifest.json` now points to `icon-512-maskable.png`; mipmaps still come from the old icon (needs `bubblewrap update` — review diff, it can rewrite `build.gradle`) |
 | Store listing | Vari | Phone screenshots (catalogue, lesson, quiz, vocabulary, chat), short/full description EN+ES, category Education, content rating questionnaire |
 | Data safety form | Vari | Email, progress, device id, IP (anti-abuse), chat text → DeepSeek; matches `privacy.html` |
 | Privacy Policy URL | Vari | `https://football-english.pages.dev/privacy.html` |
@@ -44,9 +46,8 @@
 
 | Task | Notes |
 |---|---|
-| Deploy Worker update | Chat memory (last 6 turns) + Stripe `payment_status` / signature-age checks — code ready in `worker/`, needs `wrangler deploy` **and** the privacy text change (chat context) |
-| PRO linked to the account | Today PRO is a code in localStorage (3 devices). Proposal: `users.pro_until` + webhook stores customer email → needs D1 migration + privacy/terms update |
-| Self-host Inter + Font Awesome | Removes 3rd-party requests and FOUC on cold start |
+| Deploy Worker update | Chat memory (last 6 turns) + Stripe `payment_status` / signature-age checks — code ready in `worker/`, privacy text already live; needs `npx wrangler login` + `npx wrangler deploy` |
+| PRO linked to the account | Implemented and tested (staging): `users.pro_code` (migration 0004) + `/api/auth/pro`; restores PRO on sign-in. Waiting for Vari's OK on the migration and privacy text |
 | Streak reminders (notifications) | TWA notification delegation is enabled; needs Web Push + a consent step |
 
 ### P2 — Post-launch
