@@ -442,7 +442,8 @@
     "title": "🎥 Ball Mastery: Close Control Masterclass",
     "difficulty": "Academy",
     "difficulty_elo": 1150,
-    "video_id": "https://videos.pexels.com/video-files/3194247/3194247-hd_1920_1080_30fps.mp4",
+    "video_id": "/videos/ball-mastery.mp4",
+    "video_poster": "/videos/ball-mastery.jpg",
     "content": {
       "intro_hook": "Control is everything. Watch the technique and own every touch.",
       "core_concept": "Close control allows a player to manipulate the ball in tight spaces, keeping it away from defenders and creating time to make decisions.",

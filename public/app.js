@@ -1075,10 +1075,12 @@ function renderLesson(lesson) {
     if (lesson.video_id) {
         ui.videoSection.classList.remove('hidden');
         ui.videoContainer.innerHTML = '';
-        if (lesson.video_id.includes('http')) {
+        // A URL or a path on this site ('/videos/…mp4') is a video file; anything else is a YouTube id.
+        if (/^(https?:)?\//.test(lesson.video_id)) {
             const video = document.createElement('video');
             video.controls = true; video.muted = true; video.playsInline = true;
             video.preload = 'metadata';
+            if (lesson.video_poster) video.poster = lesson.video_poster;
             const source = document.createElement('source');
             source.src = lesson.video_id; source.type = 'video/mp4';
             video.appendChild(source);

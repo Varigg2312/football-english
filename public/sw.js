@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gaffer-pro-a181af1ba801';
+const CACHE_NAME = 'gaffer-pro-243350ceebc0';
 const OFFLINE_URL = '/offline.html';
 
 // Core shell + content precached at install so lessons already seen
@@ -81,6 +81,11 @@ self.addEventListener('fetch', (event) => {
     }
 
     if (url.origin !== self.location.origin) return; // cross-origin (YouTube, Pexels, the chat Worker): untouched
+
+    // Lesson videos (/videos/*.mp4): straight to the network. The browser asks
+    // for them in byte ranges (206), which Cache Storage can't store, and a
+    // cached full copy answering a range request can stall playback.
+    if (req.destination === 'video' || req.headers.has('range') || url.pathname.startsWith('/videos/')) return;
 
     // lessons.json: network-first so new/edited lessons show up when online,
     // but still readable offline from the last successful fetch.
