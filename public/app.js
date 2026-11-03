@@ -1308,6 +1308,7 @@ function updateChatStatus() {
     ui.passwordInput.classList.toggle('is-valid', isVipVerified);
     ui.premiumBanner.classList.toggle('hidden', isVipVerified);
     if (isVipVerified) {
+        ui.passwordInput.classList.remove('is-exhausted');
         setVipStatus(t('app.vip_ok'));
         ui.freeLeft.textContent = '';
         ui.chatInput.disabled = false; ui.chatSend.disabled = false;

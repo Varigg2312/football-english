@@ -606,3 +606,13 @@ footer a { color: #64748b; text-decoration: underline; }
         height: min(560px, calc(100dvh - 80px - env(safe-area-inset-bottom, 0px)));
     }
 }
+
+/* Con PRO ya verificado, el código no se vuelve a mostrar en pantalla (cualquiera
+   que mire el móvil podría leerlo); basta el aviso "PRO active". */
+.key-input.is-valid { display: none; }
+
+/* Zonas táctiles de 48 px (pauta de Android) para login e idioma en la cabecera. */
+.auth-btn, .lang-select { min-height: 48px; }
+@media (max-width: 480px) {
+    .auth-btn { width: 48px; }
+}
