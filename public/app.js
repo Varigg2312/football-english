@@ -295,7 +295,11 @@ document.addEventListener('click', (e) => {
     e.preventDefault();
     navigate(a.getAttribute('href'));
 });
-window.addEventListener('popstate', () => { catalogNotice = ''; renderRoute(); });
+window.addEventListener('popstate', () => {
+    if (skipModalPop) { skipModalPop = false; return; }
+    if (openModalEl) { closeModal(openModalEl, { fromHistory: true }); return; }
+    catalogNotice = ''; renderRoute();
+});
 
 // ── INIT ───────────────────────────────────────────────────
 async function initLeague() {
@@ -761,9 +765,14 @@ function updateHUD() {
 // dialog on open, Escape closes it, and focus returns to whatever opened it.
 let openModalEl = null;
 let modalReturnFocus = null;
+// Android back button: opening a dialog adds a history entry, so "back" closes
+// the dialog instead of leaving the app. skipModalPop marks the popstate caused
+// by our own history.back() when a dialog is closed with its X button.
+let skipModalPop = false;
 
 function openModal(el, focusTarget) {
-    if (openModalEl && openModalEl !== el) closeModal(openModalEl);
+    if (openModalEl && openModalEl !== el) closeModal(openModalEl, { fromHistory: true });
+    if (!history.state?.modal) history.pushState({ modal: true }, '', location.href);
     modalReturnFocus = document.activeElement;
     el.classList.remove('hidden');
     openModalEl = el;
@@ -772,7 +781,8 @@ function openModal(el, focusTarget) {
     if (target) setTimeout(() => target.focus(), 0);
 }
 
-function closeModal(el) {
+function closeModal(el, { fromHistory = false } = {}) {
+    if (!fromHistory && history.state?.modal) { skipModalPop = true; history.back(); }
     el.classList.add('hidden');
     if (el === ui.chatModal) {
         ui.chatTrigger.setAttribute('aria-expanded', 'false');

@@ -592,3 +592,17 @@ footer a { color: #64748b; text-decoration: underline; }
 }
 
 .premium-card.in-lesson { display: none; }
+
+/* Android (app TWA y Chrome móvil): con interactive-widget=resizes-content en el
+   viewport, la página se encoge al abrir el teclado. La ventana del Gaffer se
+   ajusta al alto disponible para que su cabecera (cerrar/maximizar) nunca quede
+   fuera de pantalla: con teclado, en pantalla dividida o en ventana emergente.
+   El botón flotante se oculta mientras el chat está abierto (ya hay botón de cerrar). */
+.chat-body { overscroll-behavior: contain; }
+@media (max-width: 600px) {
+    .coach-btn[aria-expanded="true"] { display: none; }
+    .coach-window {
+        bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+        height: min(560px, calc(100dvh - 80px - env(safe-area-inset-bottom, 0px)));
+    }
+}
