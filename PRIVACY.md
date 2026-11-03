@@ -5,7 +5,7 @@ policy (bilingual EN/ES, with a rights-request form and a working "delete my
 account" button) is served live at `/privacy.html` — always edit that file as
 the source of truth and keep this summary in sync with it.
 
-**Effective date:** 25 July 2026 (Resend/Pexels disclosures added 24 July; login rate-limiting disclosure added 25 July, following a security-hardening pass)
+**Effective date:** 3 November 2026 (Pexels removed 3 Nov — lesson videos are now hosted on our own site; Resend disclosure added 24 July; login rate-limiting disclosure added 25 July)
 
 ## Legal basis
 
@@ -47,7 +47,6 @@ directly, and documented in `/privacy.html` §2.5.
   decision** — flagged explicitly in the live policy, with a recommendation
   not to share personal/sensitive data in chat.
 - **Resend** — transactional email (password-reset links only). US-based.
-- **Pexels** — direct video CDN for some lessons (IP exposure, no account data shared).
 - YouTube embed code path exists in `app.js` but is unused by any current
   lesson — disclosed pre-emptively in the live policy in case it's ever
   activated (sets its own tracking cookies, would need a fresh look then).
