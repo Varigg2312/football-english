@@ -1305,6 +1305,13 @@ function setVipStatus(text, isError) {
 function updateChatStatus() {
     if (!ui.chatInput) return;
     const msgsLeft = Math.max(0, FREE_LIMIT - usedMessages);
+    // Welcome bubble: PRO users don't get the "free messages" line. Swapping the
+    // data-i18n key keeps the right text when the language changes later.
+    const welcome = document.querySelector('[data-i18n="app.coach_welcome"], [data-i18n="app.coach_welcome_pro"]');
+    if (welcome) {
+        welcome.dataset.i18n = isVipVerified ? 'app.coach_welcome_pro' : 'app.coach_welcome';
+        welcome.textContent = t(welcome.dataset.i18n);
+    }
     ui.passwordInput.classList.toggle('is-valid', isVipVerified);
     ui.premiumBanner.classList.toggle('hidden', isVipVerified);
     if (isVipVerified) {

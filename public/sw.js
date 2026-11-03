@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gaffer-pro-1e8ada398500';
+const CACHE_NAME = 'gaffer-pro-02e960cb501a';
 const OFFLINE_URL = '/offline.html';
 
 // Core shell + content precached at install so lessons already seen
