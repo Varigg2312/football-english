@@ -36,13 +36,15 @@ directly, and documented in `/privacy.html` §2.5.
 | Chat message text | Never stored by us | Forwarded live to DeepSeek with up to the 6 previous turns of the same conversation (kept only in the open tab) to generate a reply; not persisted server-side |
 | IP address | Transient, Cloudflare Worker rate-limit keys (Durable Object) | 48h TTL, genuinely auto-deleted via a DO `alarm()` that calls `storage.deleteAll()` — added 2026-07-24, previously the entry just went unread after expiry without being erased |
 | Email + IP (failed login attempts) | D1 `login_attempts` (migration `0003`) | Brute-force protection on `/api/auth/login` — 8 failed attempts/10min locks both the account (`email:` key) and the source IP (`ip:` key). Rows swept opportunistically once older than 1 day; the `email:` row for a given account is also deleted immediately on that account's next successful login |
-| Payment details | Never received | Handled entirely by Stripe Payment Links |
+| Payment details | Never received | Handled entirely by Stripe Payment Links (web) or Google Play Billing (Android app) |
+| Google Play purchase token | Worker KV, only as `play:<sha256(token)>` → PRO code | Checked with the Google Play Developer API to issue/restore the PRO code; the code record keeps the Play `orderId` |
 
 ## Third-party processors / recipients
 
 - **Cloudflare** (Pages, Workers, D1, KV) — hosting/infrastructure processor.
 - **Google** — only for Google Sign-In.
 - **Stripe** — payment processing, independent controller for payment data.
+- **Google Play** — payment processing for in-app purchases (Android), independent controller for payment data.
 - **DeepSeek** — AI chat replies. Based outside the EEA, **no EU adequacy
   decision** — flagged explicitly in the live policy, with a recommendation
   not to share personal/sensitive data in chat.
