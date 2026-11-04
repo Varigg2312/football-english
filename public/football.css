@@ -104,6 +104,8 @@ body {
 .hidden { display: none !important; }
 /* App Android (TWA): sin enlaces de compra a Stripe (política de pagos de Google Play). Ver i18n.js */
 .in-twa #premium-banner, .in-twa #premium-hint { display: none !important; }
+/* Inside the Android app with Google Play Billing available, the banner sells PRO through Play. */
+.in-twa.play-billing #premium-banner:not(.hidden):not(.in-lesson) { display: flex !important; }
 
 /* Contenedor principal para centrar todo */
 #app-interface {

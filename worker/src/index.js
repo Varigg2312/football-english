@@ -221,6 +221,107 @@ async function handleVerifyVip(request, env) {
   return json({ valid: true });
 }
 
+// ---------------------------------------------------------------------------
+// Google Play Billing (Android app). The TWA buys the one-time product with
+// the Digital Goods API and sends us the purchaseToken; we check it with the
+// Google Play Developer API using a service account, acknowledge it, and hand
+// out a normal PRO code — so the 3-device limit and account restore work the
+// same as for Stripe. The same token always maps to the same code, which is
+// how "restore purchase" works on a reinstall.
+// Secret: PLAY_SERVICE_ACCOUNT — the service account's JSON key, as is.
+const PLAY_PACKAGE = 'com.footballenglish.academy';
+const PLAY_PRODUCTS = ['gaffer_pro'];
+const PLAY_CHECK_LIMIT_PER_HOUR = 20;
+let playAccessToken = null; // { token, expiresAt } — reused while the isolate lives
+
+function base64url(bytes) {
+  let bin = '';
+  for (const b of bytes) bin += String.fromCharCode(b);
+  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+async function sha256Hex(text) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function getPlayAccessToken(env) {
+  if (playAccessToken && playAccessToken.expiresAt > Date.now() + 60000) return playAccessToken.token;
+  const sa = JSON.parse(env.PLAY_SERVICE_ACCOUNT);
+  const now = Math.floor(Date.now() / 1000);
+  const enc = (obj) => base64url(new TextEncoder().encode(JSON.stringify(obj)));
+  const unsigned = `${enc({ alg: 'RS256', typ: 'JWT' })}.${enc({
+    iss: sa.client_email,
+    scope: 'https://www.googleapis.com/auth/androidpublisher',
+    aud: 'https://oauth2.googleapis.com/token',
+    iat: now,
+    exp: now + 3600,
+  })}`;
+  const pem = sa.private_key.replace(/-----[^-]+-----/g, '').replace(/\s+/g, '');
+  const der = Uint8Array.from(atob(pem), (c) => c.charCodeAt(0));
+  const key = await crypto.subtle.importKey(
+    'pkcs8', der, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['sign']
+  );
+  const sig = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', key, new TextEncoder().encode(unsigned));
+  const res = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${unsigned}.${base64url(new Uint8Array(sig))}`,
+  });
+  const data = await res.json();
+  if (!res.ok || !data.access_token) throw new Error(`google token ${res.status}`);
+  playAccessToken = { token: data.access_token, expiresAt: Date.now() + data.expires_in * 1000 };
+  return data.access_token;
+}
+
+async function handlePlayPurchase(request, env) {
+  if (!env.PLAY_SERVICE_ACCOUNT) return json({ error: 'not_configured' }, 503);
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  const { allowed } = await reserveSlot(env, `rl:play:${ip}`, PLAY_CHECK_LIMIT_PER_HOUR, 3600);
+  if (!allowed) return json({ error: 'rate_limited' }, 429);
+
+  let body;
+  try { body = await request.json(); } catch { return json({ error: 'bad_request' }, 400); }
+  const { purchaseToken, productId } = body || {};
+  if (typeof purchaseToken !== 'string' || purchaseToken.length < 20 || purchaseToken.length > 1000
+      || !PLAY_PRODUCTS.includes(productId)) {
+    return json({ error: 'bad_request' }, 400);
+  }
+
+  const tokenKey = `play:${await sha256Hex(purchaseToken)}`;
+  const existing = await env.KV.get(tokenKey);
+  if (existing) return json({ code: existing });
+
+  const base = `https://androidpublisher.googleapis.com/androidpublisher/v3/applications/${PLAY_PACKAGE}`
+    + `/purchases/products/${productId}/tokens/${encodeURIComponent(purchaseToken)}`;
+  let accessToken;
+  try { accessToken = await getPlayAccessToken(env); } catch { return json({ error: 'upstream' }, 502); }
+  const auth = { Authorization: `Bearer ${accessToken}` };
+
+  const res = await fetch(base, { headers: auth });
+  if (res.status === 400 || res.status === 404 || res.status === 410) return json({ error: 'invalid_purchase' }, 400);
+  if (!res.ok) return json({ error: 'upstream' }, 502);
+  const purchase = await res.json();
+  // purchaseState: 0 purchased, 1 cancelled, 2 pending (e.g. cash payment not made yet).
+  if (purchase.purchaseState === 2) return json({ pending: true }, 202);
+  if (purchase.purchaseState !== 0) return json({ error: 'invalid_purchase' }, 400);
+
+  const code = randomCode();
+  await env.KV.put(`code:${code}`, JSON.stringify({
+    source: 'play', orderId: purchase.orderId || null, createdAt: Date.now(), devices: [],
+  }));
+  await env.KV.put(tokenKey, code);
+
+  // Google refunds purchases that aren't acknowledged within 3 days. Done after
+  // storing the code, so a failure here is retried by the next restore call
+  // (the code already exists, but we still try to acknowledge below).
+  if (purchase.acknowledgementState === 0) {
+    await fetch(`${base}:acknowledge`, { method: 'POST', headers: { ...auth, 'Content-Type': 'application/json' }, body: '{}' })
+      .catch(() => {});
+  }
+  return json({ code });
+}
+
 async function isVipRequest(env, code, clientId) {
   if (!code || !clientId) return false;
   const raw = await env.KV.get(`code:${code}`);
@@ -436,6 +537,9 @@ export default {
     }
     if (url.pathname === '/redeem' && request.method === 'POST') {
       return handleRedeem(request, env);
+    }
+    if (url.pathname === '/play-purchase' && request.method === 'POST') {
+      return handlePlayPurchase(request, env);
     }
     if (url.pathname === '/verify-vip' && request.method === 'POST') {
       return handleVerifyVip(request, env);

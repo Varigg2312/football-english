@@ -362,6 +362,8 @@ async function initLeague() {
         if (valid) saveProCodeToAccount(vipCode);
     }
 
+    initPlayBilling();
+
     await lessonsPromise;
 }
 
@@ -596,6 +598,89 @@ async function restoreProFromAccount(user) {
         updateChatStatus();
     } else if (!user.proCode && vipCode && isVipVerified) {
         saveProCodeToAccount(vipCode);
+    }
+}
+
+// --- Google Play Billing (only inside the Android app) ----------------------
+// Stripe can't be used inside a Play app, so there PRO is bought through
+// Google Play with the Digital Goods API. The Worker checks the purchase with
+// Google and returns a normal PRO code, so everything after that (3-device
+// limit, restore on sign-in) is the same as a Stripe purchase.
+const PLAY_BILLING_METHOD = 'https://play.google.com/billing';
+const PLAY_PRO_SKU = 'gaffer_pro';
+let playBillingService = null;
+
+async function initPlayBilling() {
+    if (!document.documentElement.classList.contains('in-twa') || !('getDigitalGoodsService' in window)) return;
+    try {
+        playBillingService = await window.getDigitalGoodsService(PLAY_BILLING_METHOD);
+        if (!playBillingService) return;
+
+        // Restore: a purchase this Google account already owns (reinstall,
+        // new phone, or a purchase whose unlock didn't finish last time).
+        if (!isVipVerified) {
+            const owned = await playBillingService.listPurchases();
+            const pro = owned.find((p) => p.itemId === PLAY_PRO_SKU);
+            if (pro) { await unlockWithPlayPurchase(pro.purchaseToken); return; }
+        }
+
+        const [details] = await playBillingService.getDetails([PLAY_PRO_SKU]);
+        if (!details) return; // product not set up in Play Console yet
+        const price = new Intl.NumberFormat(document.documentElement.lang || undefined, {
+            style: 'currency', currency: details.price.currency,
+        }).format(Number(details.price.value));
+        const cta = ui.premiumBanner.querySelector('.cta-button');
+        cta.removeAttribute('data-i18n');
+        cta.textContent = `${t('app.premium_cta_play')} (${price})`;
+        cta.removeAttribute('target');
+        cta.href = '#';
+        cta.addEventListener('click', (e) => { e.preventDefault(); buyProWithPlay(); });
+        document.documentElement.classList.add('play-billing');
+    } catch (err) {
+        console.warn('Play Billing not available:', err);
+    }
+}
+
+async function buyProWithPlay() {
+    let response;
+    try {
+        const request = new PaymentRequest(
+            [{ supportedMethods: PLAY_BILLING_METHOD, data: { sku: PLAY_PRO_SKU } }],
+            // Play shows the real price; this total is required but ignored.
+            { total: { label: 'Total', amount: { currency: 'EUR', value: '0' } } }
+        );
+        response = await request.show();
+    } catch {
+        return; // cancelled by the user, or Play couldn't open
+    }
+    const ok = await unlockWithPlayPurchase(response.details.purchaseToken);
+    try { await response.complete(ok ? 'success' : 'fail'); } catch {}
+    if (!ok) addMessage(t('app.play_unlock_failed'), 'bot-msg');
+}
+
+async function unlockWithPlayPurchase(purchaseToken) {
+    try {
+        const res = await fetch(`${WORKER_URL}/play-purchase`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ purchaseToken, productId: PLAY_PRO_SKU }),
+        });
+        const data = await res.json();
+        if (!data.code) return false;
+        const { valid, reason } = await verifyVip(data.code);
+        if (!valid) {
+            if (reason === 'device_limit_reached') setVipStatus(t('app.vip_device_limit'), true);
+            return false;
+        }
+        vipCode = data.code;
+        storageSet('user_is_vip_code', vipCode);
+        ui.passwordInput.value = vipCode;
+        isVipVerified = true;
+        updateChatStatus();
+        saveProCodeToAccount(vipCode);
+        return true;
+    } catch {
+        return false;
     }
 }
 
