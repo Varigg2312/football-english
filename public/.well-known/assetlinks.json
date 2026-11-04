@@ -3,6 +3,6 @@
   "target": {
     "namespace": "android_app",
     "package_name": "com.footballenglish.academy",
-    "sha256_cert_fingerprints": ["BB:78:E7:23:16:00:73:B5:8F:73:38:D4:52:2E:C3:91:0D:8D:69:84:71:3C:29:61:E3:DA:48:C5:D6:CE:23:E9", "3F:8A:B5:89:D4:8D:D4:29:C4:07:FA:20:E9:8D:AB:DD:A3:F9:35:BF:7D:DE:47:56:A9:6C:64:DB:C0:AF:CD:FC"]
+    "sha256_cert_fingerprints": ["BB:78:E7:23:16:00:73:B5:8F:73:38:D4:52:2E:C3:91:0D:8D:69:84:71:3C:29:61:E3:DA:48:C5:D6:CE:23:E9", "3F:8A:B5:89:D4:8D:D4:29:C4:07:FA:20:E9:8D:AB:DD:A3:F9:35:BF:7D:DE:47:56:A9:6C:64:DB:C0:AF:CD:FC", "EA:43:6B:FB:E4:44:71:22:4D:00:B9:9C:8E:65:54:6F:B9:65:5D:E3:75:BE:24:6F:22:B7:9E:EA:E7:3B:48:4D"]
   }
 }]
